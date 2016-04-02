@@ -71,3 +71,48 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+#FOSUserBundle Configuration
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+    from_email:
+        address:        noreply@pingpongking.cat
+        sender_name:    PingPongKing
+    profile:
+        form:
+            type:               FOS\UserBundle\Form\Type\ProfileFormType # change for the custom form for profile or mby
+                                                                         # just delete profile if handled by normal controllers
+            name:               fos_user_profile_form
+            validation_groups:  [Profile, Default]
+    change_password:
+        form:
+            type:               FOS\UserBundle\Form\Type\ChangePasswordFormType # change for the custom form for profile or mby
+                                                                                # just delete profile if handled by normal controllers
+            name:               fos_user_change_password_form
+            validation_groups:  [ChangePassword, Default]
+    registration:
+        confirmation:
+            enabled:    true # change to true for required email confirmation
+            template:   FOSUserBundle:Registration:email.txt.twig               #change for the proper email template
+        form:
+            type:               FOS\UserBundle\Form\Type\RegistrationFormType # change for the custom form for profile or mby
+                                                                              # just delete profile if handled by normal controllers
+            name:               fos_user_registration_form
+            validation_groups:  [Registration, Default]
+    resetting:
+        token_ttl: 86400
+        email:
+            template:   FOSUserBundle:Resetting:email.txt.twig                #change for the proper email template
+        form:
+            type:               FOS\UserBundle\Form\Type\ResettingFormType # change for the custom form for profile or mby
+                                                                           # just delete profile if handled by normal controllers
+            name:               fos_user_resetting_form
+            validation_groups:  [ResetPassword, Default]
+    service:
+        mailer:                 fos_user.mailer.default
+        email_canonicalizer:    fos_user.util.canonicalizer.default
+        username_canonicalizer: fos_user.util.canonicalizer.default
+        token_generator:        fos_user.util.token_generator.default
+        user_manager:           fos_user.user_manager.default
