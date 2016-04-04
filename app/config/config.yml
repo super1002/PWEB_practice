@@ -10,7 +10,7 @@ parameters:
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -38,6 +38,13 @@ twig:
     strict_variables: "%kernel.debug%"
     globals:
       #here must be configurated all twig global variables like header menu/footer links and that stuff
+        'sections':
+          - {'name': 'sec_1', 'route':'homepage'}
+          #- {'name': 'Seccio2', 'route':'route2'}
+          #- {'name': 'Seccio3', 'route':'route3'}
+
+        #type here the sidemenu structure
+        'menu': ~
 
 # Doctrine Configuration
 doctrine:
@@ -48,10 +55,10 @@ doctrine:
         dbname:   "%database_name%"
         user:     "%database_user%"
         password: "%database_password%"
-        charset:  utf8mb4
+        charset:  utf8
         default_table_options:
-            charset: utf8mb4
-            collate: utf8mb4_unicode_ci
+            charset: utf8
+            collate: utf8_unicode_ci
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
         #     e.g. database_path: "%kernel.root_dir%/data/data.db3"

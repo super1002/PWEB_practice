@@ -2,6 +2,9 @@
     #resource: "@AppBundle/Controller/"
     #type:     annotation #commented this to create routes on yaml file
 
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
 #actions that may handle a form need to accept also post request
 # /user/* refers to the private area of the application. So controllers must extend from PrivateBaseController
 # the rest of pages that do not require authentication to render must extend PublicBaseController
@@ -109,14 +112,14 @@ buy_item:
     - GET
     - POST # used to process buy request form
 
-register:
-  path: /register
-  defaults:
-    _controller: AppBundle:Register:show
-    _format: html
-  methods:
-    - GET
-    - POST #will be used to process register form
+#register:
+#  path: /register
+#  defaults:
+#    _controller: AppBundle:Register:show
+#    _format: html
+#  methods:
+#    - GET
+#    - POST #will be used to process register form
 
 register_confirm:
   path: /confirm/{uuid}
@@ -134,22 +137,22 @@ authenticate:
   methods:
     - POST # used to authenticate users wherever the login form was captured from
 
-login:
-  path: /login
-  defaults:
-    _controller: AppBundle:Authentication:show
-    _format: html
-  methods:
-    - GET
-    - POST #submit login form
+#login:
+#  path: /login
+#  defaults:
+#    _controller: AppBundle:Authentication:show
+#    _format: html
+#  methods:
+#    - GET
+#    - POST #submit login form
 
-logout:
-  path: /logout #logs out authenticated user on current session
-  defaults:
-    _controller: AppBundle:
-    _format: html
-  methods:
-    - GET # just has to deattach session and stuff and redirect to homepage
+#logout:
+#  path: /logout #logs out authenticated user on current session
+#  defaults:
+#    _controller: AppBundle:
+#    _format: html
+#  methods:
+#    - GET # just has to deattach session and stuff and redirect to homepage
 
 welcome:
   path: /welcome

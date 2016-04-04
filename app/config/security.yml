@@ -3,9 +3,18 @@
 security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    encoders:
+        # BCrypt encoder
+        AppBundle\Entity\User:
+            algorithm:            bcrypt
+            cost:                 13
+
     providers:
         in_memory:
             memory: ~
+
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -15,6 +24,16 @@ security:
 
         main:
             anonymous: ~
+            logout:
+                path:   /logout
+                target: /
+
+            form_login:
+                provider: fos_userbundle
+                csrf_token_generator: security.csrf.token_manager
+
+
+
             # activate different ways to authenticate
 
             # http_basic: ~
@@ -22,3 +41,10 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+    access_control:
+      #Require ROLE_USER for /user/*
+      - { path: ^/user, roles: ROLE_USER }
+      - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
