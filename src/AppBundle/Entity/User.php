@@ -25,7 +25,7 @@ class User extends BaseUser
     /**
      * @var String
      *
-     * @ORM\Column(name="twitter", type="varchar" length="255")
+     * @ORM\Column(name="twitter", type="varchar", length=255)
      */
     protected $twitter_user;
 
