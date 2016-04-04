@@ -22,6 +22,28 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @var String
+     *
+     * @ORM\Column(name="twitter", type="varchar" length="255")
+     */
+    protected $twitter_user;
+
+    /**
+     * @return String
+     */
+    public function getTwitterUser()
+    {
+        return $this->twitter_user;
+    }
+
+    /**
+     * @param String $twitter_user
+     */
+    public function setTwitterUser($twitter_user)
+    {
+        $this->twitter_user = $twitter_user;
+    }
 
     /**
      * Get id
@@ -32,5 +54,7 @@ class User extends BaseUser
     {
         return $this->id;
     }
+
+
 }
 
