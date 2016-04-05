@@ -23,7 +23,7 @@ class RegistrationController extends BaseController
         if($form->isSubmitted() && $form->isValid()){
 
 
-            //Redirigim perque no puguin fer refresh i "reenviar" les dades
+            //Redirigim perque no puguin fer refresh i "reenviar" les dades.
             return $this->redirectToRoute('registration_succes');
         }
 
