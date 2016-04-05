@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use Symfony\Component\Validator\Constraints as Validator;
 
 /**
  * User
@@ -59,6 +58,7 @@ class User extends BaseUser
     {
         return $this->id;
     }
+
 
 
 }
