@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -24,7 +25,9 @@ class User extends BaseUser
 
     /**
      * @var String
-     *
+     * @Assert\Regex(
+     *     pattern = "^@?(\w){1,15}$"
+     * )
      * @ORM\Column(name="twitter", type="varchar", length=255)
      */
     protected $twitter_user;
@@ -54,6 +57,7 @@ class User extends BaseUser
     {
         return $this->id;
     }
+
 
 
 }

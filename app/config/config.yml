@@ -104,9 +104,9 @@ fos_user:
             enabled:    true # change to true for required email confirmation
             template:   FOSUserBundle:Registration:email.txt.twig               #change for the proper email template
         form:
-            type:               FOS\UserBundle\Form\Type\RegistrationFormType # change for the custom form for profile or mby
+            type:               AppBundle\Form\RegistrationType # change for the custom form for profile or mby
                                                                               # just delete profile if handled by normal controllers
-            name:               fos_user_registration_form
+            name:               app_user_registration
             validation_groups:  [Registration, Default]
     resetting:
         token_ttl: 86400
