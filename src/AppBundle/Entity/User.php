@@ -86,7 +86,7 @@ class User implements UserInterface, AdvancedUserInterface
     private $email;
 
     /**
-     * @ \ArrayCollection
+     * @var ArrayCollection
      * @ORM\Column(name="roles", type="array")
      */
     private $roles;

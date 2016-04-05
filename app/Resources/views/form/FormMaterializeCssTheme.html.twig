@@ -314,8 +314,7 @@
 {%- endblock form_end -%}
 
 {%- block form_errors -%}
-    {#- if errors|length > 0 -#}
-        {% set errors = ["error", "jslkdjfalsdkfjsfjldfgsdgdfgdgdsfgsdfgdfgsfdgk", "asdfjadfgsgfdsgsd fgdfgsdgfdgdfsgdfsgdfsgfdsgfdsgsdfsf dglksdfklasdjfjalksfdjkl"] %}
+    {%- if errors|length > 0 -%}
             <div class="input-field row">
                 <ul class="collapsible popout collapsible-accordion error">
                     <li class="collapsible-container transparent">
@@ -336,7 +335,7 @@
                     </li>
                 </ul>
             </div>
-    {#- endif -#}
+    {%- endif -%}
 {%- endblock form_errors -%}
 
 {%- block form_rest -%}
