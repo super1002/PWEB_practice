@@ -1,13 +1,96 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="title" content="" />
+    <meta name="robots" content="all" />
+    <meta name="expires" content="never" />
+    <meta name="distribution" content="world" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    {% block stylesheets %}
+    {{ include('css_includes.twig') }}
+    {% endblock %}
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body>
+
+    {# Header #}
+    <div class="navbar-fixed iamthetop">
+        <div class="full-width">
+            <nav class="navy-grey darken-2">
+                <div class="nav-wrapper">
+                    <div class="">
+                        <div class="col s12">
+                            <a href="{{ path('homepage') }}" class="brand-logo">King Pong</a>
+                            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                                {%  for section in sections %}
+                                    <li><a class="disabled" href="{{ path(section.route) }}">{{ section.name }}</a></li>
+                                {%  endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="row teal lighten-1  z-depth-2 valign-wrapper">
+                <div class="col s12">
+                    <div id="breadcrump-wrapper center">
+                        {#{%   for breadcrumb in breadcrumps if breadcrump is not null or breadcrump == '' %}
+
+                            <a href="#!" class="breadcrumb">{{ breadcrump }}</a>
+
+                        {% endfor %}#}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {# Content #}
+    {% block body %}{% endblock %}
+
+
+    {# Footer #}
+    {% block footer %}
+
+        <footer class="page-footer modal-fixed-footer navy-grey">
+            <div class="container">
+                <!--<div class="row">
+                    <div class="col l6 s12">
+                        <h5 class="white-text">Footer Content</h5>
+                        <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+                    </div>
+                    <div class="col l4 offset-l2 s12">
+                        <h5 class="white-text">Links</h5>
+                        <ul>
+                            <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                            <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                            <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                            <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                        </ul>
+                    </div>
+                </div>-->
+            </div>
+            <div class="footer-copyright navy-grey darken-2">
+                <div class="container">
+                    <div class="center">© 2016 Copyright. Created by Guillermo Dobao, Adrià Mallorquí & Ramon Pans.</div>
+                </div>
+                <!--<a class="valign col s2 offset-s1 right-align waves-effect waves-light btn " href="{$url.global}">Go home</a>-->
+            </div>
+        </footer>
+
+    {% endblock %}
+
+
+    {% block javascripts %}
+        {{ include('js_includes.twig') }}
+    {% endblock %}
+</body>
 </html>

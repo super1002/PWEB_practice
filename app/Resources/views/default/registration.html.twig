@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    {{  form_start(form) }}
+        {{  form_errors(form) }}
+
+        {{ form_row(form.username) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.password) }}
+        {{ form_row(form.twitter_user) }}
+        {{ form_row(form.submit, { 'label': 'Registrar-se' }) }}
+
+    {{ form_end(form) }}
+
+{% endblock %}

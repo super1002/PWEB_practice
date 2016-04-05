@@ -3,7 +3,7 @@
  * Use this file to override Materialize files so you can update
  * the core Materialize files in the future
  *
- * Made By MaterializeCSS.com
+ * Made By PANS
  */
 
 nav ul a,
@@ -182,11 +182,40 @@ div.whityfy>div{
   border:none;
 }
 
+.collapsible.popout.collapsible-accordion.error{
+  padding-top:10px !important;
+}
+
+.collapsible.popout.error>li.active{
+
+}
+
+.collapsible.error{
+  box-shadow: none !important;
+}
+
+.collapsible.popout.error>li{
+  box-shadow: none !important;
+}
+
+.collapsible.popout.error>li.active{
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+}
+
+.collapsible.active.error{
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+
 .collapsible-body.error{
   background: transparent !important;
   padding: 20px;
-  padding-top: 100px;
   border:none;
+}
+
+.collapsible-body.error>ul{
+  padding-top: 2rem !important;
+  padding-bottom: 1rem !important;
 }
 
 
@@ -202,12 +231,14 @@ div.whityfy>div{
   border:none !important;
 }
 
+
 .error.badge.active{
-  background: whitesmoke !important;
+  background: #d6d6d6 !important;
   border-radius: 2px;
   color: dimgray;
   font-size: 0.75rem;
   margin-top: 0.5rem;
+  right: 0.75rem;
   padding-top: 5px;
   padding-bottom: 3px;
   padding-left: 10px;
