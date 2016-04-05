@@ -3154,6 +3154,7 @@ td, th {
 
 span.badge {
   min-width: 3rem;
+  max-width: 3rem;
   padding: 0 6px;
   text-align: center;
   font-size: 1rem;

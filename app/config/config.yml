@@ -39,7 +39,7 @@ twig:
     globals:
       #here must be configurated all twig global variables like header menu/footer links and that stuff
         'sections':
-          - {'name': 'sec_1', 'route':'homepage'}
+          - {'name': 'Paaaaaaaans', 'route':'homepage'}
           #- {'name': 'Seccio2', 'route':'route2'}
           #- {'name': 'Seccio3', 'route':'route3'}
 

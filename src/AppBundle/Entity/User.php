@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\Validator\Constraints as Validator;
 
 /**
  * User
@@ -24,8 +25,12 @@ class User extends BaseUser
 
     /**
      * @var String
-     *
-     * @ORM\Column(name="twitter", type="varchar", length=255)
+     * @Validator\Regex(
+     *     pattern="@\w+",
+     *     match=true,
+     *     message="The twitter account must begin with @"
+     * )
+     * @ORM\Column(name="twitter", type="string", length=255)
      */
     protected $twitter_user;
 
