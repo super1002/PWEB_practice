@@ -8,6 +8,34 @@ services:
     class: AppBundle\Form\RegistrationType
     tags:
       - { name: form.type, alias: app_user_registration }
+
+
+  app.service.mailer.mailer_repository:
+    class: AppBundle\Services\Mailer\MailerRepository
+    arguments:
+      - mailer: {type: "service", id: "mailer"}
+      - router: {type: "service", id: "router"}
+      - templating: {type: "service", id: "templating"}
+      - parameters:
+        - confirmation.template: 'mail/confirmation.mail.twig'
+        - from_email: %email%
+
+
+
+              <service id="fos_user.mailer.default" class="FOS\UserBundle\Mailer\Mailer" public="false">
+                  <argument type="service" id="mailer" />
+                  <argument type="service" id="router" />
+                  <argument type="service" id="templating" />
+                  <argument type="collection">
+                      <argument key="confirmation.template">%fos_user.registration.confirmation.template%</argument>
+                      <argument key="resetting.template">%fos_user.resetting.email.template%</argument>
+                      <argument key="from_email" type="collection">
+                          <argument key="confirmation">%fos_user.registration.confirmation.from_email%</argument>
+                          <argument key="resetting">%fos_user.resetting.email.from_email%</argument>
+                      </argument>
+                  </argument>
+              </service>
+
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
