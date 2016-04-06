@@ -35,8 +35,9 @@ class User implements UserInterface, AdvancedUserInterface
 
     /**
      * @var String
+     * @Validator\NotBlank()
      * @Validator\Regex(
-     *     pattern="@\w+",
+     *     pattern="^@\w{1,15}^",
      *     match=true,
      *     message="The twitter account must begin with @"
      * )
@@ -47,6 +48,7 @@ class User implements UserInterface, AdvancedUserInterface
     /**
      * @ORM\Column(name="username", type="string", length=25, unique=true)
      *
+     * @Validator\NotBlank()
      * @Validator\Length(
      *      min = 6,
      *      max = 25,
@@ -68,6 +70,7 @@ class User implements UserInterface, AdvancedUserInterface
 
     /**
      * @var String
+     * @Validator\NotBlank()
      * @Validator\Length(
      *      min = 6,
      *      max = 10,
@@ -79,6 +82,7 @@ class User implements UserInterface, AdvancedUserInterface
 
     /**
      * @ORM\Column(name="email", type="string", length=60, unique=true)
+     * @Validator\NotBlank()
      * @Validator\Email()
      */
     private $email;
@@ -244,6 +248,138 @@ class User implements UserInterface, AdvancedUserInterface
         $this->isActive = $isActive;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isLocked()
+    {
+        return $this->locked;
+    }
 
+    /**
+     * @param boolean $locked
+     */
+    public function setLocked($locked)
+    {
+        $this->locked = $locked;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isExpired()
+    {
+        return $this->expired;
+    }
+
+    /**
+     * @param boolean $expired
+     */
+    public function setExpired($expired)
+    {
+        $this->expired = $expired;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCredentialsExpired()
+    {
+        return $this->credentialsExpired;
+    }
+
+    /**
+     * @param boolean $credentialsExpired
+     */
+    public function setCredentialsExpired($credentialsExpired)
+    {
+        $this->credentialsExpired = $credentialsExpired;
+    }
+
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     *
+     * @return User
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     *
+     * @return User
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     *
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Set roles
+     *
+     * @param array $roles
+     *
+     * @return User
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Get expired
+     *
+     * @return boolean
+     */
+    public function getExpired()
+    {
+        return $this->expired;
+    }
+
+    /**
+     * Get credentialsExpired
+     *
+     * @return boolean
+     */
+    public function getCredentialsExpired()
+    {
+        return $this->credentialsExpired;
+    }
+
+    /**
+     * Get locked
+     *
+     * @return boolean
+     */
+    public function getLocked()
+    {
+        return $this->locked;
+    }
 }
-

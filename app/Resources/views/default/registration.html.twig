@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% form_theme 'views/form/FormMaterializeCssTheme.html.twig' %}
+{% form_theme form 'form/FormMaterializeCssTheme.html.twig' %}
 
 {% block body %}
 
+    <div class="container col s12 top-margin3">
     {{  form_start(form) }}
         {{  form_errors(form) }}
 
         {{ form_row(form.username) }}
         {{ form_row(form.email) }}
-        {{ form_row(form.password) }}
+        {{ form_row(form.plainPassword) }}
         {{ form_row(form.twitter_user) }}
+        <div class="col s12 top-margin bot-margin2">
         {{ form_row(form.submit, { 'label': 'Registrar-se' }) }}
-
+        </div>
     {{ form_end(form) }}
+    </div>
 
 {% endblock %}

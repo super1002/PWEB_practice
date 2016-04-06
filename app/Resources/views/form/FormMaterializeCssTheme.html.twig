@@ -328,7 +328,7 @@
                         <div class="no_padding_vertical collapsible-body error valign grey lighten-5">
                             <ul class="left-margin">
                                 {%- for error in errors -%}
-                                    <li class="decorated font-s red-text darken-2">{{ error }}</li>
+                                    <li class="decorated font-s red-text darken-2">{{ error.message }}</li>
                                 {%- endfor -%}
                             </ul>
                         </div>

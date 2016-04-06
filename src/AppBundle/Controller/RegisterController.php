@@ -25,16 +25,19 @@ class RegisterController extends Controller
 
         if($form->isSubmitted() && $form->isValid()){
 
+            /**
+             * @var BCrypt $encoder
+             */
+            $encoder = $this->get('security.password_encoder');
+
+            $user->setPassword($encoder->encodePassword($user, $user->getSalt()));
             //make csrf check. no idea how that's done.
 
             //store the user information on the database
             $em->flush();
             //generate a confirmationToken
-            /**
-             * @var BCrypt $encoder
-             */
-            $encoder = $this->get('security.password_encoder');
-            $token = $encoder->encodePassword($user->getEmail(), 'confirmation');
+
+            //$token = //encode the email somehow
             //persist the confirmation token mapped to the user
 
             //send the email with the confirmation url
