@@ -2,13 +2,11 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Validator;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -96,6 +94,24 @@ class User implements UserInterface, AdvancedUserInterface
      */
     private $isActive;
 
+    /**
+     * @var bool
+     * @ORM\Column(name="is_expired", type="boolean")
+     */
+    private $expired;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_credentialsExpired", type="boolean")
+     */
+    private $credentialsExpired;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_locked", type="boolean")
+     */
+    private $locked;
+
     public function __construct()
     {
         $this->isActive = false;
@@ -103,7 +119,6 @@ class User implements UserInterface, AdvancedUserInterface
         $this->roles = new ArrayCollection();
         $this->roles->add("ROLE_USER");
 
-        $this->enabled = false;
         $this->locked = false;
         $this->expired = false;
         $this->credentialsExpired = false;
@@ -143,6 +158,7 @@ class User implements UserInterface, AdvancedUserInterface
 
     public function eraseCredentials()
     {
+        $this->plain_password = "";
     }
 
     public function getUsername()
@@ -162,17 +178,17 @@ class User implements UserInterface, AdvancedUserInterface
 
     public function isAccountNonExpired()
     {
-        return true;
+        return $this->expired;
     }
 
     public function isAccountNonLocked()
     {
-        return true;
+        return $this->locked;
     }
 
     public function isCredentialsNonExpired()
     {
-        return true;
+        return $this->credentialsExpired;
     }
 
     public function isEnabled()
