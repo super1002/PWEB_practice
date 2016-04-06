@@ -130,6 +130,7 @@ class User implements UserInterface, AdvancedUserInterface
 
         $this->locked = false;
         $this->expired = false;
+        $this->isEnabled = false;
         $this->credentialsExpired = false;
     }
 
