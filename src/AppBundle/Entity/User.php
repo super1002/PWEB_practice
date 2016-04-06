@@ -99,6 +99,11 @@ class User implements UserInterface, AdvancedUserInterface
     private $isActive;
 
     /**
+     * @ORM\Column(name="is_enabled", type="boolean")
+     */
+    private $isEnabled;
+
+    /**
      * @var bool
      * @ORM\Column(name="is_expired", type="boolean")
      */
@@ -197,7 +202,7 @@ class User implements UserInterface, AdvancedUserInterface
 
     public function isEnabled()
     {
-        return $this->isActive;
+        return $this->isEnabled;
     }
 
     /**
@@ -254,46 +259,6 @@ class User implements UserInterface, AdvancedUserInterface
     public function isLocked()
     {
         return $this->locked;
-    }
-
-    /**
-     * @param boolean $locked
-     */
-    public function setLocked($locked)
-    {
-        $this->locked = $locked;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isExpired()
-    {
-        return $this->expired;
-    }
-
-    /**
-     * @param boolean $expired
-     */
-    public function setExpired($expired)
-    {
-        $this->expired = $expired;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isCredentialsExpired()
-    {
-        return $this->credentialsExpired;
-    }
-
-    /**
-     * @param boolean $credentialsExpired
-     */
-    public function setCredentialsExpired($credentialsExpired)
-    {
-        $this->credentialsExpired = $credentialsExpired;
     }
 
 
@@ -354,6 +319,44 @@ class User implements UserInterface, AdvancedUserInterface
     }
 
     /**
+     * Set isEnabled
+     *
+     * @param boolean $isEnabled
+     *
+     * @return User
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get isEnabled
+     *
+     * @return boolean
+     */
+    public function getIsEnabled()
+    {
+        return $this->isEnabled;
+    }
+
+    /**
+     * Set expired
+     *
+     * @param boolean $expired
+     *
+     * @return User
+     */
+    public function setExpired($expired)
+    {
+        $this->expired = $expired;
+
+        return $this;
+    }
+
+    /**
      * Get expired
      *
      * @return boolean
@@ -364,6 +367,20 @@ class User implements UserInterface, AdvancedUserInterface
     }
 
     /**
+     * Set credentialsExpired
+     *
+     * @param boolean $credentialsExpired
+     *
+     * @return User
+     */
+    public function setCredentialsExpired($credentialsExpired)
+    {
+        $this->credentialsExpired = $credentialsExpired;
+
+        return $this;
+    }
+
+    /**
      * Get credentialsExpired
      *
      * @return boolean
@@ -371,6 +388,20 @@ class User implements UserInterface, AdvancedUserInterface
     public function getCredentialsExpired()
     {
         return $this->credentialsExpired;
+    }
+
+    /**
+     * Set locked
+     *
+     * @param boolean $locked
+     *
+     * @return User
+     */
+    public function setLocked($locked)
+    {
+        $this->locked = $locked;
+
+        return $this;
     }
 
     /**
