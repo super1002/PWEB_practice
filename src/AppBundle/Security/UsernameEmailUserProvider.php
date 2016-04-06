@@ -8,6 +8,7 @@
 
 namespace AppBundle\Security\User;
 
+use AppBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -40,7 +41,7 @@ class UsernameEmailUserProvider extends EntityRepository implements UserProvider
 
     public function refreshUser(UserInterface $user) {
 
-        if (!$user instanceof WebserviceUser) {
+        if (!$user instanceof User) {
             throw new UnsupportedUserException(
                 sprintf('Instances of "%s" are not supported.', get_class($user))
             );
