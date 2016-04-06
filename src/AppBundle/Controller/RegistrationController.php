@@ -2,13 +2,15 @@
 
 namespace AppBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\RegistrationType;
 use AppBundle\Entity\User;
+use \Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder as BCrypt;
 
 
-class RegistrationController extends BaseController
+class RegistrationController extends Controller
 {
     public function registerAction(Request $request)
     {
@@ -25,7 +27,11 @@ class RegistrationController extends BaseController
             //store the user information on the database
 
             //generate a confirmationToken
-
+            /**
+             * @var BCrypt $encoder
+             */
+            $encoder = $this->get('security.password_encoder');
+            $token = $encoder->encodePassword($user->getEmail(), 'confirmation');
             //persist the confirmation token mapped to the user
 
             //send the email with the confirmation url

@@ -11,7 +11,6 @@ namespace AppBundle\Service\Mailer;
 
 use AppBundle\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Templating\EngineInterface;
 
 class MailerRepository
 {
@@ -21,7 +20,7 @@ class MailerRepository
     protected $templating;
     protected $parameters;
 
-    public function __construct($mailer, UrlGeneratorInterface  $router, \Twig_Environment $templating, array $parameters)
+    public function __construct(\Swift_Mailer $mailer, UrlGeneratorInterface  $router, \Twig_Environment $templating, array $parameters)
     {
         $this->mailer = $mailer;
         $this->router = $router;
@@ -33,10 +32,11 @@ class MailerRepository
      * Send an email to a user to confirm the account creation
      *
      * @param User $user
+     * @param  $token
      *
      * @return void
      */
-    public function sendConfirmationEmailMessage(User $user)
+    public function sendConfirmationEmailMessage(User $user, $token)
     {
         $template = $this->parameters['confirmation.template'];
         $url = $this->router->generate('confirmation', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
@@ -44,6 +44,7 @@ class MailerRepository
             'user' => $user,
             'confirmationUrl' =>  $url
         );
+
 
         $this->sendEmailMessage($template, $params, $this->parameters['from_email'], $user->getEmail());
     }
@@ -62,17 +63,13 @@ class MailerRepository
         $context = $this->templating->mergeGlobals($context);
         $template = $this->templating->loadTemplate($templateName);
         $subject = $template->renderBlock('subject', $context);
-        $textBody = $template->renderBlock('body_text', $context);
         $htmlBody = $template->renderBlock('body_html', $context);
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
             ->setFrom($fromEmail)
             ->setTo($toEmail);
-        if (!empty($htmlBody)) {
             $message->setBody($htmlBody, 'text/html');
-        } else {
-            $message->setBody($textBody, '');
-        }
+
         $this->mailer->send($message);
     }
 }
