@@ -10,11 +10,14 @@ use AppBundle\Entity\User;
 use \Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder as BCrypt;
 
 
-class RegistrationController extends Controller
+class RegisterController extends Controller
 {
-    public function registerAction(Request $request)
+    public function showAction(Request $request)
     {
         $user = new User();
+        $em = $this->getDoctrine()->getManager();
+
+        $em->persist($user);
 
         $form = $this->createForm(RegistrationType::class, $user);
 
@@ -25,7 +28,7 @@ class RegistrationController extends Controller
             //make csrf check. no idea how that's done.
 
             //store the user information on the database
-
+            $em->flush();
             //generate a confirmationToken
             /**
              * @var BCrypt $encoder
