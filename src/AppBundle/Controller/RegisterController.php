@@ -48,7 +48,7 @@ class RegisterController extends Controller
             /**
              * MailerRepository $mailer
              */
-            $mailer = $this->get('mailer_repo');
+            $mailer = $this->get('app.service.mailer.mailer_repository');
             $mailer->sendConfirmationEmailMessage($user, $token->getToken());
 
             //Redirigim perque no puguin fer refresh i "reenviar" les dades.

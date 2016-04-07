@@ -6,7 +6,7 @@
  * Time: 17:47
  */
 
-namespace AppBundle\Service\Mailer;
+namespace AppBundle\Services\Mailer;
 
 
 use AppBundle\Entity\User;

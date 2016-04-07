@@ -26,11 +26,10 @@ services:
 
   app.service.mailer.mailer_repository:
     class: AppBundle\Services\Mailer\MailerRepository
-    alias: "mailer_repo"
     arguments:
-      mailer: {type: "service", id: "mailer"}
-      router: {type: "service", id: "router"}
-      templating: {type: "service", id: "templating"}
+      mailer: "@mailer"                 # {type: "service", id: "mailer"}
+      router: "@router"                 # {type: "service", id: "router"}
+      templating: "@twig"               # {type: "service", id: "templating"}
       parameters:
         confirmation.template: 'mail/confirmation.mail.twig'
         from_email: %email%
