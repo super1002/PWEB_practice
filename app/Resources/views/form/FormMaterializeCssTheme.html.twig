@@ -316,9 +316,9 @@
 {%- block form_errors -%}
     {%- if errors|length > 0 -%}
             <div class="input-field row">
-                <ul class="collapsible popout collapsible-accordion error">
+                <ul class="collapsible  popout collapsible-accordion error">
                     <li class="collapsible-container transparent">
-                        <span class=" left-margin error collapsible-header badge no_min_height">
+                        <span class=" left-margin error active collapsible-header badge no_min_height">
                             {% if errors|length > 1 %}
                                 {{ (errors|length) ~ ' errors'}}
                             {% else %}
@@ -349,8 +349,11 @@
 {# Support #}
 
 {%- block form_rows -%}
+
     {% for child in form %}
-        {{- form_row(child) -}}
+        <div class="col s6">
+            {{- form_row(child) -}}
+        </div>
     {% endfor %}
 {%- endblock form_rows -%}
 
