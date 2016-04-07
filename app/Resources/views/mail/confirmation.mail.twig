@@ -1,10 +1,12 @@
 {% block subject %}
 
-    <h1>{{  'Welcome to KING PONG, '  ~ user.getUsername() }}</h1>
+    Welcome to KING PONG
 
 {% endblock %}
 
 {% block body_html %}
+
+    <h1> {{  "Welcome to KingPong " ~ user.getUsername() }} </h1>
     <br>
     <br>
     <p> In order to active your account click on the following link: <a href="{{ url }}">{{ url }}</a></p>
