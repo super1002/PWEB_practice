@@ -445,5 +445,11 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
         return true;
     }
 
+    public function generateConfirmationToken(){
+
+        return time() . hash("bcrypt", $this->email);
+
+    }
+
 
 }

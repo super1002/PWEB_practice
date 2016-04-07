@@ -26,6 +26,7 @@ services:
 
   app.service.mailer.mailer_repository:
     class: AppBundle\Services\Mailer\MailerRepository
+    alias: "mailer_repo"
     arguments:
       mailer: {type: "service", id: "mailer"}
       router: {type: "service", id: "router"}

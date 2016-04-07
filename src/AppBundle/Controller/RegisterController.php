@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\ConfirmationToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,16 +32,24 @@ class RegisterController extends Controller
             $encoder = $this->get('security.password_encoder');
 
             $user->setPassword($encoder->encodePassword($user, $user->getSalt()));
+            $user->eraseCredentials();
             //make csrf check. no idea how that's done.
 
-            //store the user information on the database
-            $em->flush();
-            //generate a confirmationToken
 
-            //$token = //encode the email somehow
-            //persist the confirmation token mapped to the user
+            //generate a confirmationToken
+            $token = new ConfirmationToken($user->getEmail(), $user->generateConfirmationToken());
+            $em->persist($token);
+
+            //store the user information on the database
+            //persist the confirmation token mapped to the email
+            $em->flush();
 
             //send the email with the confirmation url
+            /**
+             * MailerRepository $mailer
+             */
+            $mailer = $this->get('mailer_repo');
+            $mailer->sendConfirmationEmailMessage($user, $token->getToken());
 
             //Redirigim perque no puguin fer refresh i "reenviar" les dades.
             return $this->redirectToRoute('registration_success');
