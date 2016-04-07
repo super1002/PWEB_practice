@@ -193,7 +193,7 @@ jQuery(document).ready(function () {
         },
 
         progressWidget = function () {
-            return '<div class="progress"><div class="determinate"></div></div>';
+            return '<div class="progress col s8 right" style="background-color:rgba(225, 225, 225, 0.28); height:6px; border:1px solid #D9D9D9;"><div class="determinate"></div></div>';
         },
 
         methods = {
