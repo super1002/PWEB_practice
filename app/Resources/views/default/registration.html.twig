@@ -15,9 +15,8 @@
             </div>
         </div>
         <div class="row">
-            {{ form_row(form.plainPassword, {'attr': {'id': 'password'}}) }}
+            {{ form_row(form.plainPassword) }}
         </div>
-        <div id="messages"></div>
         <div class="row ">
             <div class="col s6">
                 {{ form_row(form.twitter_user) }}
@@ -37,5 +36,5 @@
 
 {% block javascripts %}
     {{ include('js_includes.twig') }}
-    <script src="{{ asset('js/jquery-2.2.0.min.js') }}"></script>
+    <script src="{{ asset('js/PasswordMeter.js') }}"></script>
 {% endblock %}

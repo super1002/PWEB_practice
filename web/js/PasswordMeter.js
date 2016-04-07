@@ -11,7 +11,7 @@ jQuery(document).ready(function () {
             $(evt.target).pwstrength("outputErrorList");
         }
     };
-    $(':password').pwstrength(options);
+    $('#app_user_registration_plainPassword_first').pwstrength(options);
 });
 
 
@@ -26,11 +26,11 @@ jQuery(document).ready(function () {
                 password_to_short: "The Password is too short",
                 same_as_username: "Your password cannot be the same as your username"
             },
-            scores: [17, 26, 40, 50],
+            scores: [18, 33, 42, 50],
             verdicts: ["Weak", "Normal", "Medium", "Strong", "Very Strong"],
             showVerdicts: true,
             raisePower: 1.4,
-            usernameField: "#username",
+            usernameField: "#app_user_registration_username",
             onLoad: undefined,
             onKeyUp: undefined,
             viewports: {
@@ -44,7 +44,7 @@ jQuery(document).ready(function () {
                 wordLength: -100,
                 wordSimilarToUsername: -100,
                 wordLowercase: 1,
-                wordUppercase: 3,
+                wordUppercase: 1,
                 wordOneNumber: 3,
                 wordThreeNumbers: 5,
                 wordOneSpecialChar: 3,
@@ -76,14 +76,14 @@ jQuery(document).ready(function () {
                         lenScore = Math.pow(wordlen, options.raisePower);
                     if (wordlen < options.minChar) {
                         lenScore = (lenScore + score);
-                        options.errors.push(options.errorMessages.password_to_short);
+                        //options.errors.push(options.errorMessages.password_to_short);
                     }
                     return lenScore;
                 },
                 wordSimilarToUsername: function (options, word, score) {
                     var username = $(options.usernameField).val();
                     if (username && word.toLowerCase().match(username.toLowerCase())) {
-                        options.errors.push(options.errorMessages.same_as_username);
+                        //options.errors.push(options.errorMessages.same_as_username);
                         return score;
                     }
                     return true;
@@ -137,31 +137,36 @@ jQuery(document).ready(function () {
 
             if (score < options.scores[0]) {
                 progressbar.addClass("progress-danger").removeClass("progress-warning").removeClass("progress-success");
-                progressbar.find(".bar").css("width", "5%");
+                progressbar.find(".determinate").css("width", "5%");
+                progressbar.find(".determinate").css("background-color", "#f44336");
                 if (options.showVerdicts) {
                     $verdict.text(options.verdicts[0]);
                 }
             } else if (score >= options.scores[0] && score < options.scores[1]) {
                 progressbar.addClass("progress-danger").removeClass("progress-warning").removeClass("progress-success");
-                progressbar.find(".bar").css("width", "25%");
+                progressbar.find(".determinate").css("width", "25%");
+                progressbar.find(".determinate").css("background-color", "#ff9800");
                 if (options.showVerdicts) {
                     $verdict.text(options.verdicts[1]);
                 }
             } else if (score >= options.scores[1] && score < options.scores[2]) {
                 progressbar.addClass("progress-warning").removeClass("progress-danger").removeClass("progress-success");
-                progressbar.find(".bar").css("width", "50%");
+                progressbar.find(".determinate").css("width", "50%");
+                progressbar.find(".determinate").css("background-color", "#ffeb3b");
                 if (options.showVerdicts) {
                     $verdict.text(options.verdicts[2]);
                 }
             } else if (score >= options.scores[2] && score < options.scores[3]) {
                 progressbar.addClass("progress-warning").removeClass("progress-danger").removeClass("progress-success");
-                progressbar.find(".bar").css("width", "75%");
+                progressbar.find(".determinate").css("width", "75%");
+                progressbar.find(".determinate").css("background-color", "#8bc34a");
                 if (options.showVerdicts) {
                     $verdict.text(options.verdicts[3]);
                 }
             } else if (score >= options.scores[3]) {
                 progressbar.addClass("progress-success").removeClass("progress-warning").removeClass("progress-danger");
-                progressbar.find(".bar").css("width", "100%");
+                progressbar.find(".determinate").css("width", "100%");
+                progressbar.find(".determinate").css("background-color", "#2e7d32");
                 if (options.showVerdicts) {
                     $verdict.text(options.verdicts[4]);
                 }
@@ -188,7 +193,7 @@ jQuery(document).ready(function () {
         },
 
         progressWidget = function () {
-            return '<div class="progress"><div class="bar"></div></div>';
+            return '<div class="progress col s8 right" style="background-color:rgba(225, 225, 225, 0.28); height:6px; border:1px solid #D9D9D9;"><div class="determinate"></div></div>';
         },
 
         methods = {
@@ -218,7 +223,7 @@ jQuery(document).ready(function () {
                     } else {
                         progressbar.insertAfter($el);
                     }
-                    progressbar.find(".bar").css("width", "0%");
+                    progressbar.find(".determinate").css("width", "0%");
                     $el.data("pwstrength").progressbar = progressbar;
 
                     if (allOptions.showVerdicts) {
