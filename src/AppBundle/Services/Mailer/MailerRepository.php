@@ -42,7 +42,7 @@ class MailerRepository
         $url = $this->router->generate('confirmation', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
         $params = array(
             'user' => $user,
-            'confirmationUrl' =>  $url
+            'url' =>  $url
         );
 
 

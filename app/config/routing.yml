@@ -123,8 +123,8 @@ register:
     - GET
     - POST #will be used to process register form
 
-register_confirm:
-  path: /confirm/{uuid}
+confirmation:
+  path: /confirm/{token}
   defaults:
     _controller: AppBundle:Register:confirm
     _format: html

@@ -25,9 +25,8 @@ security:
         in_memory:
             memory: ~
 
-        user_email_provider:
-            entity:
-                class: AppBundle\Entity\User
+        user_email_user_provider:
+            id: app.username_email_user_provider
 
 
     firewalls:
@@ -110,4 +109,5 @@ security:
       - { path: ^/user, roles: ROLE_USER }
       - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/confirm, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/logout, roles: ROLE_USER }

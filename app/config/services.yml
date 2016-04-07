@@ -10,15 +10,29 @@ services:
       - { name: form.type, alias: app_user_registration }
 
 
+  app.metadata.user:
+      class: Doctrine\ORM\Mapping\ClassMetadata
+      factory_service: doctrine # this is an instance of Registry
+      factory_method: getRepository
+      arguments: [ AppBundle\Entity\User ]
+
+  app.username_email_user_provider:
+      class: AppBundle\Security\UsernameEmailUserProvider
+      arguments:
+          em: {type: "service", id: "@doctrine.orm.entity_manager"}
+          class: "@app.metadata.user"
+
+
+
   app.service.mailer.mailer_repository:
     class: AppBundle\Services\Mailer\MailerRepository
     arguments:
-      - mailer: {type: "service", id: "mailer"}
-      - router: {type: "service", id: "router"}
-      - templating: {type: "service", id: "templating"}
-      - parameters:
-        - confirmation.template: 'mail/confirmation.mail.twig'
-        - from_email: %email%
+      mailer: {type: "service", id: "mailer"}
+      router: {type: "service", id: "router"}
+      templating: {type: "service", id: "templating"}
+      parameters:
+        confirmation.template: 'mail/confirmation.mail.twig'
+        from_email: %email%
 
 #    service_name:
 #        class: AppBundle\Directory\ClassName
