@@ -146,7 +146,12 @@ login:
     _format: html
   methods:
     - GET
-    - POST #submit login form
+
+
+login_check:
+  path: /login_check
+  methods:
+    - POST
 
 logout:
   path: /logout #logs out authenticated user on current session
