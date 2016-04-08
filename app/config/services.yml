@@ -1,6 +1,6 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
-parameters:
+# parameters:
 #    parameter_name: value
 
 services:
@@ -9,6 +9,12 @@ services:
     tags:
       - { name: form.type, alias: app_user_registration }
 
+  app.form.login_type:
+    class: AppBundle\Form\LoginType
+    arguments:
+      router: "@router"
+    tags:
+      - { name: form.type, alias: app_form_login }
 
   app.metadata.user:
       class: Doctrine\ORM\Mapping\ClassMetadata

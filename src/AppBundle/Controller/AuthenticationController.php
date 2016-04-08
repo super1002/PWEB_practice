@@ -22,13 +22,6 @@ class AuthenticationController extends Controller
 
         $form = $this->createForm(LoginType::class);
 
-        if($form->isSubmitted() && $form->isValid()){
-
-
-
-            //Redirigim perque no puguin fer refresh i "reenviar" les dades.
-            return $this->redirectToRoute('Authentication_success');
-        }
 
         return $this->render('default/login.html.twig', array(
             'form' => $form->createView()
