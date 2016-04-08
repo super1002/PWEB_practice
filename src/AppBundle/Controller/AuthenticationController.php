@@ -24,15 +24,7 @@ class AuthenticationController extends Controller
 
         if($form->isSubmitted() && $form->isValid()){
 
-            //make csrf check. no idea how that's done.
 
-            //store the user information on the database
-
-            //generate a confirmationToken
-
-            //persist the confirmation token mapped to the user
-
-            //send the email with the confirmation url
 
             //Redirigim perque no puguin fer refresh i "reenviar" les dades.
             return $this->redirectToRoute('Authentication_success');

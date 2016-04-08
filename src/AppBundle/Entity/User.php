@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -131,8 +130,8 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
     {
         $this->isActive = false;
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $this->roles = new ArrayCollection();
-        $this->roles->add('ROLE_USER');
+
+        $this->roles = array("ROLE_USER");
 
         $this->locked = false;
         $this->expired = false;

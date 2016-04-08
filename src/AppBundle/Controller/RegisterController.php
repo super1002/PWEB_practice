@@ -74,7 +74,6 @@ class RegisterController extends Controller
 
         if($conf_token){
             $em = $this->getDoctrine()->getManager();
-            $em->remove($conf_token);
             //activamos el usuario a traves del email
             $user_repo = $this->getDoctrine()->getRepository('AppBundle:User');
 
@@ -82,22 +81,23 @@ class RegisterController extends Controller
             if (!$user) {
                 throw new UsernameNotFoundException("User not found");
             } else {
-                $user->setEnabled(true);
-                $token = new UsernamePasswordToken($user, null, "main", $user->getRoles());
-                $this->get("security.context")->setToken($token); //now the user is logged in
+                $user->setIsEnabled(true);
+                $token = new UsernamePasswordToken($user, null, "app.username_email_user_provider", $user->getRoles());
+                $this->get("security.token_storage")->setToken($token); //now the user is logged in
 
                 //now dispatch the login event
                 $event = new InteractiveLoginEvent($request, $token);
                 $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
             }
 
+
             $em->flush();
-            $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('homepage');
 
         }else{
 
 
-            $this->redirectToRoute('invalid_token');
+            return $this->redirectToRoute('invalid_token');
         }
 
     }
