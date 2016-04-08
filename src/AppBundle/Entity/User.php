@@ -89,7 +89,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
     private $email;
 
     /**
-     * @ORM\Column(name="profile_picture", type="string", length=255, nullable=true)
+     * @ORM\Column(name="profile_picture", type="string")
      */
     private $profile_picture;
 

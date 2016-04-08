@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\ConfirmationToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\RegistrationType;
@@ -34,6 +35,25 @@ class RegisterController extends Controller
             $user->setPassword($encoder->encodePassword($user, $user->getSalt()));
             $user->eraseCredentials();
             //make csrf check. no idea how that's done.
+
+            /** @var UploadedFile $file */
+            $file = $user->getProfilePicture();
+
+            $extension =  $file->guessExtension();
+            if (!$extension) {
+                // extension cannot be guessed
+                $extension = 'bin';
+            }
+
+            $fileName = $user->getUsername().'.'.$extension;
+
+            $profilePicturesDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/ProfilePictures';
+
+            //Getting the file saved
+
+            $file->move($profilePicturesDir, $fileName);
+            $user->setProfilePicture($fileName);
+
 
 
             //generate a confirmationToken

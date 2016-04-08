@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 class RegistrationType extends AbstractType{
@@ -30,10 +31,17 @@ class RegistrationType extends AbstractType{
                 'second_options' => array('label' => 'Repeat Password'),
             ))
             ->add('twitter_user', TextType::class)
-            ->add('profile_picture', FileType::class)
+            ->add('profile_picture', FileType::class, array('label' => 'Profile Picture'))
             ->add('submit', SubmitType::class)
         ;
 
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'AppBundle\Entity\User',
+        ));
     }
 
     public function getBlockPrefix()
