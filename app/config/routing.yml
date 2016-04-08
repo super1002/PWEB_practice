@@ -123,6 +123,14 @@ register:
     - GET
     - POST #will be used to process register form
 
+registration_success:
+  path: /register/confirmation
+  defaults:
+    _controller: AppBundle:Register:success
+    _format: html
+  methods:
+    - GET
+
 confirmation:
   path: /confirm/{token}
   defaults:
