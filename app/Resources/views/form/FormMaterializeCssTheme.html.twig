@@ -34,6 +34,20 @@
     <textarea class="materialize-textarea" {{ block('widget_attributes') }}>{{ value }}</textarea>
 {%- endblock textarea_widget -%}
 
+{%- block file_widget -%}
+    <div class="file-field input-field">
+        <div class="btn half-top-margin" style="height: 2rem; line-height: 2rem;">
+            <span>File</span>
+            <input type="file">
+        </div>
+        <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+        </div>
+    </div>
+{%- endblock file_widget -%}
+
+
+
 {%- block choice_widget -%}
     {% if expanded %}
         {{- block('choice_widget_expanded') -}}

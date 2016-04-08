@@ -89,6 +89,11 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
     private $email;
 
     /**
+     * @ORM\Column(name="profile_picture", type="string", length=255, nullable=true)
+     */
+    private $profile_picture;
+
+    /**
      * @var ArrayCollection
      * @ORM\Column(name="roles", type="array")
      */
@@ -446,4 +451,28 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
     }
 
 
+
+    /**
+     * Set profilePicture
+     *
+     * @param string $profilePicture
+     *
+     * @return User
+     */
+    public function setProfilePicture($profilePicture)
+    {
+        $this->profile_picture = $profilePicture;
+
+        return $this;
+    }
+
+    /**
+     * Get profilePicture
+     *
+     * @return string
+     */
+    public function getProfilePicture()
+    {
+        return $this->profile_picture;
+    }
 }

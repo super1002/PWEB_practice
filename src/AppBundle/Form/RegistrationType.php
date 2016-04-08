@@ -4,6 +4,7 @@
 namespace AppBundle\Form;
 
 
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -29,6 +30,7 @@ class RegistrationType extends AbstractType{
                 'second_options' => array('label' => 'Repeat Password'),
             ))
             ->add('twitter_user', TextType::class)
+            ->add('profile_picture', FileType::class)
             ->add('submit', SubmitType::class)
         ;
 
