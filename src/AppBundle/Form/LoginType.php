@@ -17,6 +17,7 @@ class LoginType extends AbstractType{
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            //->setAction(generateUrl('login_check')) //must inject router service for this to work
             ->add('username', TextType::class)
             ->add('password', PasswordType::class)
             ->add('submit', SubmitType::class)
