@@ -3,16 +3,21 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ConfirmationToken;
+use AppBundle\Repository\ConfirmationTokenRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\RegistrationType;
 use AppBundle\Entity\User;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use \Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder as BCrypt;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 
 class RegisterController extends Controller
 {
+
     public function showAction(Request $request)
     {
         $user = new User();
@@ -58,5 +63,42 @@ class RegisterController extends Controller
         return $this->render('default/registration.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+
+    public function confirmAction(Request $request,$token){
+
+        //check the token against database.
+        $repo = $this->getDoctrine()->getRepository('AppBundle:ConfirmationToken');
+        $conf_token = $repo->find($token);
+
+        if($conf_token){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($conf_token);
+            //activamos el usuario a traves del email
+            $user_repo = $this->getDoctrine()->getRepository('AppBundle:User');
+
+            $user = $user_repo->findOneBy(array('email'=> $conf_token->getEmail()));
+            if (!$user) {
+                throw new UsernameNotFoundException("User not found");
+            } else {
+                $user->setEnabled(true);
+                $token = new UsernamePasswordToken($user, null, "main", $user->getRoles());
+                $this->get("security.context")->setToken($token); //now the user is logged in
+
+                //now dispatch the login event
+                $event = new InteractiveLoginEvent($request, $token);
+                $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+            }
+
+            $em->flush();
+            $this->redirectToRoute('homepage');
+
+        }else{
+
+
+            $this->redirectToRoute('invalid_token');
+        }
+
     }
 }

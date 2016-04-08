@@ -94,7 +94,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
     private $profile_picture;
 
     /**
-     * @var ArrayCollection
+     * @var array
      * @ORM\Column(name="roles", type="array")
      */
     private $roles;
@@ -132,7 +132,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
         $this->isActive = false;
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->roles = new ArrayCollection();
-        $this->roles->add("ROLE_USER");
+        $this->roles->add('ROLE_USER');
 
         $this->locked = false;
         $this->expired = false;
