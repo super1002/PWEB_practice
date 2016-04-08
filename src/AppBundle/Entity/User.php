@@ -450,6 +450,12 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
         return true;
     }
 
+    public function generateConfirmationToken(){
+
+        return time() . hash("sha512", $this->email);
+
+    }
+
 
 
     /**
