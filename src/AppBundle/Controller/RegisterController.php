@@ -42,24 +42,28 @@ class RegisterController extends Controller
             //make csrf check. no idea how that's done.
 
             /** @var UploadedFile $file */
-            $file = $user->getProfilePicture();
+            $file = $user->getFile();
+            dump($user);
+            if (null !== $file) {
 
-            $extension =  $file->guessExtension();
-            if (!$extension) {
-                // extension cannot be guessed
-                $extension = 'bin';
+                $extension =  $file->guessExtension();
+                if (!$extension) {
+                    // extension cannot be guessed
+                    $extension = 'bin';
+                }
+
+                $fileName = $user->getUsername().'.'.$extension;
+
+                $profilePicturesDir = $this->getParameter('kernel.root_dir').'/../web/uploads/ProfilePictures/';
+
+                //Getting the file saved
+
+                $file->move($profilePicturesDir, $fileName);
+                $user->setProfilePicture('uploads/ProfilePictures/'. $fileName);
+
+            }else{
+                dump($file);
             }
-
-            $fileName = $user->getUsername().'.'.$extension;
-
-            $profilePicturesDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/ProfilePictures';
-
-            //Getting the file saved
-
-            $file->move($profilePicturesDir, $fileName);
-            $user->setProfilePicture($fileName);
-
-
 
             //generate a confirmationToken
             $token = new ConfirmationToken($user->getEmail(), $user->generateConfirmationToken());

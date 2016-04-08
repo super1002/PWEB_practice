@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -88,9 +89,16 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
     private $email;
 
     /**
-     * @ORM\Column(name="profile_picture", type="string")
+     *
+     * @ORM\Column(name="profile_picture", type="string", nullable=true)
      */
     private $profile_picture;
+
+    /**
+     * @Validator\File()
+     * @var UploadedFile
+     */
+    private $file;
 
     /**
      * @var array
@@ -132,6 +140,8 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
 
         $this->roles = array("ROLE_USER");
+        $this->path = null;
+        $this->file = null;
 
         $this->locked = false;
         $this->expired = false;
@@ -458,21 +468,17 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
 
 
     /**
-     * Set profilePicture
+     * Sets file.
      *
      * @param string $profilePicture
-     *
-     * @return User
      */
-    public function setProfilePicture($profilePicture)
+    public function setProfilePicture($profilePicture = null)
     {
         $this->profile_picture = $profilePicture;
-
-        return $this;
     }
 
     /**
-     * Get profilePicture
+     * Get file.
      *
      * @return string
      */
@@ -480,4 +486,22 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
     {
         return $this->profile_picture;
     }
+
+    /**
+     * @return UploadedFile mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile(UploadedFile $file)
+    {
+        $this->file = $file;
+    }
+
+
 }

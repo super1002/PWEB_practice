@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
@@ -31,7 +32,7 @@ class RegistrationType extends AbstractType{
                 'second_options' => array('label' => 'Repeat Password'),
             ))
             ->add('twitter_user', TextType::class)
-            ->add('profile_picture', FileType::class, array('label' => 'Profile Picture'))
+            ->add('file', FileType::class, array('label' => 'Profile Picture', 'data_class'=> UploadedFile::class))
             ->add('submit', SubmitType::class)
         ;
 
