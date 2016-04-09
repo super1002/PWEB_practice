@@ -123,4 +123,10 @@ class RegisterController extends Controller
         }
 
     }
+
+    public function successAction(Request $request){
+
+
+        return $this->render('default/register_success.html.twig');
+    }
 }
