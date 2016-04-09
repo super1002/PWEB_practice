@@ -2,13 +2,13 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Validator;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -24,7 +24,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     message="This username is not available")
  *
  */
-class User implements UserInterface, AdvancedUserInterface
+class User implements UserInterface, AdvancedUserInterface, EquatableInterface, EncoderAwareInterface
 {
     /**
      * @var int
@@ -37,8 +37,9 @@ class User implements UserInterface, AdvancedUserInterface
 
     /**
      * @var String
+     * @Validator\NotBlank()
      * @Validator\Regex(
-     *     pattern="@\w+",
+     *     pattern="^@\w{1,15}^",
      *     match=true,
      *     message="The twitter account must begin with @"
      * )
@@ -49,6 +50,7 @@ class User implements UserInterface, AdvancedUserInterface
     /**
      * @ORM\Column(name="username", type="string", length=25, unique=true)
      *
+     * @Validator\NotBlank()
      * @Validator\Length(
      *      min = 6,
      *      max = 25,
@@ -70,6 +72,7 @@ class User implements UserInterface, AdvancedUserInterface
 
     /**
      * @var String
+     * @Validator\NotBlank()
      * @Validator\Length(
      *      min = 6,
      *      max = 10,
@@ -81,12 +84,25 @@ class User implements UserInterface, AdvancedUserInterface
 
     /**
      * @ORM\Column(name="email", type="string", length=60, unique=true)
+     * @Validator\NotBlank()
      * @Validator\Email()
      */
     private $email;
 
     /**
-     * @ \ArrayCollection
+     *
+     * @ORM\Column(name="profile_picture", type="string", nullable=true)
+     */
+    private $profile_picture;
+
+    /**
+     * @Validator\File()
+     * @var UploadedFile
+     */
+    private $file;
+
+    /**
+     * @var array
      * @ORM\Column(name="roles", type="array")
      */
     private $roles;
@@ -96,16 +112,41 @@ class User implements UserInterface, AdvancedUserInterface
      */
     private $isActive;
 
+    /**
+     * @ORM\Column(name="is_enabled", type="boolean")
+     */
+    private $isEnabled;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_expired", type="boolean")
+     */
+    private $expired;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_credentialsExpired", type="boolean")
+     */
+    private $credentialsExpired;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_locked", type="boolean")
+     */
+    private $locked;
+
     public function __construct()
     {
         $this->isActive = false;
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $this->roles = new ArrayCollection();
-        $this->roles->add("ROLE_USER");
 
-        $this->enabled = false;
+        $this->roles = array("ROLE_USER");
+        $this->path = null;
+        $this->file = null;
+
         $this->locked = false;
         $this->expired = false;
+        $this->isEnabled = false;
         $this->credentialsExpired = false;
     }
 
@@ -138,11 +179,13 @@ class User implements UserInterface, AdvancedUserInterface
 
     public function getRoles()
     {
-        return $this->roles;
+        //return $this->roles;
+        return array("ROLE_USER");
     }
 
     public function eraseCredentials()
     {
+        $this->plain_password = "";
     }
 
     public function getUsername()
@@ -162,22 +205,22 @@ class User implements UserInterface, AdvancedUserInterface
 
     public function isAccountNonExpired()
     {
-        return true;
+        return !($this->expired);
     }
 
     public function isAccountNonLocked()
     {
-        return true;
+        return !($this->locked);
     }
 
     public function isCredentialsNonExpired()
     {
-        return true;
+        return !($this->credentialsExpired);
     }
 
     public function isEnabled()
     {
-        return $this->isActive;
+        return $this->isEnabled;
     }
 
     /**
@@ -228,6 +271,244 @@ class User implements UserInterface, AdvancedUserInterface
         $this->isActive = $isActive;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isLocked()
+    {
+        return $this->locked;
+    }
+
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     *
+     * @return User
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     *
+     * @return User
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     *
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Set roles
+     *
+     * @param array $roles
+     *
+     * @return User
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Set isEnabled
+     *
+     * @param boolean $isEnabled
+     *
+     * @return User
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get isEnabled
+     *
+     * @return boolean
+     */
+    public function getIsEnabled()
+    {
+        return $this->isEnabled;
+    }
+
+    /**
+     * Set expired
+     *
+     * @param boolean $expired
+     *
+     * @return User
+     */
+    public function setExpired($expired)
+    {
+        $this->expired = $expired;
+
+        return $this;
+    }
+
+    /**
+     * Get expired
+     *
+     * @return boolean
+     */
+    public function getExpired()
+    {
+        return $this->expired;
+    }
+
+    /**
+     * Set credentialsExpired
+     *
+     * @param boolean $credentialsExpired
+     *
+     * @return User
+     */
+    public function setCredentialsExpired($credentialsExpired)
+    {
+        $this->credentialsExpired = $credentialsExpired;
+
+        return $this;
+    }
+
+    /**
+     * Get credentialsExpired
+     *
+     * @return boolean
+     */
+    public function getCredentialsExpired()
+    {
+        return $this->credentialsExpired;
+    }
+
+    /**
+     * Set locked
+     *
+     * @param boolean $locked
+     *
+     * @return User
+     */
+    public function setLocked($locked)
+    {
+        $this->locked = $locked;
+
+        return $this;
+    }
+
+    /**
+     * Get locked
+     *
+     * @return boolean
+     */
+    public function getLocked()
+    {
+        return $this->locked;
+    }
+
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->salt !== $user->getSalt()) {
+            return false;
+        }
+
+        if ($this->username !== $user->getUsername()) {
+            return false;
+        }
+
+        if ($this->email !== $user->getEmail()) {
+            return false;
+        }
+
+        if ($this->twitter_user !== $user->getTwitterUser()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function generateConfirmationToken(){
+
+        return time() . hash("sha512", $this->email);
+
+    }
+
+
+
+    /**
+     * Sets file.
+     *
+     * @param string $profilePicture
+     */
+    public function setProfilePicture($profilePicture = null)
+    {
+        $this->profile_picture = $profilePicture;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return string
+     */
+    public function getProfilePicture()
+    {
+        return $this->profile_picture;
+    }
+
+    /**
+     * @return UploadedFile mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile(UploadedFile $file)
+    {
+        $this->file = $file;
+    }
+
+
+    public function getEncoderName()
+    {
+        return 'bcrypt_encoder';
+    }
 
 }
-

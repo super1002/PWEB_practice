@@ -2,20 +2,30 @@
 # http://symfony.com/doc/current/book/security.html
 security:
 
+    access_denied_url: ~ # /error/403
+
+    # strategy can be: none, migrate, invalidate
+    session_fixation_strategy:  migrate
+    hide_user_not_found:  true
+    always_authenticate_before_granting:  false
+    erase_credentials:    true
+    access_decision_manager:
+        strategy:             affirmative
+        allow_if_all_abstain:  false
+        allow_if_equal_granted_denied:  true
+
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     encoders:
         # BCrypt encoder
-        AppBundle\Entity\User:
+        bcrypt_encoder:
             algorithm:            bcrypt
             cost:                 13
 
     providers:
-        in_memory:
-            memory: ~
 
-        fos_userbundle:
-            id: fos_user.user_provider.username_email
-
+        user_email_user_provider:
+            entity:
+              class: AppBundle\Entity\User
 
 
     firewalls:
@@ -25,28 +35,78 @@ security:
             security: false
 
         main:
-            anonymous: ~
+            anonymous: true
+            methods: [GET, POST]
             logout:
                 path:   /logout
                 target: /
 
             form_login:
-                provider: fos_userbundle
-                csrf_token_generator: security.csrf.token_manager
+                # submit the login form here
+                check_path: /login_check
 
+                # the user is redirected here when they need to log in
+                login_path: /login
 
+                # if true, forward the user to the login form instead of redirecting
+                use_forward: false
 
-            # activate different ways to authenticate
+                # login success redirecting options (read further below)
+                always_use_default_target_path: false
+                default_target_path:            /
+                target_path_parameter:          _target_path
+                use_referer:                    false
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+                # login failure redirecting options (read further below)
+                failure_path:    /login
+                failure_forward: false  # failure forward deactivated. but if log or smthinf for failed attempts is required that must be activated
+                failure_path_parameter: _failure_path
+                failure_handler: ~
+                success_handler: ~
 
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+                # field names for the username and password fields
+                username_parameter: app_user_login[username]
+                password_parameter: app_user_login[password]
+
+                # csrf token options
+                csrf_parameter:       _token
+                csrf_token_id:        _csrf/authenticate
+                #csrf_token_generator: security.csrf.token_manager
+
+                # by default, the login form *must* be a POST, not a GET
+                post_only:      true
+                remember_me:    true
+
+                # by default, a session must exist before submitting an authentication request
+                # if false, then Request::hasPreviousSession is not called during authentication
+                require_previous_session: true
+
+            remember_me:
+                #token_provider: ~
+                secret: "%secret%"
+                name: kingpong
+                lifetime: 86400 # in seconds (1 day)
+                path: /
+                domain: ~
+                secure: true
+                httponly: true
+                always_remember_me: false
+                remember_me_parameter: _remember_me
+
+            logout:
+                path:   /logout
+                target: /
+                invalidate_session: true
+                delete_cookies:
+                    kingpong: { path: /, domain: ~ } #delete the remember me cookie
+                handlers: ~
+                success_handler: ~
 
     access_control:
       #Require ROLE_USER for /user/*
+      # - { path: ^/, requires_channel: https } # activate this to force https connection. Bewarw, proper https config must be done on the server
       - { path: ^/user, roles: ROLE_USER }
       - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/confirm, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/logout, roles: ROLE_USER }
