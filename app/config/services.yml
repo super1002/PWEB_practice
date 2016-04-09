@@ -14,7 +14,7 @@ services:
     arguments:
       router: "@router"
     tags:
-      - { name: form.type, alias: app_form_login }
+      - { name: form.type, alias: authenticate }
 
   app.metadata.user:
       class: Doctrine\ORM\Mapping\ClassMetadata
@@ -25,7 +25,7 @@ services:
   app.username_email_user_provider:
       class: AppBundle\Repository\UserRepository
       arguments:
-          em: {type: "service", id: "@doctrine.orm.entity_manager"}
+          em: "@doctrine.orm.entity_manager"
           class: "@app.metadata.user"
 
 

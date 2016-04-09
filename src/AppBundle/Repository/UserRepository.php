@@ -11,24 +11,26 @@ namespace AppBundle\Repository;
 use AppBundle\Entity;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-class UserRepository extends EntityRepository implements UserProviderInterface
+class UserRepository extends EntityRepository implements UserLoaderInterface, UserProviderInterface
 {
     public function loadUserByUsername($username) {
-        $em = $this->getEntityManager();
-        $retvar = $em->createQuery('SELECT u FROM
-         AppBundle:User u
-         WHERE u.username = :username
-         OR u.email = :username')
-            ->setParameters(array(
-                'username' => $username
-            ))
+        dump($username);
+
+        $retvar = $this->createQueryBuilder('u')
+            ->setParameter('username', $username)
+            ->setParameter('email', $username)
+            ->where('u.username = :username OR u.email = :email')
+            ->getQuery()
             ->getOneOrNullResult();
 
+
+        dump($retvar);
 
         if ($retvar) {
 

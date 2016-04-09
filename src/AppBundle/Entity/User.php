@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,7 +24,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     message="This username is not available")
  *
  */
-class User implements UserInterface, AdvancedUserInterface, EquatableInterface
+class User implements UserInterface, AdvancedUserInterface, EquatableInterface, EncoderAwareInterface
 {
     /**
      * @var int
@@ -178,7 +179,8 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
 
     public function getRoles()
     {
-        return $this->roles;
+        //return $this->roles;
+        return array("ROLE_USER");
     }
 
     public function eraseCredentials()
@@ -203,17 +205,17 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
 
     public function isAccountNonExpired()
     {
-        return $this->expired;
+        return !($this->expired);
     }
 
     public function isAccountNonLocked()
     {
-        return $this->locked;
+        return !($this->locked);
     }
 
     public function isCredentialsNonExpired()
     {
-        return $this->credentialsExpired;
+        return !($this->credentialsExpired);
     }
 
     public function isEnabled()
@@ -503,5 +505,10 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface
         $this->file = $file;
     }
 
+
+    public function getEncoderName()
+    {
+        return 'bcrypt_encoder';
+    }
 
 }

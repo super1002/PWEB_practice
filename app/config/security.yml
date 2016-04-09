@@ -17,16 +17,15 @@ security:
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     encoders:
         # BCrypt encoder
-        AppBundle\Entity\User:
+        bcrypt_encoder:
             algorithm:            bcrypt
             cost:                 13
 
     providers:
-        in_memory:
-            memory: ~
 
         user_email_user_provider:
-            id: app.username_email_user_provider
+            entity:
+              class: AppBundle\Entity\User
 
 
     firewalls:
@@ -66,13 +65,13 @@ security:
                 success_handler: ~
 
                 # field names for the username and password fields
-                username_parameter: username
-                password_parameter: password
+                username_parameter: app_user_login[username]
+                password_parameter: app_user_login[password]
 
                 # csrf token options
-                csrf_parameter:       _csrf_token
-                csrf_token_id:        authenticate
-                csrf_token_generator: security.csrf.token_manager
+                csrf_parameter:       _token
+                csrf_token_id:        _csrf/authenticate
+                #csrf_token_generator: security.csrf.token_manager
 
                 # by default, the login form *must* be a POST, not a GET
                 post_only:      true

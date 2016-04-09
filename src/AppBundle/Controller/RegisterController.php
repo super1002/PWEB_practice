@@ -35,15 +35,15 @@ class RegisterController extends Controller
             /**
              * @var BCrypt $encoder
              */
-            $encoder = $this->get('security.password_encoder');
+            $factory = $this->get('security.encoder_factory');
+            $encoder = $factory->getEncoder($user);
 
-            $user->setPassword($encoder->encodePassword($user, $user->getSalt()));
+            $user->setPassword($encoder->encodePassword($user->getPlainPassword(), $user->getSalt()));
             $user->eraseCredentials();
             //make csrf check. no idea how that's done.
 
             /** @var UploadedFile $file */
             $file = $user->getFile();
-            dump($user);
             if (null !== $file) {
 
                 $extension =  $file->guessExtension();
@@ -61,8 +61,6 @@ class RegisterController extends Controller
                 $file->move($profilePicturesDir, $fileName);
                 $user->setProfilePicture('uploads/ProfilePictures/'. $fileName);
 
-            }else{
-                dump($file);
             }
 
             //generate a confirmationToken
@@ -114,7 +112,7 @@ class RegisterController extends Controller
                 $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
             }
 
-
+            $em->remove($conf_token);
             $em->flush();
             return $this->redirectToRoute('homepage');
 
