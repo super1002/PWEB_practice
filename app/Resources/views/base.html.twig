@@ -18,10 +18,10 @@
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
-<body>
+<body style="display: flex; min-height: 100vh; flex-direction: column;">
 
     {# Header #}
-    <div class="navbar-fixed iamthetop">
+    <header class="navbar-fixed iamthetop">
         <div class="full-width">
             <nav class="navy-grey darken-2">
                 <div class="nav-wrapper">
@@ -51,12 +51,14 @@
             </div>
 
         </div>
-    </div>
+    </header>
+
+    <main style="flex: 1 0 auto;">
 
     {# Content #}
     {% block body %}{% endblock %}
 
-
+    </main>
     {# Footer #}
     {% block footer %}
 
