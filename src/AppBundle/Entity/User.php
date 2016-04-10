@@ -135,6 +135,33 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      */
     private $locked;
 
+    /**
+     * @var float
+     * @ORM\Column(name="balance", type="float")
+     * @Validator\NotBlank()
+     * @Validator\Range(
+     *     min="0"
+     *     minMessage="You cannot have negative balance, this is not a charity"
+     *     max="1000"
+     *     maxMessage="For security reason you cannot recharge when your balance is over 1000€"
+     * )
+     */
+    private $balance;
+
+
+    /**
+     * @var float
+     * @Validator\NotBlank()
+     * @Validator\Range(
+     *     min="1"
+     *     minMessage="You must recharge at least 1€"
+     *     max="100"
+     *     maxMessage="You cannot do a recharge higher than 100€"
+     * )
+     */
+    private $recharge;
+
+
     public function __construct()
     {
         $this->isActive = false;
@@ -510,5 +537,39 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     {
         return 'bcrypt_encoder';
     }
+
+    /**
+     * @return float
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param float $balance
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRecharge()
+    {
+        return $this->recharge;
+    }
+
+    /**
+     * @param float $recharge
+     */
+    public function setRecharge($recharge)
+    {
+        $this->recharge = $recharge;
+    }
+
+
 
 }
