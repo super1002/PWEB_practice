@@ -1,0 +1,31 @@
+{# app/Resources/views/security/login.html.twig #}
+
+{% form_theme form 'form/FormMaterializeCssTheme.html.twig' %}
+
+
+<div class="container row right right-margin">
+
+    {{  form_start(form) }}
+    {{  form_errors(form) }}
+    <div class="col s1 offset-s7">
+        {{ form_row(form.username, {'label': '' }) }}
+        {{ form_widget(form.username, {'attr': {'placeholder': 'holaquetal'}}) }}
+
+    </div>
+    <div class="col s1 offset-s1">
+        {{ form_row(form.password, {'label': ''}) }}
+
+
+    </div>
+    <div class="col s1 offset-s1">
+        {{ form_row(form.submit, { 'label': 'Login' }) }}
+    </div>
+    {{ form_row(form._target_path) }}
+    {{ form_end(form) }}
+
+</div>
+
+
+
+
+
