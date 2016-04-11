@@ -140,9 +140,9 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      * @ORM\Column(name="balance", type="float")
      * @Validator\NotBlank()
      * @Validator\Range(
-     *     min="0"
-     *     minMessage="You cannot have negative balance, this is not a charity"
-     *     max="1000"
+     *     min="0",
+     *     minMessage="You cannot have negative balance, this is not a charity",
+     *     max="1000",
      *     maxMessage="For security reason you cannot recharge when your balance is over 1000€"
      * )
      */
@@ -153,9 +153,9 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      * @var float
      * @Validator\NotBlank()
      * @Validator\Range(
-     *     min="1"
-     *     minMessage="You must recharge at least 1€"
-     *     max="100"
+     *     min="1",
+     *     minMessage="You must recharge at least 1€",
+     *     max="100",
      *     maxMessage="You cannot do a recharge higher than 100€"
      * )
      */
