@@ -1,3 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% theme form ''%}
+{% form_theme form 'form/FormMaterializeCssTheme.html.twig' %}
+
+{% block body %}
+
+    <div class="container col s6 top-margin3">
+
+        {{  form_start(form) }}
+        {{  form_errors(form) }}
+
+        <div class="row">
+            <div class="col s3">
+                {{ form_row(form.recharge) }}
+            </div>
+            <div class="col s3">
+                {{ form_row(form.payment_method) }}
+            </div>
+        </div>
+        <div class="row top-margin2">
+            <div class="col s3">
+                {{ form_row(form.submit, { 'label': 'Recharge' }) }}
+            </div>
+            {{ form_row(form.submit, { 'label': 'Login' }) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock body %}

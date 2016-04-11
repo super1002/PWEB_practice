@@ -45,6 +45,7 @@ class ProfileController extends Controller
                     'Visa' => ProfileController::VISA,
                     'Bitcoin' => ProfileController::BITCOIN
                 ),
+                "mapped" => false,
                 'multiple' => false,
                 'expanded' => true,
                 'placeholder' => 'Choose a payment method'
@@ -54,7 +55,7 @@ class ProfileController extends Controller
             ->getForm();
 
 
-        return $this->renderView('default/recharge.html.twig',
+        return $this->render('default/recharge.html.twig',
             array(
                 'form' => $form->createView()
             ));
