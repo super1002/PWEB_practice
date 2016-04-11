@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {% if is_granted('AUTHENTICATION_REMEMBERED') %}
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 
                     {% else %}
                         {{ render(controller('AppBundle:Authentication:showBar')) }}
