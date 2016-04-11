@@ -21,7 +21,7 @@
 <body style="display: flex; min-height: 100vh; flex-direction: column;">
 
 {# Header #}
-<div class="navbar-fixed iamthetop">
+<header class="navbar-fixed iamthetop">
     <div class="full-width">
         <nav class="navy-grey darken-2">
             <div class="nav-wrapper">
@@ -36,7 +36,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    {{ render(controller('AppBundle:Authentication:showBar')) }}
+                    {% if is_granted('AUTHENTICATION_REMEMBERED') %}
+
+                    {% else %}
+                        {{ render(controller('AppBundle:Authentication:showBar')) }}
+                    {% endif %}
                 </div>
             </div>
         </nav>
@@ -54,8 +58,8 @@
             </div>
         </div>
 
-        </div>
-    </header>
+    </div>
+</header>
 
     <main style="flex: 1 0 auto;">
 
