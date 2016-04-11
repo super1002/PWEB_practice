@@ -21,7 +21,7 @@
 <body style="display: flex; min-height: 100vh; flex-direction: column;">
 
 {# Header #}
-<div class="navbar-fixed iamthetop">
+<header class="navbar-fixed iamthetop">
     <div class="full-width">
         <nav class="navy-grey darken-2">
             <div class="nav-wrapper">
@@ -54,10 +54,10 @@
             </div>
         </div>
 
-        </div>
-    </header>
+    </div>
+</header>
 
-    <main style="flex: 1 0 auto;">
+    <main style="flex: 1 0 auto;" class="valign-wrapper">
 
     {# Content #}
     {% block body %}{% endblock %}
