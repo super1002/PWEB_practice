@@ -18,7 +18,7 @@
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 </head>
-<body>
+<body style="display: flex; min-height: 100vh; flex-direction: column;">
 
 {# Header #}
 <div class="navbar-fixed iamthetop">
@@ -54,16 +54,17 @@
             </div>
         </div>
 
+        </div>
+    </header>
 
-    </div>
-</div>
+    <main style="flex: 1 0 auto;">
 
-{# Content #}
-{% block body %}{% endblock %}
+    {# Content #}
+    {% block body %}{% endblock %}
 
-
-{# Footer #}
-{% block footer %}
+    </main>
+    {# Footer #}
+    {% block footer %}
 
     <footer class="page-footer modal-fixed-footer navy-grey">
         <div class="container">
