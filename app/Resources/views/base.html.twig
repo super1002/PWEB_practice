@@ -36,7 +36,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    {{ render(controller('AppBundle:Authentication:showBar')) }}
+                    {% if is_granted('AUTHENTICATION_REMEMBERED') %}
+
+                    {% else %}
+                        {{ render(controller('AppBundle:Authentication:showBar')) }}
+                    {% endif %}
                 </div>
             </div>
         </nav>
