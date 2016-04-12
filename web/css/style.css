@@ -81,6 +81,7 @@ footer.page-footer {
 .half-bot-buffer { padding-top:10px !important; }
 .half-top-buffer { padding-bottom:10px !important; }
 .half-left-buffer { padding-left:10px !important; }
+.half-right-buffer { padding-right:10px !important; }
 .left-buffer { padding-left:20px !important; }
 .right-buffer { padding-right:20px !important; }
 .left-buffer2 { padding-left:40px !important; }
@@ -185,6 +186,14 @@ div.whityfy>div{
 
 .fill_viewport{
   height: 90%;
+}
+
+.clear-width{
+  width: auto !important;
+}
+
+.clear-padding{
+  padding: 0 !important;
 }
 
 

@@ -170,6 +170,8 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         $this->roles = array("ROLE_USER");
         $this->path = null;
         $this->file = null;
+        $this->balance = 0;
+        $this->recharge = 0;
 
         $this->locked = false;
         $this->expired = false;
@@ -206,8 +208,8 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
     public function getRoles()
     {
-        //return $this->roles;
-        return array("ROLE_USER");
+        return $this->roles;
+        //return array("ROLE_USER");
     }
 
     public function eraseCredentials()
