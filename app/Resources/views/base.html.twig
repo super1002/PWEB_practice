@@ -61,10 +61,12 @@
     </div>
 </header>
 
-    <main style="flex: 1 0 auto;" class="valign-wrapper">
+    <main style="flex: 1 0 auto;" class="valign-wrapper ">
 
     {# Content #}
-    {% block body %}{% endblock %}
+
+        <div style="background: url({{ asset('images/1915.jpg') }}) repeat-y center center fixed; position: fixed;" class="be-background-ma-friend"></div>
+        {% block body %}{% endblock %}
 
     </main>
     {# Footer #}
