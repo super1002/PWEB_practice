@@ -40,7 +40,7 @@ profile_products:
     - POST #will be used to process the delete form submit
 
 product_add:
-  path: /user/{username}/add
+  path: /user/add-product
   defaults:
     _controller: AppBundle:Product:add
     _format: html
@@ -49,7 +49,7 @@ product_add:
     - POST #will be used also to process the add form submit
 
 product_delete:
-  path: /user/{username}/product/edit/{uuid}
+  path: /user/edit/{uuid}
   defaults:
     _controller: AppBundle:Product:edit
     _format: html
