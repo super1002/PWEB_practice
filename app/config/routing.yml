@@ -29,13 +29,6 @@ welcome:
   methods:
     - GET
 
-profile:
-  path: /user/{username}
-  defaults:
-    _controller: AppBundle:Profile:show
-    _format: html
-  methods:
-    - GET
 
 profile_products:
   path: /user/{username}/products
@@ -80,6 +73,16 @@ profile_recharge:
   methods:
     - GET
     - POST #will be used to process recharge form
+
+
+profile:
+  path: /user/{username}
+  defaults:
+    _controller: AppBundle:Profile:show
+    _format: html
+  methods:
+    - GET
+
 
 products:
   path: /products
