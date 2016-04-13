@@ -24,23 +24,46 @@
 <header class="navbar-fixed iamthetop">
     <div class="full-width">
         <nav class="navy-grey darken-2">
-            <div class="nav-wrapper">
-                <div class="">
-                    <div class="col s12 left-margin2">
-                        <a href="{{ path('homepage') }}" class="brand-logo">King Pong</a>
-                        <ul id="nav-mobile" class="right hide-on-med-and-down">
-                            {% for section in sections %}
-                                <li><a class="disabled" href="{{ path(section.route) }}">{{ section.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                <div class="row">
+            <div class="nav-wrapper col s12 left-margin2">
+                <div></div>
+                <a href="{{ path('homepage') }}" class="brand-logo">King Pong</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <li >
+                            <!-- Dropdown Trigger -->
+                            <div class="col offset-s9 s3 orange-grey-text dropdown-button valign-wrapper row" style="border-radius: 5px; " data-activates="dropdown1" data-beloworigin="true" data-hover="true">
+                                <div class="col s3">
+                                    <img src="{{ app.user.ProfilePicture }}" alt="" class="circle valign" style="width: 30px; height: 30px;">
+                                </div>
+                                <span class="valign col s5 left-align -_1px-left-margin">{{ app.user.username | capitalize }}</span>
+                                <i class="material-icons col s3">arrow_drop_down</i>
+                            </div>
 
-                    {% else %}
+                            <!-- Dropdown Structure -->
+                            <ul id='dropdown1' class='dropdown-content col offset-s6 navy-grey darken-2 border-orange-grey -border-top'>
+                                <li><a href="{{ path('product_add') }}" class="blue-grey-text lighten-3">
+                                        <i class="material-icons left">add</i>New Product</a>
+                                </li>
+                                <li><a href="{{ path('profile_recharge') }}" class="blue-grey-text lighten-3">
+                                        <i class="material-icons left">credit_card</i>Recharge</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="{{ path('logout') }}" class="orange-grey-text"><i class="material-icons right">power_settings_new</i>Logout</a></li>
+                            </ul>
+                            <!-- End Dropdown Structure -->
+                        </li>
+
+                    {% endif %}
+                    {% for section in sections %}
+                        <li><a class="disabled" href="{{ path(section.route) }}">{{ section.name }}</a></li>
+                    {% endfor %}
+                </ul>
+                <div class="row">
+
+                    {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         {{ render(controller('AppBundle:Authentication:showBar')) }}
                     {% endif %}
+
                 </div>
             </div>
         </nav>

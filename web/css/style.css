@@ -659,6 +659,25 @@ div.whityfy>div{
   border-radius: 5px;
 }
 
+.border-orange-grey.darken-2.-border-top {
+  border: solid 2px #775122 !important;
+  border-top: 0 !important;
+  border-radius: 5px;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.dropdown-button:hover {
+  background-color: #151937 !important;
+}
+
+.dropdown-button.active{
+  background-color: #151937 !important;
+}
+
+.dropdown-content li:hover, .dropdown-content li.active, .dropdown-content li.selected {
+  background-color: #151937 !important;
+}
 
 /*** PROJECT SPECFICS ***/
 
@@ -680,6 +699,9 @@ p#alert{
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+.-_1px-left-margin { margin-left:-2px !important; }
+
 
 
 
