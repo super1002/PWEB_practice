@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints as Validator;
 
 class ProfileController extends Controller
 {
@@ -35,7 +36,12 @@ class ProfileController extends Controller
 
     public function rechargeAction(){
 
-        $form = $this->createFormBuilder($this->getUser())
+        $form = $this->createFormBuilder($this->getUser(), array(
+                'constraints' => array(
+                    new Validator\Callback(array($this, 'recharge'))
+                )
+            ))
+
             ->add('recharge', NumberType::class)
             ->add('submit', SubmitType::class)
             ->add('payment_method', ChoiceType::class, array(

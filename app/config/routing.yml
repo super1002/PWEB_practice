@@ -47,7 +47,7 @@ profile_products:
     - POST #will be used to process the delete form submit
 
 product_add:
-  path: /user/{username}/product/add
+  path: /user/{username}/add
   defaults:
     _controller: AppBundle:Product:add
     _format: html

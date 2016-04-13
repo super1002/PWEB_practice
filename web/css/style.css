@@ -101,6 +101,7 @@ footer.page-footer {
 
 
 .-left-margin { margin-left:-20px !important; }
+.half-left-margin { margin-left:10px !important; }
 .left-margin { margin-left:20px !important; }
 .right-margin { margin-right:20px !important; }
 .left-margin2 { margin-left:40px !important; }
