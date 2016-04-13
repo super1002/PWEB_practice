@@ -41,7 +41,6 @@ class ProfileController extends Controller
                     new Validator\Callback(array($this, 'recharge'))
                 )
             ))
-
             ->add('recharge', NumberType::class)
             ->add('submit', SubmitType::class)
             ->add('payment_method', ChoiceType::class, array(

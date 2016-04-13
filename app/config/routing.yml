@@ -73,7 +73,7 @@ profile_edit:
     - GET
 
 profile_recharge:
-  path: /user/{username}/recharge
+  path: /user/recharge
   defaults:
     _controller: AppBundle:Profile:recharge
     _format: html
