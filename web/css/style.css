@@ -288,6 +288,10 @@ div.whityfy>div{
 
 }
 
+.bold{
+  font-weight: bold;
+}
+
 
 .navy-grey.lighten-5 {
   background-color: #7e86cd !important;
