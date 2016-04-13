@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints as Validator;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProfileController extends Controller
 {
@@ -34,7 +35,7 @@ class ProfileController extends Controller
 
     }
 
-    public function rechargeAction(){
+    public function rechargeAction(Request $request){
 
         $form = $this->createFormBuilder($this->getUser(), array(
                 'constraints' => array(
@@ -42,6 +43,10 @@ class ProfileController extends Controller
                 )
             ))
             ->add('recharge', NumberType::class)
+
+            ->add('recharge', NumberType::class, array(
+                'label' => 'Quantity (€)',
+            ))
             ->add('submit', SubmitType::class)
             ->add('payment_method', ChoiceType::class, array(
                 'choices' => array(
@@ -53,11 +58,19 @@ class ProfileController extends Controller
                 "mapped" => false,
                 'multiple' => false,
                 'expanded' => true,
-                'placeholder' => 'Choose a payment method'
+                'label' => ' ',
 
 
             ))
             ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->getUser()->setBalance($this->getUser()->getBalance()+$this->getUser()->getRecharge());
+
+        }
 
 
         return $this->render('default/recharge.html.twig',
