@@ -2,12 +2,14 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener;
 use Symfony\Component\Validator\Constraints as Validator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -162,6 +164,13 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     private $recharge;
 
 
+    /**
+     * @var ArrayCollection $products
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="owner")
+     */
+    private $products;
+
+
     public function __construct()
     {
         $this->isActive = false;
@@ -172,6 +181,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         $this->file = null;
         $this->balance = 0;
         $this->recharge = 0;
+        $this->products = new ArrayCollection();
 
         $this->locked = false;
         $this->expired = false;

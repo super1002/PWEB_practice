@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Validator;
 
 /**
  * Product
@@ -76,6 +77,15 @@ class Product
      * @var UploadedFile
      */
     private $file;
+
+    /**
+     * @var User $owner
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="products")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     *
+     */
+    private $owner;
+
 
 
     public function __construct()

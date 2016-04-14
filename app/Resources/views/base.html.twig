@@ -33,7 +33,7 @@
                             <!-- Dropdown Trigger -->
                             <div class="col offset-s9 s3 orange-grey-text dropdown-button valign-wrapper row" style="border-radius: 5px; " data-activates="dropdown1" data-beloworigin="true" data-hover="true">
                                 <div class="col s3">
-                                    <img src="{{ app.user.ProfilePicture }}" alt="" class="circle valign" style="width: 30px; height: 30px;">
+                                    <img src="{{ asset(app.user.ProfilePicture) }}" alt="" class="circle valign" style="width: 30px; height: 30px;">
                                 </div>
                                 <span class="valign col s5 left-align -_1px-left-margin">{{ app.user.username | capitalize }}</span>
                                 <i class="material-icons col s3">arrow_drop_down</i>
