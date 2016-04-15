@@ -75,6 +75,8 @@
                             <div id="comments" class="col s12  padding2 tab-content">
                                 {% for comment in product.owner.comments %}
 
+                                {% else %}
+                                    <p class="center-align orange-grey-text accent-3"> There are no comments for this seller </p>
                                 {% endfor %}
                             </div>
                         </div>
