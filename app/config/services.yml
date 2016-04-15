@@ -28,6 +28,12 @@ services:
           em: "@doctrine.orm.entity_manager"
           class: "@app.metadata.user"
 
+  app.voter.product_voter:
+      class: AppBundle\Voter\ProductVoter
+      tags:
+          - { name: security.voter }
+      # small performance boost
+      public: false
 
 
   app.service.mailer.mailer_repository:

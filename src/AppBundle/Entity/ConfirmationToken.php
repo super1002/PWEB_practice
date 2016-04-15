@@ -84,4 +84,3 @@ class ConfirmationToken
         return $this->token;
     }
 }
-
