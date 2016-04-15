@@ -175,6 +175,12 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      */
     private $score;
 
+    /**
+     * @var ArrayCollection $comments
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="target")
+     */
+    private $comments;
+
 
     public function __construct()
     {
@@ -187,6 +193,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         $this->balance = 0;
         $this->recharge = 0;
         $this->products = new ArrayCollection();
+        $this->comments = new ArrayCollection();
 
         $this->locked = false;
         $this->expired = false;
@@ -640,4 +647,54 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         $this->score = $score;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getComment()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param ArrayCollection $comment
+     */
+    public function setComment($comments)
+    {
+        $this->comments = $comments;
+    }
+
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     *
+     * @return User
+     */
+    public function addComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
 }

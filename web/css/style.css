@@ -101,6 +101,7 @@ footer.page-footer {
 
 
 .-left-margin { margin-left:-20px !important; }
+.half-right-margin { margin-right:10px !important; }
 .half-left-margin { margin-left:10px !important; }
 .left-margin { margin-left:20px !important; }
 .right-margin { margin-right:20px !important; }
@@ -161,7 +162,12 @@ li.decorated{
 }
 
 .font-m{
-  font-size: 13pt;
+  font-size: 13pt !important;
+}
+
+.no_margin_vertical{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
 }
 
 .full-width{
@@ -707,7 +713,13 @@ p#alert{
 .-_1px-left-margin { margin-left:-2px !important; }
 
 
-
+.tab-content {
+  position: relative;
+  background-color: #fff;
+  margin: 0 auto;
+  text-align: justify;
+  z-index: 10;
+}
 
 
 
