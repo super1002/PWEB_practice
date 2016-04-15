@@ -8019,7 +8019,7 @@ small {
 }
 
 .tabs .tab a {
-  color: #ee6e73;
+  color: #394293;
   display: block;
   width: 100%;
   height: 100%;
@@ -8029,11 +8029,11 @@ small {
 }
 
 .tabs .tab a:hover {
-  color: #f9c9cb;
+  color: #7e86cd;
 }
 
 .tabs .tab.disabled a {
-  color: #f9c9cb;
+  color: #7e86cd;
   cursor: default;
 }
 
@@ -8041,7 +8041,7 @@ small {
   position: absolute;
   bottom: 0;
   height: 2px;
-  background-color: #f6b2b5;
+  background-color: #5a6abf;
   will-change: left, right;
 }
 

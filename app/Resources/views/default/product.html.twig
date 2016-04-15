@@ -1,0 +1,92 @@
+{%  extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col s12 card-panel navy-grey darken-5 z-depth-5">
+                <div class="col s12  center-align card-panel grey lighten-4 padding2">
+
+                    <div class="row">
+                        <h2 class="left-align  col s12 flow-text">{{ product.name }}</h2>
+                        <hr class="col s12">
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col s12 l6">
+                            <img class="col s12 responsive-img" src="{{ asset(product.picture) }}" alt="{{ product.name }}">
+                            <hr class="col s12">
+                        </div>
+
+                        <div class="col s12 l6 left-align left-buffer2 padding2">
+                            <div class="row valign-wrapper flow-text font-m">
+                                Seller:
+                                <img src="{{ asset(product.owner.profilePicture) }}" alt="this is a handsome dude" class=" left-margin half-right-margin circle valign" style="width: 30px; height: 30px;">
+                                <p class="valign flow-text font-m no_margin_vertical half-right-margin"><b>{{ product.owner.username }}</b></p>
+                                {% if product.owner.score < 100 %}
+                                    {% set medal = asset('images/bronze_medal.png') %}
+                                    {% set step = 20 %}
+                                {% elseif product.owner.score < 1000 %}
+                                    {% set medal = asset('images/silver_medal.png') %}
+                                    {% set step = 200 %}
+                                {% elseif product.owner.score < 10000 %}
+                                    {% set medal = asset('images/gold_medal.png') %}
+                                    {% set step = 2000 %}
+                                {% else %}
+                                    {% set medal = asset('images/logo_symfony.png') %}
+                                    {% set step = product.owner.score + 1 %}
+                                {% endif %}
+                                {% for i in range(0, product.owner.score, step) %}
+                                    <img src="{{ medal }}" alt="this is a wonderful medal" class="circle valign" style="width: 15px; height: 20px;">
+                                {% endfor %}
+                            </div>
+                            <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff}}</b></p>
+                            <div class="row">
+                                <div class="col s11 offset-s1">
+                                    <p class="row flow-text font-m"> Stock:
+                                        <b>
+                                            {% transchoice product.stock with { '%stock%': product.stock } %}
+                                            {0} There is no stock available |{1} %stock% unit |]1,Inf[ %stock% units
+                                            {% endtranschoice %}
+                                        </b>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12">
+                            <ul class="tabs z-depth-1">
+                                <li class="tab col s3 m3"><a class="active" href="#description">Description</a></li>
+                                <li class="tab col s3 m3"><a href="#comments">Comments</a></li>
+                                <li class="col m6"></li>
+                            </ul>
+                        </div>
+                        <div class="s12 col">
+                            <div id="description" class="col s12 padding2 tab-content">
+                                <p class="">{{ product.description}}</p>
+                            </div>
+                            <div id="comments" class="col s12  padding2 tab-content">
+                                {% for comment in product.owner.comments %}
+
+                                {% else %}
+                                    <p class="center-align orange-grey-text accent-3"> There are no comments for this seller </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

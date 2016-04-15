@@ -29,34 +29,29 @@ welcome:
   methods:
     - GET
 
-profile:
-  path: /user/{username}
-  defaults:
-    _controller: AppBundle:Profile:show
-    _format: html
-  methods:
-    - GET
 
 profile_products:
-  path: /user/{username}/products
+  path: /user/products
   defaults:
-    _controller: AppBundle:Product:show
+    _controller: AppBundle:Profile:showProducts
     _format:
   methods:
     - GET
     - POST #will be used to process the delete form submit
 
 product_add:
-  path: /user/{username}/product/add
+  path: /user/add-product
   defaults:
-    _controller: AppBundle:Product:add
+    _controller: AppBundle:Profile:addProduct
     _format: html
   methods:
     - GET
     - POST #will be used also to process the add form submit
 
-product_delete:
-  path: /user/{username}/product/edit/{uuid}
+product_delete: # that will be changed since voters will be implemented to allow edit access to the products instead of
+                #accessing through the /user/username/uuid path it will be /uuid/edit and access will be handled through
+                # autoritzation for the logged in user.
+  path: /user/edit/{uuid}
   defaults:
     _controller: AppBundle:Product:edit
     _format: html
@@ -73,13 +68,23 @@ profile_edit:
     - GET
 
 profile_recharge:
-  path: /user/{username}/recharge
+  path: /user/recharge
   defaults:
     _controller: AppBundle:Profile:recharge
     _format: html
   methods:
     - GET
     - POST #will be used to process recharge form
+
+
+profile:
+  path: /user/{username}
+  defaults:
+    _controller: AppBundle:Profile:show
+    _format: html
+  methods:
+    - GET
+
 
 products:
   path: /products
@@ -139,13 +144,6 @@ confirmation:
   methods:
     - GET
 
-authenticate:
-  path: /auth #authenticates user and attaches it to the actual session
-  defaults:
-    _controller: AppBundle:Authentication:auth
-    _format: html
-  methods:
-    - POST # used to authenticate users wherever the login form was captured from
 
 login:
   path: /login
@@ -168,6 +166,16 @@ logout:
     _format: html
   methods:
     - GET # just has to deattach session and stuff and redirect to homepage
+
+product_show:
+  path: /{category}/{uuid} #category must be reserved words that cannot appear on any route so it will default here
+  requirements:
+    category: "tables|paddles|balls|robots|accessories|other"
+  defaults:
+    _controller: AppBundle:Product:show
+    _format:
+  methods:
+    - GET
 
 welcome:
   path: /welcome

@@ -7,18 +7,29 @@
 
 {% block body %}
 
-    <div class="container col s12 top-margin3">
 
-        {{  form_start(form) }}
-            {{  form_errors(form) }}
+    
+    <div class="container top-margin3">
 
-            {{ form_row(form.username) }}
-            {{ form_row(form.password) }}
-            <div class="col s12 top-margin2">
-                {{ form_row(form.submit, { 'label': 'Login' }) }}
+        <div class="row">
+            <div class="col s12 card-panel navy-grey darken-4 offset-m4 m4 5 z-depth-5">
+                <div class="col s12  center-align card-panel navy-grey darken-3 padding2">
+
+                    {{  form_start(form) }}
+                    {{  form_errors(form) }}
+
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.password) }}
+                    <div class="col s12 top-margin2">
+                        {{ form_row(form.submit, { 'label': 'Login' }) }}
+                    </div>
+                    {{ form_row(form._target_path) }}
+                    {{ form_end(form) }}
+
+                </div>
             </div>
-            {{ form_row(form._target_path) }}
-        {{ form_end(form) }}
+
+        </div>
 
     </div>
 

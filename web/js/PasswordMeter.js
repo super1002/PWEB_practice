@@ -129,7 +129,7 @@ jQuery(document).ready(function () {
                 } else {
                     $verdict = $el.parent().find(".password-verdict");
                     if ($verdict.length === 0) {
-                        $verdict = $('<span class="password-verdict"></span>');
+                        $verdict = $('<span class="password-verdict grey-text bold"></span>');
                         $verdict.insertAfter($el);
                     }
                 }
@@ -227,7 +227,7 @@ jQuery(document).ready(function () {
                     $el.data("pwstrength").progressbar = progressbar;
 
                     if (allOptions.showVerdicts) {
-                        verdict = $('<span class="password-verdict">' + allOptions.verdicts[0] + '</span>');
+                        verdict = $('<span class="password-verdict grey-text bold">' + allOptions.verdicts[0] + '</span>');
                         if (allOptions.viewports.verdict) {
                             $(allOptions.viewports.verdict).append(verdict);
                         } else {

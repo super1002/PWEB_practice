@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
@@ -135,6 +136,59 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      */
     private $locked;
 
+    /**
+     * @var float
+     * @ORM\Column(name="balance", type="float")
+     * @Validator\NotBlank()
+     * @Validator\Range(
+     *     min="0",
+     *     minMessage="You cannot have negative balance, this is not a charity",
+     *     max="1000",
+     *     maxMessage="For security reason you cannot recharge when your balance is over 1000€"
+     * )
+     */
+    private $balance;
+
+
+    /**
+     * @var float
+     * @Validator\NotBlank()
+     * @Validator\Range(
+     *     min="1",
+     *     minMessage="You must recharge at least 1€",
+     *     max="100",
+     *     maxMessage="You cannot do a recharge higher than 100€"
+     * )
+     */
+    private $recharge;
+
+
+    /**
+     * @var ArrayCollection $products
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="owner")
+     */
+    private $products;
+
+    /**
+     * @var integer
+     * @ORM\Column(name="score", type="integer")
+     */
+    private $score;
+
+    /**
+     * @var ArrayCollection $comments
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="target")
+     */
+    private $comments;
+
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
+     */
+    private $comments_done;
+
+
     public function __construct()
     {
         $this->isActive = false;
@@ -143,6 +197,10 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         $this->roles = array("ROLE_USER");
         $this->path = null;
         $this->file = null;
+        $this->balance = 0;
+        $this->recharge = 0;
+        $this->products = new ArrayCollection();
+        $this->comments = new ArrayCollection();
 
         $this->locked = false;
         $this->expired = false;
@@ -179,8 +237,8 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
     public function getRoles()
     {
-        //return $this->roles;
-        return array("ROLE_USER");
+        return $this->roles;
+        //return array("ROLE_USER");
     }
 
     public function eraseCredentials()
@@ -511,4 +569,179 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         return 'bcrypt_encoder';
     }
 
+    /**
+     * @return float
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param float $balance
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRecharge()
+    {
+        return $this->recharge;
+    }
+
+    /**
+     * @param float $recharge
+     */
+    public function setRecharge($recharge)
+    {
+        $this->recharge = $recharge;
+    }
+
+
+
+
+    /**
+     * Add product
+     *
+     * @param \AppBundle\Entity\Product $product
+     *
+     * @return User
+     */
+    public function addProduct(\AppBundle\Entity\Product $product)
+    {
+        $this->products[] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Remove product
+     *
+     * @param \AppBundle\Entity\Product $product
+     */
+    public function removeProduct(\AppBundle\Entity\Product $product)
+    {
+        $this->products->removeElement($product);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @return int
+     */
+    public function getScore()
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param int $score
+     */
+    public function setScore($score)
+    {
+        $this->score = $score;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getComment()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param ArrayCollection $comment
+     */
+    public function setComment($comments)
+    {
+        $this->comments = $comments;
+    }
+
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     *
+     * @return User
+     */
+    public function addComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCommentsDone()
+    {
+        return $this->comments_done;
+    }
+
+    /**
+     * @param ArrayCollection $comments_done
+     */
+    public function setCommentsDone($comments_done)
+    {
+        $this->comments_done = $comments_done;
+    }
+
+    /**
+     * Add commentsDone
+     *
+     * @param \AppBundle\Entity\Comment $commentsDone
+     *
+     * @return User
+     */
+    public function addCommentsDone(\AppBundle\Entity\Comment $commentsDone)
+    {
+        $this->comments_done[] = $commentsDone;
+
+        return $this;
+    }
+
+    /**
+     * Remove commentsDone
+     *
+     * @param \AppBundle\Entity\Comment $commentsDone
+     */
+    public function removeCommentsDone(\AppBundle\Entity\Comment $commentsDone)
+    {
+        $this->comments_done->removeElement($commentsDone);
+    }
 }
