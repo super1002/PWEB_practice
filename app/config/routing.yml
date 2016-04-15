@@ -31,9 +31,9 @@ welcome:
 
 
 profile_products:
-  path: /user/{username}/products
+  path: /user/products
   defaults:
-    _controller: AppBundle:Product:show
+    _controller: AppBundle:Profile:showProducts
     _format:
   methods:
     - GET
@@ -42,13 +42,15 @@ profile_products:
 product_add:
   path: /user/add-product
   defaults:
-    _controller: AppBundle:Product:add
+    _controller: AppBundle:Profile:addProduct
     _format: html
   methods:
     - GET
     - POST #will be used also to process the add form submit
 
-product_delete:
+product_delete: # that will be changed since voters will be implemented to allow edit access to the products instead of
+                #accessing through the /user/username/uuid path it will be /uuid/edit and access will be handled through
+                # autoritzation for the logged in user.
   path: /user/edit/{uuid}
   defaults:
     _controller: AppBundle:Product:edit
