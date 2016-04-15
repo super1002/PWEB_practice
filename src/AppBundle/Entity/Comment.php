@@ -45,7 +45,7 @@ class Comment
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;

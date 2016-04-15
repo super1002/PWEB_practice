@@ -182,6 +182,13 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     private $comments;
 
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
+     */
+    private $comments_done;
+
+
     public function __construct()
     {
         $this->isActive = false;
@@ -696,5 +703,45 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCommentsDone()
+    {
+        return $this->comments_done;
+    }
+
+    /**
+     * @param ArrayCollection $comments_done
+     */
+    public function setCommentsDone($comments_done)
+    {
+        $this->comments_done = $comments_done;
+    }
+
+    /**
+     * Add commentsDone
+     *
+     * @param \AppBundle\Entity\Comment $commentsDone
+     *
+     * @return User
+     */
+    public function addCommentsDone(\AppBundle\Entity\Comment $commentsDone)
+    {
+        $this->comments_done[] = $commentsDone;
+
+        return $this;
+    }
+
+    /**
+     * Remove commentsDone
+     *
+     * @param \AppBundle\Entity\Comment $commentsDone
+     */
+    public function removeCommentsDone(\AppBundle\Entity\Comment $commentsDone)
+    {
+        $this->comments_done->removeElement($commentsDone);
     }
 }
