@@ -144,13 +144,6 @@ confirmation:
   methods:
     - GET
 
-authenticate:
-  path: /auth #authenticates user and attaches it to the actual session
-  defaults:
-    _controller: AppBundle:Authentication:auth
-    _format: html
-  methods:
-    - POST # used to authenticate users wherever the login form was captured from
 
 login:
   path: /login
@@ -173,6 +166,16 @@ logout:
     _format: html
   methods:
     - GET # just has to deattach session and stuff and redirect to homepage
+
+product_show:
+  path: /{category}/{uuid} #category must be reserved words that cannot appear on any route so it will default here
+  requirements:
+    category: "tables|paddles|balls|robots|accessories|other"
+  defaults:
+    _controller: AppBundle:Product:show
+    _format:
+  methods:
+    - GET
 
 welcome:
   path: /welcome

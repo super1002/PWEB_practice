@@ -79,4 +79,10 @@ class ProfileController extends Controller
             ));
     }
 
+
+    //for the addproductaction add an extra field on the form that consists of a choice field that allows to select the
+    //different kind of products that can be inserted and that will be used to generate the SEO like url for the products.
+    //the available options are: "tables | paddles | balls | robots | accessories | other" if new are added notify in order
+    //to add them to the routing configuration.
+
 }

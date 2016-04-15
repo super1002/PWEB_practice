@@ -169,6 +169,12 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      */
     private $products;
 
+    /**
+     * @var integer
+     * @ORM\Column(name="score", type="integer")
+     */
+    private $score;
+
 
     public function __construct()
     {
@@ -617,4 +623,21 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     {
         return $this->products;
     }
+
+    /**
+     * @return int
+     */
+    public function getScore()
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param int $score
+     */
+    public function setScore($score)
+    {
+        $this->score = $score;
+    }
+
 }
