@@ -46,6 +46,12 @@ services:
         confirmation.template: 'mail/confirmation.mail.twig'
         from_email: %email%
 
+  app.service.security.entry_point:
+      class: AppBundle\Services\Security\ForbiddenEntryPoint
+      arguments:
+        twig: "@twig"
+
+
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

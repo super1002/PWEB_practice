@@ -35,6 +35,7 @@ security:
             security: false
 
         main:
+            entry_point: app.service.security.entry_point
             anonymous: true
             methods: [GET, POST]
             logout:

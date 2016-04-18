@@ -170,7 +170,7 @@ logout:
 product_show:
   path: /{category}/{uuid} #category must be reserved words that cannot appear on any route so it will default here
   requirements:
-    category: "tables|paddles|balls|robots|accessories|other"
+    category: "table|paddle|ball|robot|accessories|other"
   defaults:
     _controller: AppBundle:Product:show
     _format:
