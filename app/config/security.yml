@@ -54,7 +54,7 @@ security:
                 # login success redirecting options (read further below)
                 always_use_default_target_path: false
                 default_target_path:            /
-                target_path_parameter:          _target_path
+                target_path_parameter:          app_user_login[_target_path]
                 use_referer:                    false
 
                 # login failure redirecting options (read further below)

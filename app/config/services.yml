@@ -16,6 +16,13 @@ services:
     tags:
       - { name: form.type, alias: authenticate }
 
+  app.form.login_bar_type:
+      class: AppBundle\Form\LoginBarType
+      arguments:
+        router: "@router"
+      tags:
+        - { name: form.type, alias: authenticate }
+
   app.metadata.user:
       class: Doctrine\ORM\Mapping\ClassMetadata
       factory_service: doctrine # this is an instance of Registry

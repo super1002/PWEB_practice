@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 
 
-class LoginType extends AbstractType{
+class LoginBarType extends AbstractType{
 
 
     protected $router;
@@ -32,27 +32,29 @@ class LoginType extends AbstractType{
     {
         $builder
             ->setAction($this->router->generate('login_check'))
-            ->add('username', TextType::class, array(
-                'block_name' => 'uname'
-            ))
+            ->add('username', TextType::class)
             ->add('password', PasswordType::class)
             ->add('submit', SubmitType::class)
             ->add('_target_path', HiddenType::class, array(
-                'data' => '/'
+                'data' => $options['target']
             ))
 
         ;
+
+        dump($options['target']);
 
     }
 
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        AbstractType::configureOptions($resolver);
         $resolver->setDefaults(array(
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
-            'csrf_token_id'   => 'authenticate'
+            'csrf_token_id'   => 'authenticate',
+            'target'          => '/'
         ));
     }
 

@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Validator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * User
@@ -23,6 +24,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(
  *     fields={"username"},
  *     message="This username is not available")
+ *
  *
  */
 class User implements UserInterface, AdvancedUserInterface, EquatableInterface, EncoderAwareInterface
@@ -152,12 +154,13 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
     /**
      * @var float
-     * @Validator\NotBlank()
+     * @Validator\NotBlank(groups={"recharge"})
      * @Validator\Range(
      *     min="1",
      *     minMessage="You must recharge at least 1€",
      *     max="100",
-     *     maxMessage="You cannot do a recharge higher than 100€"
+     *     maxMessage="You cannot do a recharge higher than 100€",
+     *     groups={"recharge"}
      * )
      */
     private $recharge;
@@ -743,5 +746,27 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     public function removeCommentsDone(\AppBundle\Entity\Comment $commentsDone)
     {
         $this->comments_done->removeElement($commentsDone);
+    }
+
+
+    /**
+     * @param User $user
+     * @param ExecutionContextInterface $context
+     * @Validator\Callback(
+     *     groups = {"recharge"}
+     * )
+     */
+    public function recharge(ExecutionContextInterface $context){
+        dump('hola');
+        if($this->getRecharge() + $this->getBalance() > 1000){
+
+            //$context->addViolation(, array(
+            $context->buildViolation('Recharge not allowed. You are exceding your maximum balance. (1000€)')
+                ->atPath('recharge')
+                ->addViolation();
+
+
+        }
+
     }
 }

@@ -48,7 +48,7 @@
                                         <i class="material-icons left">credit_card</i>Recharge</a>
                                 </li>
                                 <li class="divider"></li>
-                                <li><span>Your credit: {{ app.user.balance }}€</span></li>
+                                <li><span class="navy-grey darken-5">Your credit: {{ app.user.balance }}€</span></li>
                                 <li class="divider"></li>
                                 <li><a href="{{ path('logout') }}" class="orange-grey-text"><i class="material-icons right">power_settings_new</i>Logout</a></li>
                             </ul>
@@ -63,7 +63,7 @@
                 <div class="row">
 
                     {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        {{ render(controller('AppBundle:Authentication:showBar')) }}
+                        {{  render(controller('AppBundle:Authentication:showBar', { 'target': app.request.get('_route')})) }}
                     {% endif %}
 
                 </div>

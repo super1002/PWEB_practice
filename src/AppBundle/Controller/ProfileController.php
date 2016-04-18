@@ -27,20 +27,12 @@ class ProfileController extends Controller
     const VISA = 3;
     const BITCOIN = 4;
 
-    public function recharge(User $user, ExecutionContextInterface $context){
 
-        if($user->getRecharge() + $user->getBalance() > ProfileController::MAX_BALANCE){
-            $context->addViolationAt('recharge', 'Recharge not allowed. You are exceding your maximum balance. (1000€)');
-        }
-
-    }
 
     public function rechargeAction(Request $request){
 
         $form = $this->createFormBuilder($this->getUser(), array(
-                'constraints' => array(
-                    new Validator\Callback(array($this, 'recharge'))
-                )
+                'validation_groups' => array('recharge')
             ))
             ->add('recharge', NumberType::class)
 
@@ -69,7 +61,7 @@ class ProfileController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $this->getUser()->setBalance($this->getUser()->getBalance()+$this->getUser()->getRecharge());
-
+            $this->getDoctrine()->getManager()->flush();
         }
 
 
