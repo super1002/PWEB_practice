@@ -37,7 +37,7 @@
                                     {% set step = 2000 %}
                                 {% else %}
                                     {% set medal = asset('images/logo_symfony.png') %}
-                                    {% set step = product.owner.score + 1 %}
+                                    {% set step = product.owner.score %}
                                 {% endif %}
                                 {% for i in range(0, product.owner.score, step) %}
                                     <img src="{{ medal }}" alt="this is a wonderful medal" class="circle valign" style="width: 15px; height: 20px;">
@@ -55,9 +55,7 @@
                                     </p>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
 
                     <div class="row">
@@ -70,11 +68,25 @@
                         </div>
                         <div class="s12 col">
                             <div id="description" class="col s12 padding2 tab-content">
-                                <p class="">{{ product.description}}</p>
+                                <p class="">{{ product.description }}</p>
                             </div>
                             <div id="comments" class="col s12  padding2 tab-content">
                                 {% for comment in product.owner.comments %}
-
+                                    <div class="col s12">
+                                        <div class=" row card-panel padding grey lighten-3">
+                                            <div class="left-margin row no-margin-bot half-top-margin">
+                                                <h5 class="no-margin-vertical right-margin2">{{ comment.title|capitalize }} <span class=" left-margin yellow-text text-darken-2">({{ comment.score ~ '/10' }})</span></h5>
+                                            </div>
+                                            <div class="left-margin row valign-wrapper no_padding_vertical  top-margin half-bot-margin">
+                                                <img src="{{ asset(comment.author.profilePicture) }}" alt="this is a handsome dude" class=" left-margin half-right-margin circle valign" style="width: 30px; height: 30px;">
+                                                <p class="valign no-margin-vertical">{{ comment.author.username }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row card-panel orange-grey lighten-5">
+                                            <p>{{ comment.comment }}</p>
+                                        </div>
+                                        <hr>
+                                    </div>
                                 {% else %}
                                     <p class="center-align orange-grey-text accent-3"> There are no comments for this seller </p>
                                 {% endfor %}

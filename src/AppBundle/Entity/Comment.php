@@ -45,7 +45,7 @@ class Comment
 
     /**
      * @var ArrayCollection
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="comments_done")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;
@@ -60,8 +60,7 @@ class Comment
 
     public function __construct()
     {
-        $this->author = new ArrayCollection();
-        $this->target = new ArrayCollection();
+
     }
 
     /**
