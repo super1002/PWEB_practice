@@ -48,6 +48,8 @@
                                         <i class="material-icons left">credit_card</i>Recharge</a>
                                 </li>
                                 <li class="divider"></li>
+                                <li><span>Your credit: {{ app.user.balance }}€</span></li>
+                                <li class="divider"></li>
                                 <li><a href="{{ path('logout') }}" class="orange-grey-text"><i class="material-icons right">power_settings_new</i>Logout</a></li>
                             </ul>
                             <!-- End Dropdown Structure -->
