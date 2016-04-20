@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% form_theme form 'form/FormMaterializeCssTheme.html.twig' %}
+{% form_theme form 'form/FormMaterializeCssTheme_Alt.html.twig' %}
 
 
 
@@ -21,34 +21,17 @@
                         {{  form_start(form) }}
                         {{  form_errors(form) }}
 
-                            <div class="col s6">
-                                <div class="row">
+                            <div class="col s6 left-margin2">
+                                <div class="row  white-text">
                                     {{ form_row(form.recharge) }}
                                     {{ form_row(form.payment_method) }}
-                                    {% block _form_payment_method_0_label %}
-                                        <img src={{ asset("/images/icon_mastercard.png") }}/>
-                                        {{ block ('form_label') }}
-                                    {% endblock %}
-                                    {% block _form_payment_method_1_label %}
-                                        <img src={{ asset("/images/icon_paypal.png") }}/>
-                                        {{ block ('form_label') }}
-                                    {% endblock %}
-                                    {% block _form_payment_method_2_label %}
-                                        <img src={{ asset("/images/icon_visa.png") }}/>
-                                        {{ block ('form_label') }}
-                                    {% endblock %}
-                                    {% block _form_payment_method_3_label %}
-                                        <img src={{ asset("/images/icon_bitcoin.png") }}/>
-                                        {{ block ('form_label') }}
-                                    {% endblock %}
-
                                 </div>
-                                <div class="row">
+                                <div class="row top-margin3 right-align">
                                     {{ form_row(form.submit) }}
                                 </div>
                             </div>
 
-                            <img src="{{ asset(app.user.getProfilePicture()) }}" alt="Profile Picture" class="responsive-img circle" style="width: 220px; height: 220px">
+                            <img src="{{ asset(app.user.getProfilePicture()) }}" alt="Profile Picture" class="responsive-img circle left-margin2" style="width: 220px; height: 220px">
 
 
                         {{ form_end(form) }}
@@ -68,8 +51,26 @@
 
 
 {#
-<label form="form_payment_method_0"><img src={{ asset("/images/icon_mastercard.png") }}/></label>
-<label form="form_payment_method_1"><img src={{ asset("/images/icon_paypal.png") }}/></label>
-<label form="form_payment_method_2"><img src={{ asset("/images/icon_visa.png") }}/></label>
-<label form="form_payment_method_3"><img src={{ asset("/images/icon_bitcoin.png") }}/></label>
+
+{% block _form_payment_method_0_label %}
+    <img src={{ asset("/images/form_payment_method_0.png") }}/>
+    {{ block ('form_label') }}
+{% endblock %}
+{% block _form_payment_method_1_label %}
+    <img src={{ asset("/images/form_payment_method_1.png") }}/>
+    {{ block ('form_label') }}
+{% endblock %}
+{% block _form_payment_method_2_label %}
+    <img src={{ asset("/images/form_payment_method_2.png") }}/>
+    {{ block ('form_label') }}
+{% endblock %}
+{% block _form_payment_method_3_label %}
+    <img src={{ asset("/images/form_payment_method_3.png") }}/>
+    {{ block ('form_label') }}
+{% endblock %}
+
+<label form="form_payment_method_0"><img src={{ asset("/images/form_payment_method_0.png") }}/></label>
+<label form="form_payment_method_1"><img src={{ asset("/images/form_payment_method_1.png") }}/></label>
+<label form="form_payment_method_2"><img src={{ asset("/images/form_payment_method_2.png") }}/></label>
+<label form="form_payment_method_3"><img src={{ asset("/images/form_payment_method_3.png") }}/></label>
 #}

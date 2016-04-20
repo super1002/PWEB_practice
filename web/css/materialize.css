@@ -2612,7 +2612,7 @@ a {
 }
 
 .valign-wrapper .valign {
-  display: block;
+  display: block !important;
 }
 
 ul {

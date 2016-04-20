@@ -52,13 +52,13 @@ class ProfileController extends Controller
 
                     switch($value){
                         case ProfileController::PAYPAL:
-                            $file ='/images/icon_paypal.png';
+                            $file ='/images/form_payment_method_1.png';
                             break;
                         case ProfileController::MASTER_CARD:
-                            $file ='/images/icon_mastercard.png';
+                            $file ='/images/form_payment_method_0.png';
                             break;
                         case ProfileController::VISA:
-                            $file ='/images/icon_visa.png';
+                            $file ='/images/form_payment_method_2.png';
                             break;
                         case ProfileController::BITCOIN:
                             $file ='/images/icon_bitcoin.ong';
