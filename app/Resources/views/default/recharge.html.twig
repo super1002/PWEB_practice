@@ -8,32 +8,42 @@
 {% block body %}
 
 
-    <div class="container ">
+    <div class="container row">
+        <div class="col s12 card-panel navy-grey darken-4 z-depth-5">
+            <div class="col s12  center-align card-panel navy-grey darken-3 padding2">
 
-        <div class="row top-margin card-panel orange-grey accent-4 white-text">
-            <h3>Need more money? Don't worry! Just recharge!!!</h3>
-        </div>
+                <div class="row top-margin card-panel accent-4 navy-grey-text text-darken-1">
+                    <h2>Need more money? Don't worry! Just recharge!!!</h2>
+                </div>
 
-        <div class="row card-panel">
-            <div class="top-margin3">
-                {{  form_start(form) }}
-                {{  form_errors(form) }}
+                <div class="row card-panel navy-grey darken-2">
+                    <div class="top-margin3">
+                        {{  form_start(form) }}
+                        {{  form_errors(form) }}
 
-                    <div class="col s6">
-                        <div class="row">
-                            {{ form_row(form.recharge) }}
-                            {{ form_row(form.payment_method) }}
-                        </div>
-                        <div class="row">
-                            {{ form_row(form.submit) }}
-                        </div>
+                            <div class="col s6">
+                                <div class="row">
+                                    {{ form_row(form.recharge) }}
+                                    {{ form_row(form.payment_method) }}
+                                    <label form="form_payment_method_0"><img src={{ asset("/images/icon_mastercard.png") }}/></label>
+                                    <label form="form_payment_method_1"><img src={{ asset("/images/icon_paypal.png") }}/></label>
+                                    <label form="form_payment_method_2"><img src={{ asset("/images/icon_visa.png") }}/></label>
+                                    <label form="form_payment_method_3"><img src={{ asset("/images/icon_bitcoin.png") }}/></label>
+
+                                </div>
+                                <div class="row">
+                                    {{ form_row(form.submit) }}
+                                </div>
+                            </div>
+
+                            <img src="{{ asset(app.user.getProfilePicture()) }}" alt="Profile Picture" class="responsive-img circle" style="width: 220px; height: 220px">
+
+
+                        {{ form_end(form) }}
                     </div>
-                    <img src="{{ asset(app.user.getProfilePicture()) }}" alt="Profile Picture" class="materialboxed circle right-margin3 col s4 offset-s1" width="300">
 
-
-                {{ form_end(form) }}
+                </div>
             </div>
-
         </div>
 
     </div>
