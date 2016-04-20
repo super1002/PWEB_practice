@@ -32,6 +32,9 @@ class AuthenticationController extends Controller
     {
 
         dump($target);
+        if($target == 'homepage'){
+            $target = null;
+        }
         $form = $this->createForm(LoginBarType::class, null, array(
             'target' => '/'. $target
         ));

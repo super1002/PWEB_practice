@@ -30,6 +30,9 @@ class LoginBarType extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if($options['target'] == 'homepage'){
+            $options['target'] = '/';
+        }
         $builder
             ->setAction($this->router->generate('login_check'))
             ->add('username', TextType::class)
