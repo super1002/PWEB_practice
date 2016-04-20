@@ -25,10 +25,22 @@
                                 <div class="row">
                                     {{ form_row(form.recharge) }}
                                     {{ form_row(form.payment_method) }}
-                                    <label form="form_payment_method_0"><img src={{ asset("/images/icon_mastercard.png") }}/></label>
-                                    <label form="form_payment_method_1"><img src={{ asset("/images/icon_paypal.png") }}/></label>
-                                    <label form="form_payment_method_2"><img src={{ asset("/images/icon_visa.png") }}/></label>
-                                    <label form="form_payment_method_3"><img src={{ asset("/images/icon_bitcoin.png") }}/></label>
+                                    {% block _form_payment_method_0_label %}
+                                        <img src={{ asset("/images/icon_mastercard.png") }}/>
+                                        {{ block ('form_label') }}
+                                    {% endblock %}
+                                    {% block _form_payment_method_1_label %}
+                                        <img src={{ asset("/images/icon_paypal.png") }}/>
+                                        {{ block ('form_label') }}
+                                    {% endblock %}
+                                    {% block _form_payment_method_2_label %}
+                                        <img src={{ asset("/images/icon_visa.png") }}/>
+                                        {{ block ('form_label') }}
+                                    {% endblock %}
+                                    {% block _form_payment_method_3_label %}
+                                        <img src={{ asset("/images/icon_bitcoin.png") }}/>
+                                        {{ block ('form_label') }}
+                                    {% endblock %}
 
                                 </div>
                                 <div class="row">
@@ -52,20 +64,12 @@
 
 {% endblock body %}
 
-{% block _form_payment_method_0_label %}
-    <img src={{ asset("/images/icon_mastercard.png") }}/>
-    {{ block ('form_label') }}
-{% endblock %}
-{% block _form_payment_method_1_label %}
-    <img src={{ asset("/images/icon_paypal.png") }}/>
-    {{ block ('form_label') }}
-{% endblock %}
-{% block _form_payment_method_2_label %}
-    <img src={{ asset("/images/icon_visa.png") }}/>
-    {{ block ('form_label') }}
-{% endblock %}
-{% block _form_payment_method_3_label %}
-    <img src={{ asset("/images/icon_bitcoin.png") }}/>
-    {{- form_label(form) -}}
-{% endblock %}
 
+
+
+{#
+<label form="form_payment_method_0"><img src={{ asset("/images/icon_mastercard.png") }}/></label>
+<label form="form_payment_method_1"><img src={{ asset("/images/icon_paypal.png") }}/></label>
+<label form="form_payment_method_2"><img src={{ asset("/images/icon_visa.png") }}/></label>
+<label form="form_payment_method_3"><img src={{ asset("/images/icon_bitcoin.png") }}/></label>
+#}

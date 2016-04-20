@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints as Validator;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,6 +48,25 @@ class ProfileController extends Controller
                     'Visa' => ProfileController::VISA,
                     'Bitcoin' => ProfileController::BITCOIN
                 ),
+                /*'choice_label' => function($value, $key, $index){
+
+                    switch($value){
+                        case ProfileController::PAYPAL:
+                            $file ='/images/icon_paypal.png';
+                            break;
+                        case ProfileController::MASTER_CARD:
+                            $file ='/images/icon_mastercard.png';
+                            break;
+                        case ProfileController::VISA:
+                            $file ='/images/icon_visa.png';
+                            break;
+                        case ProfileController::BITCOIN:
+                            $file ='/images/icon_bitcoin.ong';
+                            break;
+                    }
+
+                    return new File($file);
+                },*/
                 "mapped" => false,
                 'multiple' => false,
                 'expanded' => true,
