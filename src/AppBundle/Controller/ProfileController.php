@@ -9,7 +9,9 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
+use AppBundle\Form\NewProductType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -91,10 +93,29 @@ class ProfileController extends Controller
             ));
     }
 
+    public function addProductAction(Request $request){
+
+        $product = new Product();
+
+        $form = $this->createForm(NewProductType::class, $product);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            //HUE
+        }
+
+        return $this->render('default/new_product.html.twig',
+            array(
+                'form' => $form->createView()
+            ));
+    }
+
 
     //for the addproductaction add an extra field on the form that consists of a choice field that allows to select the
     //different kind of products that can be inserted and that will be used to generate the SEO like url for the products.
-    //the available options are: "tables | paddles | balls | robots | accessories | other" if new are added notify in order
+    //the available options are: "tables | blades | balls | rubbers | clothing | other" if new are added notify in order
     //to add them to the routing configuration.
 
 }

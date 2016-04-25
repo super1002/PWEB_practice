@@ -73,6 +73,13 @@ class Product
     private $picture;
 
     /**
+    * @var string
+    *
+    * @ORM\Column(name="category", type="string", length=550)
+    */
+    private $category;
+
+    /**
      * @Validator\File()
      * @var UploadedFile
      */
@@ -313,5 +320,29 @@ class Product
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * Set category
+     *
+     * @param string $category
+     *
+     * @return Product
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return string
+     */
+    public function getCategory()
+    {
+        return $this->category;
     }
 }
