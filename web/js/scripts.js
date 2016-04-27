@@ -20,6 +20,10 @@ $(document).ready(function(){
     }); // end of document ready
 })(jQuery); // end of jQuery name space
 
+$(document).ready(function() {
+    $('select').material_select();
+});
+
 $('.datepicker').on('focusin', function () {
     $('.datepicker').pickadate('open');
 });

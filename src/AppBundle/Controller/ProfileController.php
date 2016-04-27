@@ -13,6 +13,8 @@ use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
 use AppBundle\Form\NewProductType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -95,7 +97,13 @@ class ProfileController extends Controller
 
     public function addProductAction(Request $request){
 
+
+        $productPicturesTemp = null;
         $product = new Product();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->persist($product);
 
         $form = $this->createForm(NewProductType::class, $product);
 
@@ -103,12 +111,81 @@ class ProfileController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $product->setOwner($this->getUser());
+
+            $product->setNormalizedName("PatataTEST");
+
+            $file = $product->getFile();
+            if (null !== $file) {
+
+                $extension =  $file->guessExtension();
+                if (!$extension) {
+                    // extension cannot be guessed
+                    $extension = 'bin';
+                }
+
+                $fileName = $product->getNormalizedName().'.'.$extension;
+
+                $productPicturesDir = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/'.$product->getOwner()->getUsername().'/';
+
+                //Getting the file saved
+
+                $file->move($productPicturesDir, $fileName);
+                $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $fileName);
+
+                $em->flush();
+
+                $this->addFlash('modal','Your product was added');
+                return $this->redirectToRoute('homepage');
+            }
+            else{
+
+                $filesystem = new Filesystem();
+
+                if($filesystem->exists('web/uploads/Products/TEMP/'.$this->getUser().'.'.'temp')){
+
+                    $extension =  $file->guessExtension();
+                    if (!$extension) {
+                        // extension cannot be guessed
+                        $extension = 'bin';
+                    }
+
+                    $filesystem->rename('web/uploads/Products/TEMP/'.$this->getUser().'.'.'temp', 'uploads/Products/'.$product->getOwner()->getUsername().'/'. $product->getNormalizedName().'.'.$extension);
+
+                    $productPicturesDir = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/'.$product->getOwner()->getUsername().'/';
+
+                    //Getting the file saved
+
+                    $file->move($productPicturesDir, $product->getNormalizedName().'.'.$extension);
+                    $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $fileName);
+
+                    $em->flush();
+
+                    $this->addFlash('modal','Your product was added');
+                    return $this->redirectToRoute('homepage');
+                }
+            }
             //HUE
+        }
+        else{
+            $file = $product->getFile();
+
+            if (null !== $file) {
+
+                $fileName = $this->getUser().'.'.'temp';
+
+                $productPicturesTemp = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/';
+
+                //Getting the file saved
+
+                $file->move($productPicturesTemp, $fileName);
+            }
         }
 
         return $this->render('default/new_product.html.twig',
             array(
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'image' => $productPicturesTemp
             ));
     }
 

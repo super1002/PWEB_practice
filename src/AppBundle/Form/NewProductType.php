@@ -32,6 +32,7 @@ class NewProductType extends AbstractType{
             ->add('price', NumberType::class)
             ->add('stock', IntegerType::class)
             ->add('expiringDate', DateType::class, array(
+                'format' => 'dd MMMM, yyyy',
                 'widget' => 'single_text'))
             ->add('file', FileType::class, array('label' => 'Product Picture', 'data_class'=> UploadedFile::class))
             ->add('category', ChoiceType::class, array(
