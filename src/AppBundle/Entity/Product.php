@@ -80,7 +80,10 @@ class Product
     private $category;
 
     /**
-     * @Validator\File()
+     * @Validator\Image(
+     *     mimeTypes= {"image/png", "image/gif", "image/jpg"}
+     *     mimeTypesMessage="Unsupported file type, use gif, jpg or png"
+     * )
      * @var UploadedFile
      */
     private $file;
