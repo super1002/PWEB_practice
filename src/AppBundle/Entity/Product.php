@@ -80,7 +80,10 @@ class Product
     private $category;
 
     /**
-     * @Validator\File()
+     * @Validator\Image(
+     *     mimeTypes= {"image/png", "image/gif", "image/jpg"}
+     *     mimeTypesMessage="Unsupported file type, use gif, jpg or png"
+     * )
      * @var UploadedFile
      */
     private $file;
@@ -93,7 +96,18 @@ class Product
      */
     private $owner;
 
+    /**
+     * @var \DateTime $creationDate
+     * @ORM\Column(name="creation_date", type="datetime")
+     *
+     */
+    private $creationDate;
 
+    /**
+     * @var int $numVisits
+     * @ORM\Column(name="num_visits", type="integer")
+     */
+    private $numVisits;
 
     public function __construct()
     {
@@ -344,5 +358,53 @@ class Product
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Set creationDate
+     *
+     * @param \DateTime $creationDate
+     *
+     * @return Product
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get creationDate
+     *
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * Set numVisits
+     *
+     * @param integer $numViists
+     *
+     * @return Product
+     */
+    public function setNumVisits($numViists)
+    {
+        $this->numVisits = $numViists;
+
+        return $this;
+    }
+
+    /**
+     * Get numVisits
+     *
+     * @return int
+     */
+    public function getNumVisits()
+    {
+        return $this->numVisits;
     }
 }

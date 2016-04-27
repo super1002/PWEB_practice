@@ -10,4 +10,26 @@ namespace AppBundle\Repository;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function getNewestProducts()
+    {
+        $products = $this->createQueryBuilder('u')
+        ->orderBy('p.creationDate', 'DESC')
+        ->setMaxResults(6)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+        return $products;;
+    }
+
+    public function getMostViewedProducts()
+    {
+        $products = $this->createQueryBuilder('u')
+            ->orderBy('p.numVisits', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $products;;
+    }
 }
