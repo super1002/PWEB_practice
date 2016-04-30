@@ -113,7 +113,13 @@ class ProfileController extends Controller
 
             $product->setOwner($this->getUser());
 
-            $product->setNormalizedName("PatataTEST");
+            $repo = $this->getDoctrine()->getRepository('AppBundle:Profile');
+            $resultset = $repo->findBy(array('name' => $product->getName()));
+            if(is_null($resultset) or empty($resultset)){
+                $product->setNormalizedName($product->getName());
+            }else{
+                $product->setNormalizedName($product->getNormalizedName() . count($resultset));
+            }
 
             $file = $product->getFile();
             if (null !== $file) {
