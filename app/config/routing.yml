@@ -58,15 +58,15 @@ product_delete:
   methods:
     - GET
 
- product_edit:
-   path: /user/edit/{category}/{uuid}
-   requirements:
-     category: "table|paddle|ball|robot|accessories|other"
-   defaults:
-     _controller: AppBundle:Product:edit
-     _format: html
-   methods:
-     - GET
+product_edit:
+  path: /user/edit/{category}/{uuid}
+  requirements:
+   category: "table|paddle|ball|robot|accessories|other"
+  defaults:
+   _controller: AppBundle:Product:edit
+   _format: html
+  methods:
+   - GET
 
 profile_edit:
   path: /user/{username}/edit-profile
