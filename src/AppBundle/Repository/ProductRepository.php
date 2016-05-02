@@ -17,7 +17,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         ->orderBy('p.creationDate', 'DESC')
         ->setMaxResults(6)
         ->getQuery()
-        ->getOneOrNullResult();
+        ->getResult();
 
         return $products;;
     }
@@ -28,7 +28,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->orderBy('p.numVisits', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
 
         return $products;;
     }
