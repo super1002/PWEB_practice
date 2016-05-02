@@ -48,16 +48,25 @@ product_add:
     - GET
     - POST #will be used also to process the add form submit
 
-product_delete: # that will be changed since voters will be implemented to allow edit access to the products instead of
-                #accessing through the /user/username/uuid path it will be /uuid/edit and access will be handled through
-                # autoritzation for the logged in user.
-  path: /user/edit/{uuid}
+product_delete:
+  path: /user/delete/{category}/{uuid}
+  requirements:
+    category: "table|paddle|ball|robot|accessories|other"
   defaults:
-    _controller: AppBundle:Product:edit
+    _controller: AppBundle:Product:delete
     _format: html
   methods:
     - GET
-    - POST #will be used to process edit and delete form submit
+
+ product_edit:
+   path: /user/edit/{category}/{uuid}
+   requirements:
+     category: "table|paddle|ball|robot|accessories|other"
+   defaults:
+     _controller: AppBundle:Product:edit
+     _format: html
+   methods:
+     - GET
 
 profile_edit:
   path: /user/{username}/edit-profile
@@ -173,6 +182,14 @@ product_show:
     category: "table|paddle|ball|robot|accessories|other"
   defaults:
     _controller: AppBundle:Product:show
+    _format:
+  methods:
+    - GET
+
+welcome:
+  path: /welcome
+  defaults:
+    _controller: AppBundle:
     _format:
   methods:
     - GET

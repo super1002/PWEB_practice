@@ -113,13 +113,15 @@ class ProfileController extends Controller
 
             $product->setOwner($this->getUser());
 
-            $repo = $this->getDoctrine()->getRepository('AppBundle:Profile');
+            $repo = $this->getDoctrine()->getRepository('AppBundle:Product');
             $resultset = $repo->findBy(array('name' => $product->getName()));
+            dump($resultset);
             if(is_null($resultset) or empty($resultset)){
-                $product->setNormalizedName($product->getName());
+                $product->setNormalizedName(join('-', preg_split('/\s/', strtolower($product->getName()))));
             }else{
-                $product->setNormalizedName($product->getNormalizedName() . count($resultset));
+                $product->setNormalizedName($resultset[0]->getNormalizedName() . '-' . count($resultset));
             }
+            $product->setCreationDate(new \DateTime());
 
             $file = $product->getFile();
             if (null !== $file) {
@@ -162,7 +164,8 @@ class ProfileController extends Controller
 
                     //Getting the file saved
 
-                    $file->move($productPicturesDir, $product->getNormalizedName().'.'.$extension);
+                    $fileName = $product->getNormalizedName().'.'.$extension;
+                    $file->move($productPicturesDir, $fileName);
                     $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $fileName);
 
                     $em->flush();
@@ -178,7 +181,7 @@ class ProfileController extends Controller
 
             if (null !== $file) {
 
-                $fileName = $this->getUser().'.'.'temp';
+                $fileName = $this->getUser()->getUsername(). '.'.'temp';
 
                 $productPicturesTemp = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/';
 

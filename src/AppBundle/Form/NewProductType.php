@@ -37,10 +37,10 @@ class NewProductType extends AbstractType{
             ->add('file', FileType::class, array('label' => 'Product Picture', 'data_class'=> UploadedFile::class))
             ->add('category', ChoiceType::class, array(
                 'choices'  => array(
-                    'Tables' => 'tables',
-                    'Blades' => 'blades',
-                    'Rubbers' => 'rubbers',
-                    'Balls' => 'balls',
+                    'Table' => 'table',
+                    'Blade' => 'blade',
+                    'Rubber' => 'rubber',
+                    'Ball' => 'ball',
                     'Clothing' => 'clothing',
                     'Other' => 'other',
                 )))

@@ -91,7 +91,7 @@ class Product
     /**
      * @var User $owner
      * @ORM\ManyToOne(targetEntity="User", inversedBy="products")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      *
      */
     private $owner;
@@ -111,7 +111,8 @@ class Product
 
     public function __construct()
     {
-
+        $this->creationDate = new \DateTime();
+        $this->numVisits = 0;
         $this->expiringDate = new \DateTime();
         $this->file = null;
 
@@ -406,5 +407,11 @@ class Product
     public function getNumVisits()
     {
         return $this->numVisits;
+    }
+
+
+    public function isNotAvailable(){
+        //returns true if it has no stock or it is expired
+        return $this->stock == 0 or $this->expiringDate->diff(new \DateTime())->invert == 0;
     }
 }
