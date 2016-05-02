@@ -392,9 +392,9 @@ class Product
      *
      * @return Product
      */
-    public function setNumVisits($numViists)
+    public function setNumVisits($numVisits)
     {
-        $this->numVisits = $numViists;
+        $this->numVisits = $numVisits;
 
         return $this;
     }
