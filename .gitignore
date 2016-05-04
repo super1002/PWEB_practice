@@ -21,6 +21,7 @@
 /vendor/paragonie
 /vendor/psr
 /vendor/sensio
+/vendor/kms
 /vendor/sensiolabs
 /vendor/swiftmailer
 /vendor/symfony

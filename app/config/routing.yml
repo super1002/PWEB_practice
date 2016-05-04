@@ -2,6 +2,10 @@
     #resource: "@AppBundle/Controller/"
     #type:     annotation #commented this to create routes on yaml file
 
+kms_froala_editor:
+  resource: "@KMSFroalaEditorBundle/Resources/config/routing.yml"
+  prefix:   /froalaeditor
+
 
 #actions that may handle a form need to accept also post request
 # /user/* refers to the private area of the application. So controllers must extend from PrivateBaseController

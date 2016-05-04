@@ -13,22 +13,22 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function getNewestProducts()
     {
-        $products = $this->createQueryBuilder('u')
+        $products = $this->createQueryBuilder('p')
         ->orderBy('p.creationDate', 'DESC')
         ->setMaxResults(6)
         ->getQuery()
-        ->getOneOrNullResult();
+        ->getResult();
 
         return $products;;
     }
 
     public function getMostViewedProducts()
     {
-        $products = $this->createQueryBuilder('u')
+        $products = $this->createQueryBuilder('p')
             ->orderBy('p.numVisits', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
 
         return $products;;
     }
