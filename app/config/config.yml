@@ -86,4 +86,4 @@ kms_froala_editor:
     toolbarInline: false
     tableColors: [ "#FFFFFF", "#FF0000" ]
 
-    pluginsDisabled: [ "save", "fullscreen", "file", "image", "image manager" ]
+    pluginsDisabled: [ "save", "fullscreen", "file", "image", "image manager", "emoticons"]
