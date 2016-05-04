@@ -83,5 +83,7 @@ swiftmailer:
 kms_froala_editor:
 
     language: "es"
-    toolbarInline: true
+    toolbarInline: false
     tableColors: [ "#FFFFFF", "#FF0000" ]
+
+    pluginsDisabled: [ "save", "fullscreen", "file", "image", "image manager" ]

@@ -16,6 +16,8 @@
         {{ include('css_includes.twig') }}
     {% endblock %}
 
+    <script src="{{ asset('js/jquery-2.1.4.min.js') }}"></script>
+
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 </head>
 <body style="display: flex; min-height: 100vh; flex-direction: column;">
@@ -139,9 +141,9 @@
 
 {% endblock %}
 
-
 {% block javascripts %}
     {{ include('js_includes.twig') }}
 {% endblock %}
+
 </body>
 </html>
