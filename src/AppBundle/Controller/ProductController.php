@@ -13,20 +13,41 @@ use AppBundle\Entity\Comment;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class ProductController extends Controller
 {
 
-    public function editAction(){
+    public function editAction($category, $uuid){
 
-        if( ! $this->isGranted('EDIT', $product));
+        $product = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('category' => $category,
+            'normalizedName' => $uuid));
+
+        if(is_null($product) or empty($product) ){
+            throw $this->createNotFoundException();
+        }
+
+        if( ! $this->isGranted('EDIT', $product) ){
+            throw $this->createAccessDeniedException();
+        }
+
+        //preload product into add product form and process data to perform update
+
+        //when submited and all done
+        $this->get
+
         return $this->redirectToRoute('homepage');
     }
 
-    public function deleteAction(){
+    public function deleteAction($category, $uuid){
 
-        return $this->redirectToRoute('register');
+        if($this->getDoctrine()->getRepository('AppBundle:Product')->remove($category, $uuid)){
+            $options = array('status' => 1);
+        }else{
+            $options = array('status' => 0);
+        }
+        return $this->redirectToRoute('delete_success', $options);
     }
 
     public function showAction($category, $uuid){
