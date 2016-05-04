@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Validator;
@@ -59,7 +60,7 @@ class Product
     private $stock;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="expiring_date", type="datetime")
      */
@@ -81,7 +82,7 @@ class Product
 
     /**
      * @Validator\Image(
-     *     mimeTypes= {"image/png", "image/gif", "image/jpg"},
+     *     mimeTypes= {"image/png", "image/gif", "image/jpg", "image/jpeg", "image/pjpeg"},
      *     mimeTypesMessage="Unsupported file type, use gif, jpg or png"
      * )
      * @var UploadedFile
@@ -97,7 +98,7 @@ class Product
     private $owner;
 
     /**
-     * @var \DateTime $creationDate
+     * @var DateTime $creationDate
      * @ORM\Column(name="creation_date", type="datetime")
      *
      */
@@ -111,9 +112,9 @@ class Product
 
     public function __construct()
     {
-        $this->creationDate = new \DateTime();
+        $this->creationDate = new DateTime();
         $this->numVisits = 0;
-        $this->expiringDate = new \DateTime();
+        $this->expiringDate = new DateTime();
         $this->file = null;
 
     }

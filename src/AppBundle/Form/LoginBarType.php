@@ -44,8 +44,6 @@ class LoginBarType extends AbstractType{
 
         ;
 
-        dump($options['target']);
-
     }
 
 

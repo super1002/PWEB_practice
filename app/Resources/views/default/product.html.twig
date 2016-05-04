@@ -9,10 +9,16 @@
             <div class="col s12 card-panel navy-grey darken-5 z-depth-5">
                 <div class="col s12  center-align card-panel grey lighten-4 padding2">
 
-                    <div class="row">
-                        <h2 class="left-align  col s12 flow-text">{{ product.name|capitalize }}</h2>
-                        <hr class="col s12">
+                    <div class="row valign-wrapper">
+                        {% if is_granted("EDIT", product) %}
+                            <h2 class="left-align  col s10 flow-text">{{ product.name|capitalize }}</h2>
+                            <a href="{{ path('product_edit', {'category': product.category, 'uuid': product.normalizedName}) }}"><i class="material-icons col s1 right-align">mode_edit</i></a>
+                            <a href="{{ path('product_delete', {'category': product.category, 'uuid': product.normalizedName}) }}"><i class="material-icons col s1 left-align red-text">delete</i></a>
+                        {% else %}
+                            <h2 class="left-align  col s12 flow-text">{{ product.name|capitalize }}</h2>
+                        {% endif %}
                     </div>
+                    <hr class="row col s12">
 
                     <div class="row">
 

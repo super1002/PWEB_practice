@@ -31,12 +31,11 @@ class AuthenticationController extends Controller
     public function showBarAction(Request $request, $target)
     {
 
-        dump($target);
         if($target == 'homepage'){
             $target = null;
         }
         $form = $this->createForm(LoginBarType::class, null, array(
-            'target' => '/'. $target
+            'target' => $target
         ));
 
         return $this->render('default/login_bar.html.twig', array(
