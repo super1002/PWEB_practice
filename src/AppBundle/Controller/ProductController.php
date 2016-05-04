@@ -20,6 +20,13 @@ class ProductController extends Controller
 
     public function editAction(){
 
+        if( ! $this->isGranted('EDIT', $product));
+        return $this->redirectToRoute('homepage');
+    }
+
+    public function deleteAction(){
+
+        return $this->redirectToRoute('register');
     }
 
     public function showAction($category, $uuid){

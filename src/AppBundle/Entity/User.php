@@ -197,6 +197,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         $this->isActive = false;
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
 
+        $this->score = 0;
         $this->roles = array("ROLE_USER");
         $this->path = null;
         $this->file = null;
