@@ -35,7 +35,7 @@ class ProductController extends Controller
         //preload product into add product form and process data to perform update
 
         //when submited and all done
-        $this->get
+        //$this->getDoctrine()->getManager('AppBundle:Product')->flush();
 
         return $this->redirectToRoute('homepage');
     }

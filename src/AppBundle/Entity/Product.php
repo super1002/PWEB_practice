@@ -82,7 +82,7 @@ class Product
 
     /**
      * @Validator\Image(
-     *     mimeTypes= {"image/png", "image/gif", "image/jpg"},
+     *     mimeTypes= {"image/png", "image/gif", "image/jpg", "image/jpeg", "image/pjpeg"},
      *     mimeTypesMessage="Unsupported file type, use gif, jpg or png"
      * )
      * @var UploadedFile
