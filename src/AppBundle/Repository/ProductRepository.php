@@ -32,4 +32,18 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
         return $products;;
     }
+
+    public function remove($category, $uuid)
+    {
+
+        $ret = $this->getEntityManager()->createQuery(
+            'DELETE p FROM AppBundle:Product p WHERE p.category = :category AND p.normalizedName = :uuid'
+        )->setParameters(array(
+            'category' => $category,
+            'uuid' => $uuid
+        ))->execute();
+
+        return $ret !== null;
+    }
+
 }

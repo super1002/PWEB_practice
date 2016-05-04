@@ -9,12 +9,7 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Product;
-use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class ProductController extends Controller
 {

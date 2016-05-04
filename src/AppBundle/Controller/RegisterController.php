@@ -114,6 +114,7 @@ class RegisterController extends Controller
 
             $em->remove($conf_token);
             $em->flush();
+            $this->addFlash('modal', 'Welcome to KingPong');
             return $this->redirectToRoute('homepage');
 
         }else{
@@ -126,7 +127,7 @@ class RegisterController extends Controller
 
     public function successAction(Request $request){
 
-
+        //falta montar el fet de reenviar el mail quan es prem el boto de reenviar
         return $this->render('default/register_success.html.twig');
     }
 }
