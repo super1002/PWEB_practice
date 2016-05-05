@@ -19,7 +19,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         ->getQuery()
         ->getResult();
 
-        return $products;;
+        return $products;
     }
 
     public function getMostViewedProducts()
@@ -30,7 +30,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getResult();
 
-        return $products;;
+        return $products;
     }
 
     public function remove($category, $uuid)
