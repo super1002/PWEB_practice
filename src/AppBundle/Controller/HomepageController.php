@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Product;
 
 
-class HomePageController extends Controller
+class HomepageController extends Controller
 {
 
     public function showAction(Request $request)
@@ -17,9 +17,11 @@ class HomePageController extends Controller
 
         $repo = $this->getDoctrine()->getRepository('AppBundle:Product');
 
-        $popularProducts = $repo->getMostViewedProducts();
+        $popularProducts = array_chunk($repo->getMostViewedProducts(), 3);
         $newestProducts = $repo->getNewestProducts();
-
+        $newestProduct = $newestProducts[0];
+        $newestProducts = array_chunk(array_slice($newestProducts, 1), 3);
+        /*
         //TEMPORAL
         $p = new Product();
         $p->setName('This is a large name to fuck the view test product');
@@ -69,11 +71,13 @@ Section 1.10.33 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC
             $p,
             $p,
         );
+        */
 
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', array(
-            'popularProducts' => $popularProductsProva,
-            'newestProducts' => $newestProductsProva
+            'popularProducts' => $popularProducts,
+            'newestProduct' => $newestProduct,
+            'newestProducts' => $newestProducts
         ));
     }
 }

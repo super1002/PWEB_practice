@@ -1,6 +1,8 @@
 <?php
 
 namespace AppBundle\Repository;
+use DateTime;
+
 
 /**
  * ProductRepository
@@ -11,20 +13,29 @@ namespace AppBundle\Repository;
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    /**
+     * @return array
+     */
     public function getNewestProducts()
     {
+        $date = new DateTime();
         $products = $this->createQueryBuilder('p')
-        ->orderBy('p.creationDate', 'DESC')
-        ->setMaxResults(6)
-        ->getQuery()
-        ->getResult();
+            ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->where('p.expiringDate >= :date')
+            ->orderBy('p.creationDate', 'DESC')
+            ->setMaxResults(6)
+            ->getQuery()
+            ->getResult();
 
         return $products;
     }
 
     public function getMostViewedProducts()
     {
+        $date = new DateTime();
         $products = $this->createQueryBuilder('p')
+            ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->where('p.expiringDate >= :date')
             ->orderBy('p.numVisits', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
