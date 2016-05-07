@@ -110,6 +110,12 @@ class Product
      */
     private $numVisits;
 
+    /**
+     * @var int $numSells
+     * @ORM\Column(name="num_sells", type="integer")
+     */
+    private $numSells;
+
     public function __construct()
     {
         $this->creationDate = new DateTime();
@@ -389,7 +395,7 @@ class Product
     /**
      * Set numVisits
      *
-     * @param integer $numViists
+     * @param integer $numVisits
      *
      * @return Product
      */
@@ -408,6 +414,30 @@ class Product
     public function getNumVisits()
     {
         return $this->numVisits;
+    }
+
+    /**
+     * Set numSells
+     *
+     * @param integer $numSells
+     *
+     * @return Product
+     */
+    public function setNumSells($numSells)
+    {
+        $this->numSells = $numSells;
+
+        return $this;
+    }
+
+    /**
+     * Get numSells
+     *
+     * @return int
+     */
+    public function getNumSells()
+    {
+        return $this->numSells;
     }
 
 

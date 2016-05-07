@@ -21,7 +21,7 @@
                                 </div>
                                 <div class="card-action navy-grey darken-2">
                                     <span class="card-title">
-                                        <a href="#" class="grey-text text-lighten-2">{{ newestProduct.name|capitalize }}</a>
+                                        <a href="{{ path('product_show', {'category': newestProduct.category, 'uuid': newestProduct.normalizedName}) }}" class="grey-text text-lighten-2">{{ newestProduct.name|capitalize }}</a>
                                     </span>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@
                                         </div>
                                         <div class="card-action navy-grey darken-2">
                                             <span class="card-title">
-                                                <a href="#" class="grey-text text-lighten-2">{{ product.name|capitalize }}</a>
+                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|capitalize }}</a>
                                             </span>
                                         </div>
                                         <div class="card-content">
@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="card-action navy-grey darken-2">
                                             <span class="card-title">
-                                                <a href="#" class="grey-text text-lighten-2">{{ product.name|capitalize }}</a>
+                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|capitalize }}</a>
                                             </span>
                                         </div>
                                         <div class="card-content">

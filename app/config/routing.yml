@@ -19,7 +19,7 @@ kms_froala_editor:
 homepage:
   path: /
   defaults:
-    _controller: AppBundle:HomePage:show
+    _controller: AppBundle:Homepage:show
     _format: html
   methods:
     - GET
@@ -28,7 +28,7 @@ homepage:
 welcome:
   path: /welcome
   defaults:
-    _controller: AppBundle:HomePage:welcome
+    _controller: AppBundle:Homepage:welcome
     _format: html
   methods:
     - GET
@@ -55,7 +55,7 @@ product_add:
 product_delete:
   path: /user/delete/{category}/{uuid}
   requirements:
-    category: "table|paddle|ball|robot|accessories|other"
+    category: "table|blade|ball|rubber|clothing|other"
   defaults:
     _controller: AppBundle:Product:delete
     _format: html
@@ -65,7 +65,7 @@ product_delete:
 product_edit:
   path: /user/edit/{category}/{uuid}
   requirements:
-   category: "table|paddle|ball|robot|accessories|other"
+   category: "table|blade|ball|rubber|clothing|other"
   defaults:
    _controller: AppBundle:Product:edit
    _format: html
@@ -183,7 +183,7 @@ logout:
 product_show:
   path: /{category}/{uuid} #category must be reserved words that cannot appear on any route so it will default here
   requirements:
-    category: "table|paddle|ball|robot|accessories|other"
+    category: "table|blade|ball|rubber|clothing|other"
   defaults:
     _controller: AppBundle:Product:show
     _format:
