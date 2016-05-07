@@ -120,6 +120,7 @@ class Product
     {
         $this->creationDate = new DateTime();
         $this->numVisits = 0;
+        $this->numSells = 0;
         $this->expiringDate = new DateTime();
         $this->file = null;
 
