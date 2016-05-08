@@ -20,10 +20,18 @@ class AuthenticationController extends Controller
     {
 
         $form = $this->createForm(LoginType::class);
+        $utils = $this->get('security.authentication_utils');
+        dump($utils);
+        $error = $utils->getLastAuthenticationError();
+        dump($error);
+        $lastUsername = $utils->getLastUsername();
+        dump($lastUsername);
 
 
         return $this->render('default/login.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'lastUsername' => $lastUsername,
+            'error' => $error
         ));
     }
 

@@ -7,19 +7,22 @@
 
 {% block body %}
 
-
-    
     <div class="container top-margin3">
 
         <div class="row">
             <div class="col s12 card-panel navy-grey darken-4 offset-m4 m4 5 z-depth-5">
                 <div class="col s12  center-align card-panel navy-grey darken-3 padding2">
 
+                    {% if error %}
+                        <div class="row center-align card-panel white red-text border-red bot-margin">Error: {{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
                     {{  form_start(form) }}
                     {{  form_errors(form) }}
-
-                    {{ form_row(form.username, { 'id': 'uname'}) }}
-                    {{ form_row(form.password, { 'id': 'pword' }) }}
+                    <div class="white-text">
+                        {{ form_row(form.username, { 'id': 'uname', 'value': lastUsername}) }}
+                        {{ form_row(form.password, { 'id': 'pword' }) }}
+                    </div>
                     <div class="col s12 top-margin2">
                         {{ form_row(form.submit, { 'label': 'Login' }) }}
                     </div>

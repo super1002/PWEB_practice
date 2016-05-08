@@ -116,10 +116,11 @@ search:
     - POST #handles the form received on search and loads the results
 
 popular:
-  path: /products/popular
+  path: /popular/{page}
   defaults:
     _controller: AppBundle:Products:showPopular
     _format: html
+    page: 1
   methods:
     - GET
 
