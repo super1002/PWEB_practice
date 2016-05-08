@@ -19,7 +19,8 @@ class ProductsController extends Controller
 
         $repo = $this->getDoctrine()->getRepository('AppBundle:Product');
         $limit = 10;
-        $totalProducts = count($repo->getAllProducts()); // Count of ALL products
+        $allProducts = $repo->getAllProducts(); //Get all products that did not expire
+        $totalProducts = count($allProducts);
         $maxPages = ceil($totalProducts / $limit);
 
         if ($page > $maxPages || $page < 1)
@@ -30,12 +31,25 @@ class ProductsController extends Controller
         //$prova = $repo->getOrderedByPopular($page, $limit);
         //dump($prova);
         $products = array_chunk($repo->getOrderedByPopular($page, $limit), 3);
+        $totalVisits = $this->countTotalVisits($allProducts);
+
 
 
         return $this->render('default/popular.html.twig', array(
             'products' => $products,
             'maxPages' => $maxPages,
             'page'     => $page,
+            'total'    => $totalVisits
         ));
+    }
+
+    public function countTotalVisits($products)
+    {
+        $total = 0;
+        foreach ($products as $product)
+        {
+            $total += $product->getNumVisits();
+        }
+        return $total;
     }
 }

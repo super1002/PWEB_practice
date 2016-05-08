@@ -768,6 +768,15 @@ p#alert{
   overflow: hidden;
 }
 
+.meter > p {
+  position: absolute;
+  overflow: visible;
+  height: 10px;
+  width: 100%;
+  z-index: 1000;
+  bottom: 1%;
+  right: 1%;
+}
 .navy-grey-meter > span {
   background-color: #394293 !important;
   background-image: linear-gradient(to bottom, #394293, #2b326e);
