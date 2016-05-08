@@ -78,7 +78,8 @@
                 <div class="row">
 
                     {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        {{  render(controller('AppBundle:Authentication:showBar', { 'target': path(app.request.get('_route'))})) }}
+                        {{  render(controller('AppBundle:Authentication:showBar', { 'target': path(app.request.get('_route'),
+                            {'category': app.request.get('category'), 'uuid': app.request.get('uuid')})})) }}
                     {% endif %}
 
                 </div>

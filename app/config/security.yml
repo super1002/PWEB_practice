@@ -107,6 +107,7 @@ security:
       #Require ROLE_USER for /user/*
       # - { path: ^/, requires_channel: https } # activate this to force https connection. Bewarw, proper https config must be done on the server
       - { path: ^/user, roles: ROLE_USER }
+      - { path: ^/buy, roles: ROLE_USER }
       - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/confirm, role: IS_AUTHENTICATED_ANONYMOUSLY }

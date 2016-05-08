@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Validator;
@@ -116,12 +117,19 @@ class Product
      */
     private $numSells;
 
+    /**
+     * @var Arraycollection $buyers
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="purchases")
+     */
+    private $buyers;
+
     public function __construct()
     {
         $this->creationDate = new DateTime();
         $this->numVisits = 0;
         $this->expiringDate = new DateTime();
         $this->file = null;
+        $this->buyers = new ArrayCollection();
 
     }
 
@@ -443,6 +451,40 @@ class Product
 
     public function isNotAvailable(){
         //returns true if it has no stock or it is expired
-        return $this->stock == 0 or $this->expiringDate->diff(new \DateTime())->invert == 0;
+        return $this->stock <= 0 or $this->expiringDate->diff(new \DateTime())->invert == 0;
+    }
+
+    /**
+     * Add buyer
+     *
+     * @param \AppBundle\Entity\User $buyer
+     *
+     * @return Product
+     */
+    public function addBuyer(\AppBundle\Entity\User $buyer)
+    {
+        $this->buyers[] = $buyer;
+
+        return $this;
+    }
+
+    /**
+     * Remove buyer
+     *
+     * @param \AppBundle\Entity\User $buyer
+     */
+    public function removeBuyer(\AppBundle\Entity\User $buyer)
+    {
+        $this->buyers->removeElement($buyer);
+    }
+
+    /**
+     * Get buyers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBuyers()
+    {
+        return $this->buyers;
     }
 }

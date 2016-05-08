@@ -186,15 +186,15 @@ product_show:
     category: "table|blade|ball|rubber|clothing|other"
   defaults:
     _controller: AppBundle:Product:show
-    _format:
+    _format: html
   methods:
     - GET
 
-welcome:
-  path: /welcome
+buy_product:
+  path: /buy/{category}/{uuid}
   defaults:
-    _controller: AppBundle:
-    _format:
+    _controller: AppBundle:Product:buy
+    _format: html
   methods:
     - GET
 

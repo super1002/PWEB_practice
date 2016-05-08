@@ -191,6 +191,14 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      */
     private $comments_done;
 
+    /**
+     * @var Arraycollection $purchases
+     * @ORM\ManyToMany(targetEntity="Product", inversedBy="buyers")
+     * @ORM\JoinTable(name="purchase_records")
+     *
+     */
+    private $purchases;
+
 
     public function __construct()
     {
@@ -205,6 +213,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         $this->recharge = 0;
         $this->products = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->purchases = new ArrayCollection();
 
         $this->locked = false;
         $this->expired = false;
@@ -734,7 +743,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      */
     public function addCommentsDone(\AppBundle\Entity\Comment $commentsDone)
     {
-        $this->comments_done[] = $commentsDone;
+        $this->comments_done = $commentsDone;
 
         return $this;
     }
@@ -769,5 +778,39 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
         }
 
+    }
+
+    /**
+     * Add purchase
+     *
+     * @param \AppBundle\Entity\Product $purchase
+     *
+     * @return User
+     */
+    public function addPurchase(\AppBundle\Entity\Product $purchase)
+    {
+        $this->purchases[] = $purchase;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchase
+     *
+     * @param \AppBundle\Entity\Product $purchase
+     */
+    public function removePurchase(\AppBundle\Entity\Product $purchase)
+    {
+        $this->purchases->removeElement($purchase);
+    }
+
+    /**
+     * Get purchases
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPurchases()
+    {
+        return $this->purchases;
     }
 }

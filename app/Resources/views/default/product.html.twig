@@ -11,11 +11,11 @@
 
                     <div class="row valign-wrapper">
                         {% if is_granted("EDIT", product) %}
-                            <h2 class="left-align  col s10 flow-text">{{ product.name|capitalize }}</h2>
+                            <h2 class="left-align  col s10 flow-text left-margin">{{ product.name|capitalize }}</h2>
                             <a href="{{ path('product_edit', {'category': product.category, 'uuid': product.normalizedName}) }}"><i class="material-icons col s1 right-align">mode_edit</i></a>
                             <a href="{{ path('product_delete', {'category': product.category, 'uuid': product.normalizedName}) }}"><i class="material-icons col s1 left-align red-text">delete</i></a>
                         {% else %}
-                            <h2 class="left-align  col s12 flow-text">{{ product.name|capitalize }}</h2>
+                            <h2 class="left-align  col s12 flow-text left-margin">{{ product.name|capitalize }}</h2>
                         {% endif %}
                     </div>
                     <hr class="row col s12">
@@ -60,6 +60,21 @@
                                         </b>
                                     </p>
                                 </div>
+                            </div>
+                            <div class="row valign-wrapper top-buffer2 bot-buffer2">
+
+                                <a  {% if is_granted('ROLE_USER') %}
+                                        {{'href=' ~ path('buy_product', {'category': product.category, 'uuid': product.normalizedName})}}
+                                    {% endif %}
+                                    class="waves-effect valign  orange-grey accent-4 waves-light btn-large col s4 offset-s1  flow-text
+                                    {% if not app.user %}
+                                        {{ 'disabled' }}
+                                    {% endif %}
+                                    ">
+                                    <i class="material-icons left">shopping_cart</i>
+                                    BUY
+                                </a>
+
                             </div>
                         </div>
                     </div>

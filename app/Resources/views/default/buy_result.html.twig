@@ -1,0 +1,46 @@
+{%  extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="search-wrapper card row valign-wrapper">
+            <input class="col s11 valign no-margin-vertical" id="search"><i class="valign material-icons col s1 font-m center-align">search</i>
+        </div>
+
+        <div class="row card padding grey lighten-1">
+            <p class="flow-text center-align">
+                You have succesfully purchased
+                <a class="bold" href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}">
+                    {{ product.name }}
+                </a>
+                for just <span class="bold red-text text-darken-2">{{ product.price }} €</span>.
+            </p>
+        </div>
+
+        <div class="row card">
+            <table class="responsive-table centered highlight">
+                <thead>
+                <tr>
+                    <th data-field="product_name">Product</th>
+                    <th data-field="product_owner">Owner</th>
+                    <th data-field="product_price">Price</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    {%  for purchase in app.user.purchases %}
+                        <tr data-href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}">
+                            <td>{{ purchase.name }}</td>
+                            <td>{{ purchase.owner.name }}</td>
+                            <td>{{ purchase.price ~ '€'}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{%  endblock %}
