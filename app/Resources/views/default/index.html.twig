@@ -17,12 +17,20 @@
                         <div class="col s8 offset-s2">
                             <div class="card">
                                 <div class="card-image">
-                                    <img class= "responsive-img"src="{{ asset(newestProduct.picture) }}" alt="{{ newestProduct.name }}">
+                                    <img class= "size400 center-block"src="{{ asset(newestProduct.picture) }}" alt="{{ newestProduct.name }}">
                                 </div>
                                 <div class="card-action navy-grey darken-2">
                                     <span class="card-title">
-                                        <a href="{{ path('product_show', {'category': newestProduct.category, 'uuid': newestProduct.normalizedName}) }}" class="grey-text text-lighten-2">{{ newestProduct.name|capitalize }}</a>
+                                        <a href="{{ path('product_show', {'category': newestProduct.category, 'uuid': newestProduct.normalizedName}) }}" class="grey-text text-lighten-2">{{ newestProduct.name|title }}</a>
                                     </span>
+                                </div>
+                                <div class="card-content">
+                                    <p class="">{{ newestProduct.description|truncate(50, true) }}</p>
+                                </div>
+                                <div class="card-action">
+                                    <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ newestProduct.expiringDate|time_diff}}</b></p>
+                                    <p class="row flow-text font-m no_margin_vertical"> Price: <b>{{ newestProduct.price}}</b>€</p>
+
                                 </div>
                             </div>
                         </div>
@@ -37,21 +45,20 @@
                             {% for product in product_row %}
                                 <div class="col s4">
                                     <div class="card">
-                                        <div class="card-image">
-                                            <img {#style="height: 100px; width: 100px"#} class= "responsive-img"src="{{ asset(product.picture) }}" alt="{{ product.name }}">
+                                        <div class="card-image bot-buffer top-buffer">
+                                            <img class= "size100 center-block" src="{{ asset(product.picture) }}" alt="{{ product.name }}">
                                         </div>
-                                        <div class="card-action navy-grey darken-2">
-                                            <span class="card-title">
-                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|capitalize }}</a>
+                                        <div class="card-action navy-grey darken-2 ctitle">
+                                            <span class="card-title font-m">
+                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, true) }}</a>
                                             </span>
                                         </div>
-                                        <div class="card-content">
-                                            <p class="">{{ product.description|truncate(50, true) }}</p>
+                                        <div class="card-content ccontent">
+                                            {{ product.description|truncate(50, true) }}
                                         </div>
                                         <div class="card-action">
                                             <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff}}</b></p>
                                             <p class="row flow-text font-m no_margin_vertical"> Price: <b>{{ product.price}}</b>€</p>
-
                                         </div>
                                     </div>
                                 </div>
@@ -68,21 +75,20 @@
                             {% for product in product_row %}
                                 <div class="col s4">
                                     <div class="card">
-                                        <div class="card-image">
-                                            <img {#style="height: 100px; width: 100px"#} class= "responsive-img"src="{{ asset(product.picture) }}" alt="{{ product.name }}">
+                                        <div class="card-image bot-buffer top-buffer">
+                                            <img class= "size100 center-block" src="{{ asset(product.picture) }}" alt="{{ product.name }}">
                                         </div>
-                                        <div class="card-action navy-grey darken-2">
-                                            <span class="card-title">
-                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|capitalize }}</a>
+                                        <div class="card-action navy-grey darken-2 ctitle">
+                                            <span class="card-title font-m">
+                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, true) }}</a>
                                             </span>
                                         </div>
-                                        <div class="card-content">
-                                            <p class="">{{ product.description|truncate(50, true) }}</p>
+                                        <div class="card-content ccontent">
+                                            {{ product.description|truncate(50, true) }}
                                         </div>
                                         <div class="card-action">
                                             <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff}}</b></p>
                                             <p class="row flow-text font-m no_margin_vertical"> Price: <b>{{ product.price}}</b>€</p>
-
                                         </div>
                                     </div>
                                 </div>

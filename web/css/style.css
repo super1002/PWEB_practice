@@ -733,6 +733,12 @@ p#alert{
 
 }
 
+.size400 {
+
+  width: 400px !important;
+  height: 300px !important;
+}
+
 .ctitle {
 
   height: 100px !important;
@@ -773,7 +779,6 @@ p#alert{
   overflow: visible;
   height: 10px;
   width: 100%;
-  z-index: 1000;
   bottom: 1%;
   right: 1%;
 }
@@ -782,5 +787,9 @@ p#alert{
   background-image: linear-gradient(to bottom, #394293, #2b326e);
 }
 
+.border-red {
+  border: solid 2px darkred !important;
+  border-radius: 5px;
+}
 
 

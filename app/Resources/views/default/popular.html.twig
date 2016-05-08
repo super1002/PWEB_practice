@@ -10,7 +10,7 @@
                 <div class="col s12  center-align card-panel grey lighten-4 padding2">
 
                     <div class="row top-margin card-panel accent-4 navy-grey-text text-darken-1">
-                        <h1 class="left-align  col s12 flow-text">All product ordered by popularity</h1>
+                        <h1 class="left-align  col s12 flow-text">All products ordered by popularity</h1>
                     </div>
 
 
@@ -24,7 +24,7 @@
                                         </div>
                                         <div class="card-action navy-grey darken-2 ctitle">
                                             <span class="card-title font-m">
-                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|truncate(30, true) }}</a>
+                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, true) }}</a>
                                             </span>
                                         </div>
                                         <div class="card-content ccontent">
