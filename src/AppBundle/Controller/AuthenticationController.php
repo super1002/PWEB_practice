@@ -39,7 +39,7 @@ class AuthenticationController extends Controller
     public function showBarAction(Request $request, $target)
     {
 
-        if($target == 'homepage'){
+        if($target == 'homepage' || $target == 'login'){
             $target = null;
         }
         $form = $this->createForm(LoginBarType::class, null, array(

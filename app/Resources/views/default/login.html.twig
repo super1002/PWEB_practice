@@ -20,7 +20,11 @@
                     {{  form_start(form) }}
                     {{  form_errors(form) }}
                     <div class="white-text">
-                        {{ form_row(form.username, { 'id': 'uname', 'value': lastUsername}) }}
+                        {% if error %}
+                            {{ form_row(form.username, { 'id': 'uname', 'value': lastUsername }) }}
+                        {% else %}
+                            {{ form_row(form.username, { 'id': 'uname' }) }}
+                        {% endif %}
                         {{ form_row(form.password, { 'id': 'pword' }) }}
                     </div>
                     <div class="col s12 top-margin2">

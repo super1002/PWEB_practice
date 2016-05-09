@@ -25,7 +25,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
             ->where('p.expiringDate >= :date')
             ->orderBy('p.creationDate', 'DESC')
-            ->setMaxResults(6)
+            ->setMaxResults(7)
             ->getQuery()
             ->getResult();
 
@@ -39,7 +39,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
             ->where('p.expiringDate >= :date')
             ->orderBy('p.numVisits', 'DESC')
-            ->setMaxResults(5)
+            ->setMaxResults(6)
             ->getQuery()
             ->getResult();
 
@@ -58,7 +58,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         return $products;
     }
 
-    public function getOrderedByPopular($currentPage = 1, $limit = 10)
+    public function getOrderedByPopular($currentPage = 1, $limit = 12)
     {
         $date = new DateTime();
         $products = $this->createQueryBuilder('p')
@@ -70,21 +70,9 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getResult();
 
-        //$paginator = $this->paginate($products, $currentPage);
-
         return $products;
     }
 
-    public function paginate($dql, $page = 1, $limit = 10)
-    {
-        $paginator = new Paginator($dql);
-
-        $paginator->getQuery()
-            ->setFirstResult($limit * ($page - 1)) // Offset
-            ->setMaxResults($limit); // Limit
-
-        return $paginator;
-    }
 
     public function remove($category, $uuid)
     {

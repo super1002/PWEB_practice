@@ -30,7 +30,7 @@ class LoginBarType extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if($options['target'] == 'homepage'){
+        if($options['target'] == '/homepage' || $options['target'] == '/login'){
             $options['target'] = '/';
         }
         $builder

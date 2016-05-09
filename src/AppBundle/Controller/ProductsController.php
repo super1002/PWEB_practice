@@ -18,7 +18,7 @@ class ProductsController extends Controller
     {
 
         $repo = $this->getDoctrine()->getRepository('AppBundle:Product');
-        $limit = 10;
+        $limit = 12;
         $allProducts = $repo->getAllProducts(); //Get all products that did not expire
         $totalProducts = count($allProducts);
         $maxPages = ceil($totalProducts / $limit);
@@ -28,8 +28,6 @@ class ProductsController extends Controller
             throw $this->createNotFoundException();
         }
 
-        //$prova = $repo->getOrderedByPopular($page, $limit);
-        //dump($prova);
         $products = array_chunk($repo->getOrderedByPopular($page, $limit), 3);
         $totalVisits = $this->countTotalVisits($allProducts);
 
