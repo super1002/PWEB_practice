@@ -99,6 +99,7 @@ class ProfileController extends Controller
 
 
         $productPicturesTemp = null;
+        $tempExtension = null;
         $product = new Product();
 
         $em = $this->getDoctrine()->getManager();
@@ -147,18 +148,21 @@ class ProfileController extends Controller
                 return $this->redirectToRoute('homepage');
             }
             else{
+                var_dump("hola");
 
                 $filesystem = new Filesystem();
 
-                if($filesystem->exists('web/uploads/Products/TEMP/'.$this->getUser().'.'.'temp')){
+                if($filesystem->exists($this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/'.$this->getUser()->getUsername().'.'.'temp')){
+
+                    var_dump("fileExists");
+
+                    $file = new File($this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/'.$this->getUser()->getUsername().'.'.'temp');
 
                     $extension =  $file->guessExtension();
                     if (!$extension) {
                         // extension cannot be guessed
                         $extension = 'bin';
                     }
-
-                    $filesystem->rename('web/uploads/Products/TEMP/'.$this->getUser().'.'.'temp', 'uploads/Products/'.$product->getOwner()->getUsername().'/'. $product->getNormalizedName().'.'.$extension);
 
                     $productPicturesDir = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/'.$product->getOwner()->getUsername().'/';
 
@@ -181,13 +185,23 @@ class ProfileController extends Controller
 
             if (null !== $file) {
 
-                $fileName = $this->getUser()->getUsername(). '.'.'temp';
+                if($file->isValid()) {
 
-                $productPicturesTemp = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/';
+                    $extension =  $file->guessExtension();
+                    if (!$extension) {
+                        // extension cannot be guessed
+                        $extension = 'bin';
+                    }
 
-                //Getting the file saved
+                    $tempExtension = $extension;
+                    $fileName = $this->getUser()->getUsername() . '.' . 'temp';
 
-                $file->move($productPicturesTemp, $fileName);
+                    $productPicturesTemp = $this->getParameter('kernel.root_dir') . '/../web/uploads/Products/TEMP/';
+
+                    //Getting the file saved
+
+                    $file->move($productPicturesTemp, $fileName);
+                }
             }
         }
 

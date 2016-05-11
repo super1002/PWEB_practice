@@ -27,6 +27,10 @@ class Product
 
     /**
      * @var string
+     * @Validator\Length(
+     *     max = 50,
+     *     maxMessage = "The product name cannot be longer than {{ limit }} characters"
+     *     )
      *
      * @ORM\Column(name="name", type="string", length=50)
      */
@@ -48,6 +52,10 @@ class Product
 
     /**
      * @var float
+     * @Validator\Range(
+     *     min = 0,
+     *     minMessage = "The product cannot have a negative cost"
+     *     )
      *
      * @ORM\Column(name="price", type="float")
      */
@@ -55,6 +63,10 @@ class Product
 
     /**
      * @var int
+     * @Validator\Range(
+     *     min = 1,
+     *     minMessage = "The product cannot have a negative stock or 0 stock"
+     *     )
      *
      * @ORM\Column(name="stock", type="integer")
      */
