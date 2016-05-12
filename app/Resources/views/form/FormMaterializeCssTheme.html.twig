@@ -221,7 +221,7 @@
             {% set label = name|humanize %}
         {%- endif -%}
     {%- endif -%}
-    <button type="{{ type|default('button') }}" {{ block('button_attributes') }} class=" navy-grey btn waves-effect waves-light">{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}<i class="material-icons right">send</i></button>
+    <button type="{{ type|default('button') }}" {{ block('button_attributes') }} class=" navy-grey btn waves-effect waves-light">{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}{% if 'no_icon' not in block('button_attributes') %}<i class="material-icons right">send</i>{% endif %}</button>
 {%- endblock submit_widget -%}
 
 {%- block reset_widget -%}
