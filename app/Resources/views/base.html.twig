@@ -39,14 +39,24 @@
 <header class="navbar-fixed iamthetop">
     <div class="full-width">
         <nav class="navy-grey darken-2">
-            <div class="nav-wrapper col s12 left-margin2">
-                <div></div>
-                <a href="{{ path('homepage') }}" class="brand-logo">King Pong</a>
+            <div class="nav-wrapper col s12 left-margin2 row">
+                <a href="{{ path('homepage') }}" class="float logo half-right-margin">King Pong</a>
+                <ul class="float col">
+                    <li class="col">
+                        <a href="{{ path('popular') }}" class="valign-wrapper">
+                            <i class="orange-grey-text material-icons half-right-margin valign">grade</i> <p class="valign orange-grey-text">Popular</p>
+                        </a>
+                    </li>
+                </ul>
+
+                {#<a href="{{ path('popular') }}" class=" col s1 offset-s10">
+                    <i class="grey-text text-lighten-2">grade</i>
+                </a>#}
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <li >
+                        <li>
                             <!-- Dropdown Trigger -->
-                            <div class="col offset-s9 s3 orange-grey-text dropdown-button valign-wrapper row" style="border-radius: 5px; " data-activates="dropdown1" data-beloworigin="true" data-hover="true">
+                            <div class="col orange-grey-text dropdown-button valign-wrapper row" style="border-radius: 5px; " data-activates="dropdown1" data-beloworigin="true" data-hover="true">
                                 <div class="col s3">
                                     <img src="{{ asset(app.user.ProfilePicture) }}" alt="" class="circle valign" style="width: 30px; height: 30px;">
                                 </div>
@@ -55,12 +65,15 @@
                             </div>
 
                             <!-- Dropdown Structure -->
-                            <ul id='dropdown1' class='dropdown-content col offset-s6 navy-grey darken-2 border-orange-grey -border-top'>
+                            <ul id='dropdown1' class='dropdown-content navy-grey darken-2 border-orange-grey -border-top'>
                                 <li><a href="{{ path('product_add') }}" class="blue-grey-text lighten-3">
                                         <i class="material-icons left">add</i>New Product</a>
                                 </li>
                                 <li><a href="{{ path('profile_recharge') }}" class="blue-grey-text lighten-3">
                                         <i class="material-icons left">credit_card</i>Recharge</a>
+                                </li>
+                                <li><a href="{{ path('profile_products') }}" class="blue-grey-text lighten-3">
+                                        <i class="material-icons left">view_carousel</i>My products</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li><span class="navy-grey darken-5">Your credit: {{ app.user.balance }}€</span></li>
@@ -75,7 +88,7 @@
                         <li><a class="disabled" href="{{ path(section.route) }}">{{ section.name }}</a></li>
                     {% endfor %}
                 </ul>
-                <div class="row">
+                <div class="right">
 
                     {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         {{  render(controller('AppBundle:Authentication:showBar', { 'target': path(app.request.get('_route'),

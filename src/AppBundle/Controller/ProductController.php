@@ -9,6 +9,8 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Purchase;
+use AppBundle\Form\SearchBarType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ProductController extends Controller
@@ -64,7 +66,7 @@ class ProductController extends Controller
         }
 
         $product->setNumvisits($product->getNumvisits() + 1);
-        $this->getDoctrine()->getEntityManager()->flush();
+        $this->getDoctrine()->getManager()->flush();
 
         return $this->render('default/product.html.twig', array(
             'product' => $product
@@ -90,15 +92,27 @@ class ProductController extends Controller
         $this->getUser()->setBalance($this->getUser()->getBalance() - $product->getPrice());
         $product->getOwner()->setBalance($product->getPrice() + $product->getOwner()->getBalance());
         $product->setStock($product->getStock() - 1);
-        $this->getUser()->addPurchase($product);
-        $this->getDoctrine()->getManager()->flush();
-        dump($this->getUser());
-        dump(count($this->getUser()->getPurchases()));
+        $purchase = new Purchase();
+        $purchase->setBuyer($this->getUser());
+        $purchase->setProduct($product);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($purchase);
+        $em->flush();
 
         return $this->render('default/buy_result.html.twig', array(
             'product' => $product,
             'historic' => $this->getUser()->getPurchases()
         ));
+    }
+
+    public function searchAction(){
+
+        $form = $this->createForm(SearchBarType::class, null);
+
+        return $this->render('default/search_bar.html.twig', array(
+            'form' => $form->createView()
+        ));
+
     }
 
 

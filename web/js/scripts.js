@@ -39,3 +39,10 @@ $(document).ready(function(){
         return false;
     });
 });
+
+
+function submitSearch(){
+
+    $('button.hidden').click();
+
+}

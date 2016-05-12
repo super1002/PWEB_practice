@@ -24,6 +24,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         $products = $this->createQueryBuilder('p')
             ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
             ->where('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
             ->orderBy('p.creationDate', 'DESC')
             ->setMaxResults(7)
             ->getQuery()
@@ -38,6 +39,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         $products = $this->createQueryBuilder('p')
             ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
             ->where('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
             ->orderBy('p.numVisits', 'DESC')
             ->setMaxResults(6)
             ->getQuery()
@@ -52,6 +54,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         $products = $this->createQueryBuilder('p')
             ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
             ->where('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
             ->getQuery()
             ->getResult();
 
@@ -64,6 +67,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         $products = $this->createQueryBuilder('p')
             ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
             ->where('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
             ->setFirstResult($limit * ($currentPage - 1))
             ->setMaxResults($limit)
             ->orderBy('p.numVisits', 'DESC')
@@ -85,6 +89,24 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         ))->execute();
 
         return $ret !== null;
+    }
+
+     public function countTotalVisits()
+    {
+        $total = $this->createQueryBuilder('p')
+            ->select('count(p.numVisits)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return $total;
+    }
+
+    public function searchAll($string){
+
+        return $this->createQueryBuilder('p')
+            ->where('p.name LIKE :string')
+            ->setParameter('string', '%' . $string . '%')
+            ->getQuery()
+            ->execute();
     }
 
 }

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\SearchBarType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,7 @@ class ProductsController extends Controller
 
         $repo = $this->getDoctrine()->getRepository('AppBundle:Product');
         $limit = 12;
-        $allProducts = $repo->getAllProducts(); //Get all products that did not expire
+        $allProducts = $repo->getAllProducts(); //Get all products that did not expire and have stock > 0
         $totalProducts = count($allProducts);
         $maxPages = ceil($totalProducts / $limit);
 
@@ -29,9 +30,7 @@ class ProductsController extends Controller
         }
 
         $products = array_chunk($repo->getOrderedByPopular($page, $limit), 3);
-        $totalVisits = $this->countTotalVisits($allProducts);
-
-
+        $totalVisits = $repo->countTotalVisits();
 
         return $this->render('default/popular.html.twig', array(
             'products' => $products,
@@ -41,13 +40,24 @@ class ProductsController extends Controller
         ));
     }
 
-    public function countTotalVisits($products)
-    {
-        $total = 0;
-        foreach ($products as $product)
-        {
-            $total += $product->getNumVisits();
+    public function searchResultsAction(Request $request){
+
+        $form = $this->createForm(SearchBarType::class);
+
+        $form->handleRequest($request);
+
+        $results = null;
+
+        if($form->isValid() and $form->isSubmitted()){
+
+            $results = $this->getDoctrine()->getRepository('AppBundle:Product')->searchAll($form->get('search')->getData());
+
         }
-        return $total;
+
+        return $this->render('default/search_result.html.twig', array(
+            'string' => $form->get('search')->getData(),
+            'results' => $results
+        ));
     }
+
 }

@@ -24,7 +24,7 @@
                                         </div>
                                         <div class="card-action navy-grey darken-2 ctitle">
                                             <span class="card-title font-m">
-                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, true) }}</a>
+                                                <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, false) }}</a>
                                             </span>
                                         </div>
                                         <div class="card-content ccontent fr-view">
@@ -33,7 +33,13 @@
                                         <div class="card-action">
                                             <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff}}</b></p>
                                             <p class="row flow-text font-m no_margin_vertical"> Price: <b>{{ product.price}}</b>€</p>
-                                            <p class="row flow-text font-m no_margin_vertical"><i class="material-icons navy-grey-text darken-2 valign">visibility</i> <b>{{ product.numVisits}}</b></p>
+                                            <div class="row">
+                                                <div class="col s6 offset-s3">
+                                                    <p class="flow-text font-m no_margin_vertical col s6"><i class="material-icons navy-grey-text darken-2 valign">visibility</i> <b>{{ product.numVisits}}</b></p>
+                                                    <p class="flow-text font-m no_margin_vertical col s6"><i class="material-icons navy-grey-text darken-2 valign">shopping_basket</i> <b>{{ product.numSells}}</b></p>
+                                                </div>
+
+                                            </div>
                                             <div class="meter grey lighten-2 navy-grey-meter valign-wrapper">
                                                 <span class="valign" style="width: {{ 100*product.numVisits/total }}%"></span>
                                                 <p class="white-text">{{ 100*product.numVisits//total }}%</p>

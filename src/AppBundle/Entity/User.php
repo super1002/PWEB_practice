@@ -193,8 +193,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
     /**
      * @var Arraycollection $purchases
-     * @ORM\ManyToMany(targetEntity="Product", inversedBy="buyers")
-     * @ORM\JoinTable(name="purchase_records")
+     * @ORM\OneToMany(targetEntity="Purchase", mappedBy="buyer")
      *
      */
     private $purchases;
