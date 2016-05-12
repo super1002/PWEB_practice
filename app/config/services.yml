@@ -16,6 +16,13 @@ services:
     tags:
       - { name: form.type, alias: authenticate }
 
+  app.form.search_bar_type:
+    class: AppBundle\Form\SearchBarType
+    arguments:
+      router: "@router"
+    tags:
+      - { name: form.type, alias: search}
+
   app.form.login_bar_type:
       class: AppBundle\Form\LoginBarType
       arguments:

@@ -99,4 +99,14 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->getSingleScalarResult();
         return $total;
     }
+
+    public function searchAll($string){
+
+        return $this->createQueryBuilder('p')
+            ->where('p.name LIKE :string')
+            ->setParameter('string', '%' . $string . '%')
+            ->getQuery()
+            ->execute();
+    }
+
 }

@@ -5,9 +5,7 @@
 
     <div class="container">
 
-        <div class="search-wrapper card row valign-wrapper">
-            <input class="col s11 valign no-margin-vertical" id="search"><i class="valign material-icons col s1 font-m center-align">search</i>
-        </div>
+        {{  render(controller('AppBundle:Product:search')) }}
 
         <div class="row card padding grey lighten-1">
             <p class="flow-text center-align">
@@ -19,27 +17,7 @@
             </p>
         </div>
 
-        <div class="row card">
-            <table class="responsive-table centered highlight">
-                <thead>
-                <tr>
-                    <th data-field="product_name">Product</th>
-                    <th data-field="product_owner">Owner</th>
-                    <th data-field="product_price">Price</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                    {%  for purchase in app.user.purchases %}
-                        <tr data-href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}">
-                            <td>{{ purchase.name }}</td>
-                            <td>{{ purchase.owner.name }}</td>
-                            <td>{{ purchase.price ~ '€'}}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        {{ include('default/show_purchases.html.twig') }}
 
     </div>
 

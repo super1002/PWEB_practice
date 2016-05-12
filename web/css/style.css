@@ -151,8 +151,13 @@ li.decorated{
   list-style-type: square;
 }
 
-tr.clickable{
+.clickable{
   cursor: pointer;
+}
+
+tr.clickable:hover{
+  cursor: pointer;
+  background-color: #7e86cd !important;
 }
 
 .whityfy>*{
@@ -798,4 +803,20 @@ p#alert{
   border-radius: 5px;
 }
 
+.underline{
+  text-decoration: underline gold !important;
+}
 
+.hidden{
+  display: none;
+}
+
+img.little{
+  height:30px !important;
+  width:30px !important;
+}
+
+img.medium{
+  height:70px !important;
+  width:70px !important;
+}

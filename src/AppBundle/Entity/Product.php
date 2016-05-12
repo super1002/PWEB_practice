@@ -130,10 +130,10 @@ class Product
     private $numSells;
 
     /**
-     * @var Arraycollection $buyers
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="purchases")
+     * @var Arraycollection $purchases
+     * @ORM\OneToMany(targetEntity="Purchase", mappedBy="product")
      */
-    private $buyers;
+    private $purchases;
 
     public function __construct()
     {
@@ -142,7 +142,7 @@ class Product
         $this->numSells = 0;
         $this->expiringDate = new DateTime();
         $this->file = null;
-        $this->buyers = new ArrayCollection();
+        $this->purchases = new ArrayCollection();
 
     }
 
@@ -499,5 +499,39 @@ class Product
     public function getBuyers()
     {
         return $this->buyers;
+    }
+
+    /**
+     * Add purchase
+     *
+     * @param \AppBundle\Entity\Purchase $purchase
+     *
+     * @return Product
+     */
+    public function addPurchase(\AppBundle\Entity\Purchase $purchase)
+    {
+        $this->purchases[] = $purchase;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchase
+     *
+     * @param \AppBundle\Entity\Purchase $purchase
+     */
+    public function removePurchase(\AppBundle\Entity\Purchase $purchase)
+    {
+        $this->purchases->removeElement($purchase);
+    }
+
+    /**
+     * Get purchases
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPurchases()
+    {
+        return $this->purchases;
     }
 }

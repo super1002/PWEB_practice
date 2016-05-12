@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\SearchBarType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,26 @@ class ProductsController extends Controller
             'maxPages' => $maxPages,
             'page'     => $page,
             'total'    => $totalVisits
+        ));
+    }
+
+    public function searchResultsAction(Request $request){
+
+        $form = $this->createForm(SearchBarType::class);
+
+        $form->handleRequest($request);
+
+        $results = null;
+
+        if($form->isValid() and $form->isSubmitted()){
+
+            $results = $this->getDoctrine()->getRepository('AppBundle:Product')->searchAll($form->get('search')->getData());
+
+        }
+
+        return $this->render('default/search_result.html.twig', array(
+            'string' => $form->get('search')->getData(),
+            'results' => $results
         ));
     }
 

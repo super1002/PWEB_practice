@@ -8,69 +8,43 @@
 {% block body %}
 
 
-    <div class="container row">
-        <div class="col s12 card-panel navy-grey darken-4 z-depth-5">
-            <div class="col s12  center-align card-panel navy-grey darken-3 padding2">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 card-panel navy-grey darken-4 z-depth-5">
+                <div class="row col s12  center-align card-panel navy-grey darken-3 padding2">
 
-                <div class="row top-margin card-panel accent-4 navy-grey-text text-darken-1">
-                    <h2>Need more money? Don't worry! Just recharge!!!</h2>
-                </div>
-
-                <div class="row card-panel navy-grey darken-2">
-                    <div class="top-margin3">
-                        {{  form_start(form) }}
-                        {{  form_errors(form) }}
-
-                            <div class="col s6 left-margin2">
-                                <div class="row  white-text">
-                                    {{ form_row(form.recharge) }}
-                                    {{ form_row(form.payment_method) }}
-                                </div>
-                                <div class="row top-margin3 right-align">
-                                    {{ form_row(form.submit) }}
-                                </div>
-                            </div>
-
-                            <img src="{{ asset(app.user.getProfilePicture()) }}" alt="Profile Picture" class="responsive-img circle left-margin2" style="width: 220px; height: 220px">
-
-
-                        {{ form_end(form) }}
+                    <div class="row top-margin card-panel accent-4 navy-grey-text text-darken-1">
+                        <h2>Need more money? Don't worry! Just recharge!!!</h2>
                     </div>
 
+                    <div class="row card-panel navy-grey darken-2">
+                        <div class="top-margin3">
+                            {{  form_start(form) }}
+                            {{  form_errors(form) }}
+
+                                <div class="col s6 left-margin2">
+                                    <div class="row  white-text">
+                                        {{ form_row(form.recharge) }}
+                                        {{ form_row(form.payment_method) }}
+                                    </div>
+                                    <div class="row top-margin3 right-align">
+                                        {{ form_row(form.submit) }}
+                                    </div>
+                                </div>
+
+                                <img src="{{ asset(app.user.getProfilePicture()) }}" alt="Profile Picture" class="responsive-img circle left-margin2" style="width: 220px; height: 220px">
+
+
+                            {{ form_end(form) }}
+                        </div>
+
+                    </div>
+                    {{  render(controller('AppBundle:Product:search')) }}
+                    {{ include('default/show_purchases.html.twig') }}
                 </div>
+
             </div>
         </div>
-
     </div>
 
-
-
 {% endblock body %}
-
-
-
-
-{#
-
-{% block _form_payment_method_0_label %}
-    <img src={{ asset("/images/form_payment_method_0.png") }}/>
-    {{ block ('form_label') }}
-{% endblock %}
-{% block _form_payment_method_1_label %}
-    <img src={{ asset("/images/form_payment_method_1.png") }}/>
-    {{ block ('form_label') }}
-{% endblock %}
-{% block _form_payment_method_2_label %}
-    <img src={{ asset("/images/form_payment_method_2.png") }}/>
-    {{ block ('form_label') }}
-{% endblock %}
-{% block _form_payment_method_3_label %}
-    <img src={{ asset("/images/form_payment_method_3.png") }}/>
-    {{ block ('form_label') }}
-{% endblock %}
-
-<label form="form_payment_method_0"><img src={{ asset("/images/form_payment_method_0.png") }}/></label>
-<label form="form_payment_method_1"><img src={{ asset("/images/form_payment_method_1.png") }}/></label>
-<label form="form_payment_method_2"><img src={{ asset("/images/form_payment_method_2.png") }}/></label>
-<label form="form_payment_method_3"><img src={{ asset("/images/form_payment_method_3.png") }}/></label>
-#}
