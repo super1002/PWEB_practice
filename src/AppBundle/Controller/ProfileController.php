@@ -213,6 +213,19 @@ class ProfileController extends Controller
     }
 
 
+    public function productsAction(){
+
+        $user = $this->getUser()->getUsername();
+        $repo = $this->getDoctrine()->getRepository('AppBundle:User');
+        $products = $repo->getUserProducts($user);
+
+        return $this->render('default/new_product.html.twig',
+            array(
+                'products' => $products
+            ));
+
+    }
+
     //for the addproductaction add an extra field on the form that consists of a choice field that allows to select the
     //different kind of products that can be inserted and that will be used to generate the SEO like url for the products.
     //the available options are: "tables | blades | balls | rubbers | clothing | other" if new are added notify in order

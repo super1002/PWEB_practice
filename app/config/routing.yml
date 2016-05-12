@@ -89,6 +89,12 @@ profile_recharge:
     - GET
     - POST #will be used to process recharge form
 
+profile_products:
+  path: /user/my-products
+  defaults:
+    _controller: AppBundle:Profile:products
+    _format: html
+    _methods: GET
 
 profile:
   path: /user/{username}
