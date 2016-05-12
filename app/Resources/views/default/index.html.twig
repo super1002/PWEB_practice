@@ -25,7 +25,7 @@
                                     </span>
                                 </div>
                                 <div class="card-content">
-                                    <p class="">{{ newestProduct.description|truncate(50, true) }}</p>
+                                    {{ newestProduct.description|truncate(50, true) }}
                                 </div>
                                 <div class="card-action">
                                     <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ newestProduct.expiringDate|time_diff}}</b></p>
@@ -53,7 +53,7 @@
                                                 <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, true) }}</a>
                                             </span>
                                         </div>
-                                        <div class="card-content ccontent">
+                                        <div class="card-content ccontent fr-view">
                                             {{ product.description|truncate(50, true) }}
                                         </div>
                                         <div class="card-action">
@@ -83,7 +83,7 @@
                                                 <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, true) }}</a>
                                             </span>
                                         </div>
-                                        <div class="card-content ccontent">
+                                        <div class="card-content ccontent fr-view">
                                             {{ product.description|truncate(50, true) }}
                                         </div>
                                         <div class="card-action">
