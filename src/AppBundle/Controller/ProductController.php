@@ -10,13 +10,15 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Purchase;
+use AppBundle\Form\NewProductType;
 use AppBundle\Form\SearchBarType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductController extends Controller
 {
 
-    public function editAction($category, $uuid){
+    public function editAction($category, $uuid, Request $request){
 
         $product = $this->getDoctrine()->getRepository('AppBundle:Product')->findOneBy(array('category' => $category,
             'normalizedName' => $uuid));
@@ -30,6 +32,40 @@ class ProductController extends Controller
         }
 
         //preload product into add product form and process data to perform update
+        $form = $this->createForm(NewProductType::class, $product);
+
+        // ???
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $resultset = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('name' => $product->getName()));
+            dump($resultset);
+            if(is_null($resultset) or empty($resultset)){
+                $product->setNormalizedName(join('-', preg_split('/\s/', strtolower($product->getName()))));
+            }else{
+                $product->setNormalizedName($resultset[0]->getNormalizedName() . '-' . count($resultset));
+            }
+            $product->setCreationDate(new \DateTime());
+
+            $file = $product->getFile();
+            if (null !== $file) {
+
+                $extension =  $file->guessExtension();
+                if (!$extension) {
+                    // extension cannot be guessed
+                    $extension = 'bin';
+                }
+
+                $fileName = $product->getNormalizedName().'.400.'.$extension;
+
+                $productPicturesDir = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/'.$product->getOwner()->getUsername().'/';
+
+                //Getting the file saved
+
+                $file->move($productPicturesDir, $fileName);
+                $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $fileName);
+            }
+        }
 
         //when submited and all done
         //$this->getDoctrine()->getManager('AppBundle:Product')->flush();

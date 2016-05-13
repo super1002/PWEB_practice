@@ -27,8 +27,8 @@
                                                 <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, false) }}</a>
                                             </span>
                                         </div>
-                                        <div class="card-content ccontent">
-                                            {{ product.description|truncate(50, false) }}
+                                        <div class="card-content ccontent fr-view">
+                                            {{ product.description|truncate(50, true) }}
                                         </div>
                                         <div class="card-action">
                                             <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff}}</b></p>

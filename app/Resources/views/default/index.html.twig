@@ -24,8 +24,8 @@
                                         <a href="{{ path('product_show', {'category': newestProduct.category, 'uuid': newestProduct.normalizedName}) }}" class="grey-text text-lighten-2">{{ newestProduct.name|title|truncate(30, false) }}</a>
                                     </span>
                                 </div>
-                                <div class="card-content">
-                                    <p class="">{{ newestProduct.description|truncate(50, false) }}</p>
+                                <div class="card-content fr-view">
+                                    {{ newestProduct.description|truncate(50, true) }}
                                 </div>
                                 <div class="card-action">
                                     <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ newestProduct.expiringDate|time_diff}}</b></p>
@@ -53,8 +53,8 @@
                                                 <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, false) }}</a>
                                             </span>
                                         </div>
-                                        <div class="card-content ccontent">
-                                            {{ product.description|truncate(50, false) }}
+                                        <div class="card-content ccontent fr-view">
+                                            {{ product.description|truncate(50, true) }}
                                         </div>
                                         <div class="card-action">
                                             <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff }}</b></p>
@@ -83,8 +83,8 @@
                                                 <a href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}" class="grey-text text-lighten-2">{{ product.name|title|truncate(30, false) }}</a>
                                             </span>
                                         </div>
-                                        <div class="card-content ccontent">
-                                            {{ product.description|truncate(50, false) }}
+                                        <div class="card-content ccontent fr-view">
+                                            {{ product.description|truncate(50, true) }}
                                         </div>
                                         <div class="card-action">
                                             <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff}}</b></p>
