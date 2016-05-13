@@ -114,12 +114,14 @@ products:
     - GET
 
 search:
-  path: /search
+  path: /search/{page}
   defaults:
+    page: 1
     _controller: AppBundle:Products:searchResults
     _format: html
   methods:
     - POST #handles the form received on search and loads the results
+    - GET
 
 popular:
   path: /popular/{page}

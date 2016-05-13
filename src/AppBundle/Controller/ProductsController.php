@@ -40,23 +40,60 @@ class ProductsController extends Controller
         ));
     }
 
-    public function searchResultsAction(Request $request){
+    public function searchResultsAction(Request $request, $page){
 
         $form = $this->createForm(SearchBarType::class);
 
         $form->handleRequest($request);
 
         $results = null;
+        $pages = 1;
+        $string = '';
 
-        if($form->isValid() and $form->isSubmitted()){
+        if($page < 1){
 
-            $results = $this->getDoctrine()->getRepository('AppBundle:Product')->searchAll($form->get('search')->getData());
+            if(($form->isValid() and $form->isSubmitted())){
+                $this->container->get('session')->getFlashbag()->set('search_string', $form->get('search')->getData());
+            }else if ($this->container->get('session')->getFlashbag()->has('search_string')[0]){
+                $this->container->get('session')->getFlashbag()->set('search_string', $this->container->get('session')
+                    ->getFlashbag()->get('search_string')[0]);
+            }
 
+            return $this->redirectToRoute('search', array('page' => 1));
+        }
+
+        if( ($form->isValid() and $form->isSubmitted())){
+            $string = $form->get('search')->getData();
+            $resultset = $this->getDoctrine()->getRepository('AppBundle:Product')->searchAll($string, $page);
+            $results = $resultset[0];
+            $pages = $resultset[1];
+            $this->container->get('session')->getFlashbag()->set('search_string', $string);
+
+        }else if ($this->container->get('session')->getFlashbag()->has('search_string')){
+            $string = $this->container->get('session')->getFlashbag()->get('search_string')[0];
+            $resultset = $this->getDoctrine()->getRepository('AppBundle:Product')->searchAll($string, $page);
+            $results = $resultset[0];
+            $pages = $resultset[1];
+            $this->container->get('session')->getFlashbag()->set('search_string', $string);
+        }
+
+        if($results == null){
+
+            if(($form->isValid() and $form->isSubmitted())){
+                $this->container->get('session')->getFlashbag()->set('search_string', $form->get('search')->getData());
+            }else if ($this->container->get('session')->getFlashbag()->has('search_string')[0]){
+                $this->container->get('session')->getFlashbag()->set('search_string', $this->container->get('session')
+                    ->getFlashbag()->get('search_string')[0]);
+            }
+
+            return $this->redirectToRoute('search', array('page' => $pages));
         }
 
         return $this->render('default/search_result.html.twig', array(
-            'string' => $form->get('search')->getData(),
-            'results' => $results
+            'string' => $string,
+            'results' => $results,
+            'pages' => $pages,
+            'page' => $page
         ));
     }
 

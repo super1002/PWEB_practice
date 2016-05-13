@@ -15,6 +15,8 @@ use DateTime;
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    const SEARCH_PAGE_SIZE = 5;
+
     /**
      * @return array
      */
@@ -82,7 +84,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     {
 
         $ret = $this->getEntityManager()->createQuery(
-            'DELETE p FROM AppBundle:Product p WHERE p.category = :category AND p.normalizedName = :uuid'
+            'DELETE FROM AppBundle:Product p WHERE p.category = :category AND p.normalizedName = :uuid'
         )->setParameters(array(
             'category' => $category,
             'uuid' => $uuid
@@ -100,13 +102,34 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         return $total;
     }
 
-    public function searchAll($string){
+    public function searchAll($string, $page){
 
-        return $this->createQueryBuilder('p')
+
+        $total = $this->createQueryBuilder('p')
+            ->select('count(p)')
             ->where('p.name LIKE :string')
+            ->andWhere('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
             ->setParameter('string', '%' . $string . '%')
+            ->setParameter('date', new DateTime())
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $pages = ceil($total/self::SEARCH_PAGE_SIZE);
+        if($page > $pages) return array(null, $pages);
+
+        $results = $this->createQueryBuilder('p')
+            ->where('p.name LIKE :string')
+            ->andWhere('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
+            ->setMaxResults(self::SEARCH_PAGE_SIZE)
+            ->setFirstResult(($page - 1) * self::SEARCH_PAGE_SIZE)
+            ->setParameter('string', '%' . $string . '%')
+            ->setParameter('date', new DateTime())
             ->getQuery()
             ->execute();
+
+        return array($results, $pages);
     }
 
 }

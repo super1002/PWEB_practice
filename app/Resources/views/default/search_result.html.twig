@@ -10,7 +10,7 @@
 
         {{  render(controller('AppBundle:Product:search')) }}
 
-        <div class="row card-panel">
+        <div class="row card-panel center-align">
             <table class="responsive-table centered highlight striped">
                 <thead>
                 <tr>
@@ -55,6 +55,19 @@
                 {% endfor %}
                 </tbody>
             </table>
+
+            {% if pages > 1 %}
+                <ul class="pagination">
+                    <li class="{{ page == 1 ? 'disabled' : 'waves-effect' }}"><a href="{{ page == 1 ? '#!' : path('search', {'page': page - 1}) }}"><i class="material-icons">chevron_left</i></a></li>
+                    {% for i in page-2..page+2 %}
+                        {% if i > 0 and i <= pages %}
+                            <li class="{{ i == page ? 'active navy-grey darken-2' : 'waves-effect' }}"><a href="{{ path('search', {'page': i}) }}">{{ i }}</a></li>
+                        {% endif %}
+                    {%  endfor %}
+                    <li class="{{ page == pages ? 'disabled' : 'waves-effect' }}"><a href="{{ page == pages ? '#!' : path('search', {'page': page + 1}) }}"><i class="material-icons">chevron_right</i></a></li>
+                </ul>
+            {% endif %}
+
         </div>
 
     </div>

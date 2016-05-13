@@ -18,7 +18,7 @@ class ProductController extends Controller
 
     public function editAction($category, $uuid){
 
-        $product = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('category' => $category,
+        $product = $this->getDoctrine()->getRepository('AppBundle:Product')->findOneBy(array('category' => $category,
             'normalizedName' => $uuid));
 
         if(is_null($product) or empty($product) ){
