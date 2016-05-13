@@ -89,7 +89,7 @@
                         </div>
                         <div class="s12 col">
                             <div id="description" class="col s12 padding2 tab-content fr-view">
-                                <p class="">{{ product.description }}</p>
+                                {{ product.description }}
                             </div>
                             <div id="comments" class="col s12  padding2 tab-content">
                                 {% for comment in product.owner.comments %}
