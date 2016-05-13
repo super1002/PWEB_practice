@@ -65,12 +65,16 @@ class ProductController extends Controller
                 $file->move($productPicturesDir, $fileName);
                 $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $fileName);
             }
+
+            $this->getDoctrine()->getManager('AppBundle:Product')->flush();
+
+            return $this->redirectToRoute('product_show', array('category' => $category, 'uuid' => $uuid));
         }
 
-        //when submited and all done
-        //$this->getDoctrine()->getManager('AppBundle:Product')->flush();
-
-        return $this->redirectToRoute('homepage');
+        return $this->render('default/new_product.html.twig', array(
+            'form' => $form->createView(),
+            'image' => null //aqui va la imatge per precarregar :D
+        ));
     }
 
     public function deleteAction($category, $uuid){
