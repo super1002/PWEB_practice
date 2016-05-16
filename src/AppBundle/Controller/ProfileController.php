@@ -207,26 +207,29 @@ class ProfileController extends Controller
                 $fileName = $product->getNormalizedName().'.100.png';
                 imagepng($resize100, $productPicturesDir.$fileName);
 
-                $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $fileName);
+                $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $product->getNormalizedName());
             }
             else{
-                var_dump("hola");
 
-                if($this->container->get('session')->getFlashbag()->has($this->getUser()->getUsername().'extension')){
+                $fileSystem = new Filesystem();
+                if($fileSystem->exists($this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/'.$this->getUser()->getUsername().'.400.png')){
 
                     var_dump("fileExists");
 
-                    $extension = $this->container->get('session')->getFlashbag()->get($this->getUser()->getUsername().'extension')[0];
-
-                    $file = new File($this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/'.$this->getUser()->getUsername().'.'.$extension);
+                    $file = new File($this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/'.$this->getUser()->getUsername().'.400.png');
 
                     $productPicturesDir = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/'.$product->getOwner()->getUsername().'/';
 
                     //Getting the file saved
 
-                    $fileName = $product->getNormalizedName().'.'.$extension;
+                    $fileName = $product->getNormalizedName().'.400.png';
                     $file->move($productPicturesDir, $fileName);
-                    $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $fileName);
+
+                    $file = new File($this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/'.$this->getUser()->getUsername().'.100.png');
+                    $fileName = $product->getNormalizedName().'.100.png';
+                    $file->move($productPicturesDir, $fileName);
+
+                    $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $product->getNormalizedName());
                 }
                 else{
                     //El formulari es valid pero no ha posat imatge i no hi ha cap imatge temporal
@@ -280,17 +283,77 @@ class ProfileController extends Controller
                         $extension = 'bin';
                     }
 
-                    $this->addFlash($this->getUser()->getUsername().'extension', $extension);
+                    $resize400 = imagecreatetruecolor(400, 300);
+                    $resize100 = imagecreatetruecolor(100, 100);
 
-                    $fileName = $this->getUser()->getUsername() . '.' . $extension;
+                    imagesavealpha($resize400, true);
+                    imagesavealpha($resize100, true);
+
+                    $makeWhite400 = imagecolorallocatealpha($resize400, 0, 0, 0, 127);
+                    $makeWhite100 = imagecolorallocatealpha($resize100, 0, 0, 0, 127);
+
+                    imagefill($resize400, 0, 0, $makeWhite400);
+                    imagefill($resize100, 0, 0, $makeWhite100);
+
+                    switch ($extension){
+                        case "gif":
+                            $source = imagecreatefromgif($file->getRealPath());
+                            break;
+                        case "png":
+                            $source = imagecreatefrompng($file->getRealPath());
+                            break;
+                        default:
+                            $source = imagecreatefromjpeg($file->getRealPath());
+                            break;
+                    }
+
+                    list($w, $h) = getimagesize($file->getRealPath());
+
+                    $ratio = $w/$h;
+
+                    if($ratio > 1){
+                        if($ratio > 4/3){
+                            //Amplada restrictiva a les dues mides
+                            $wr = 400;
+                            $hr = $wr/$ratio;
+                            imagecopyresampled($resize400, $source, 0, ((300 - $hr)/2), 0, 0, $wr, $hr, $w, $h);
+
+                            $wr = 100;
+                            $hr = $wr/$ratio;
+                            imagecopyresampled($resize100, $source, 0, ((100 - $hr)/2), 0, 0, $wr, $hr, $w, $h);
+                        }
+                        else{
+                            //Altura restrictiva a 400x300
+                            $hr = 400;
+                            $wr = $hr*$ratio;
+                            imagecopyresampled($resize400, $source, ((400 - $wr)/2), 0, 0, 0, $wr, $hr, $w, $h);
+
+                            //Amplada restrictiva a 100x100
+                            $wr = 100;
+                            $hr = $wr/$ratio;
+                            imagecopyresampled($resize100, $source, 0, ((100 - $hr)/2), 0, 0, $wr, $hr, $w, $h);
+                        }
+                    }
+                    else{
+                        //Altura restrictiva a les dues mides
+                        $hr = 300;
+                        $wr = $hr*$ratio;
+                        imagecopyresampled($resize400, $source, ((400 - $wr)/2), 0, 0, 0, $wr, $hr, $w, $h);
+
+                        $hr = 100;
+                        $wr = $hr*$ratio;
+                        imagecopyresampled($resize100, $source, ((100 - $wr)/2), 0, 0, 0, $wr, $hr, $w, $h);
+                    }
 
                     $productPicturesTemp = $this->getParameter('kernel.root_dir') . '/../web/uploads/Products/TEMP/';
 
-                    $tempPictureRoute = '/uploads/Products/TEMP/' . $fileName;
-
                     //Getting the file saved
+                    $fileName = $this->getUser()->getUsername().'.400.png';
+                    $tempPictureRoute = $productPicturesTemp.$fileName;
+                    imagepng($resize400, $productPicturesTemp.$fileName);
 
-                    $file->move($productPicturesTemp, $fileName);
+                    $fileName = $this->getUser()->getUsername().'.100.png';
+                    imagepng($resize100, $productPicturesTemp.$fileName);
                 }
             }
         }
