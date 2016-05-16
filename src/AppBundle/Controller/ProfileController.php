@@ -349,11 +349,12 @@ class ProfileController extends Controller
 
                     //Getting the file saved
                     $fileName = $this->getUser()->getUsername().'.400.png';
-                    $tempPictureRoute = $productPicturesTemp.$fileName;
                     imagepng($resize400, $productPicturesTemp.$fileName);
 
                     $fileName = $this->getUser()->getUsername().'.100.png';
                     imagepng($resize100, $productPicturesTemp.$fileName);
+
+                    $tempPictureRoute = 'uploads/Products/TEMP/'.$this->getUser()->getUsername().'.100.png';
                 }
             }
         }
