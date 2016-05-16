@@ -84,7 +84,7 @@ class ProductController extends Controller
         }else{
             $options = array('status' => 0);
         }
-        return $this->redirectToRoute('delete_success', $options);
+        return $this->redirectToRoute('profile_products', $options);
     }
 
     public function showAction($category, $uuid){
@@ -138,6 +138,8 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($purchase);
         $em->flush();
+        $mailer = $this->get('app.service.mailer.mailer_repository');
+        $mailer->sendNotificationEmail($product->getOwner(), $product);
 
         return $this->render('default/buy_result.html.twig', array(
             'product' => $product,

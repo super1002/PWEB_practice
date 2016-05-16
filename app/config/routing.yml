@@ -33,12 +33,21 @@ welcome:
   methods:
     - GET
 
+password_recovery:
+  path: /password-recovery/{username}
+  defaults:
+    username: null
+    _controller: AppBundle:Authentication:recovery
+    _format: html
+  methods:
+    - GET
 
 profile_products:
-  path: /user/products
+  path: /user/products/{page}
   defaults:
     _controller: AppBundle:Profile:showProducts
-    _format:
+    _format: html
+    page: 1
   methods:
     - GET
     - POST #will be used to process the delete form submit
@@ -71,6 +80,7 @@ product_edit:
    _format: html
   methods:
    - GET
+   - POST
 
 profile_edit:
   path: /user/{username}/edit-profile
@@ -88,13 +98,6 @@ profile_recharge:
   methods:
     - GET
     - POST #will be used to process recharge form
-
-profile_products:
-  path: /user/my-products
-  defaults:
-    _controller: AppBundle:Profile:products
-    _format: html
-    _methods: GET
 
 profile:
   path: /user/{username}

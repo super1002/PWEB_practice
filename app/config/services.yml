@@ -58,6 +58,8 @@ services:
       templating: "@twig"               # {type: "service", id: "templating"}
       parameters:
         confirmation.template: 'mail/confirmation.mail.twig'
+        recovery.template: 'mail/recovery.mail.twig'
+        notification.template: 'mail/notification.mail.twig'
         from_email: %email%
 
   app.service.security.entry_point:

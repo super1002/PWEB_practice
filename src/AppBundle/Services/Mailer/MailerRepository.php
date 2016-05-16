@@ -9,6 +9,7 @@
 namespace AppBundle\Services\Mailer;
 
 
+use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -46,6 +47,25 @@ class MailerRepository
         );
 
 
+        $this->sendEmailMessage($template, $params, $this->parameters['from_email'], $user->getEmail());
+    }
+
+    public function sendPasswordRecoveryEmail(User $user)
+    {
+        $template = $this->parameters['recovery.template'];
+        $params = array(
+            'user' => $user
+        );
+        $this->sendEmailMessage($template, $params, $this->parameters['from_email'], $user->getEmail());
+    }
+
+    public function sendNotificationEmail(User $user, Product $product)
+    {
+        $template = $this->parameters['notification.template'];
+        $params = array(
+            'user' => $user,
+            'product' => $product
+        );
         $this->sendEmailMessage($template, $params, $this->parameters['from_email'], $user->getEmail());
     }
 

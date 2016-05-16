@@ -315,15 +315,31 @@ class ProfileController extends Controller
     }
 
 
-    public function productsAction(){
+    public function showProductsAction(Request $request, $page){
 
-        $user = $this->getUser()->getUsername();
-        $repo = $this->getDoctrine()->getRepository('AppBundle:User');
-        $products = $repo->getUserProducts($user);
 
-        return $this->render('default/new_product.html.twig',
+        $allProducts = $this->getUser()->getProducts()->toArray();
+        $limit = 12;
+        $totalProducts = count($allProducts);
+        dump($totalProducts);
+        dump($allProducts);
+        $maxPages = ceil($totalProducts / $limit);
+
+        if ($page > $maxPages || $page < 1)
+        {
+            throw $this->createNotFoundException();
+        }
+
+        $pageProducts = array_chunk($allProducts, 12);
+        dump($pageProducts);
+        $products = array_chunk($pageProducts[$page - 1], 3);
+
+
+        return $this->render('default/user_products.html.twig',
             array(
-                'products' => $products
+                'products' => $products,
+                'maxPages' => $maxPages,
+                'page' => $page
             ));
 
     }
