@@ -136,7 +136,7 @@ class ProductController extends Controller
             if($this->getUser()->getBalance() - $product->getStock() > 0){
                 $this->getUser()->setBalance($this->getUser()->getBalance() - $product->getStock());
 
-                $this->getDoctrine()->getManager('AppBundle:Product')->flush();
+                $this->getDoctrine()->getManager()->flush();
 
                 $this->addFlash('modal','Your product was edited!');
                 return $this->redirectToRoute('product_show', array(
