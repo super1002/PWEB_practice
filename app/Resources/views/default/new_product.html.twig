@@ -47,6 +47,7 @@
                             <img src="{{ asset(image) }}" alt="" class="responsive-img">
                         </div>
                     </div>
+                    <div class="row" id="image-errors"></div>
                     <div class="col right top-margin3">
                         {{ form_row(form.submit, { 'label': 'Submit' }) }}
                     </div>
@@ -59,4 +60,13 @@
     </div>
 
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ include('js_includes.twig') }}
+    <script>
+        $.validate({
+            modules : 'file'
+        });
+    </script>
 {% endblock %}
