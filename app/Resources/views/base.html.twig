@@ -22,7 +22,7 @@
 </head>
 <body style="display: flex; min-height: 100vh; flex-direction: column;">
 
-{% for flashMessage in app.session.flashbag.get('modal') %}
+{% if flashMessage in app.session.flashbag.get('modal') %}
 
     <div id="modal1" class="modal modal-fixed-footer active">
         <div class="modal-content">
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-{% endfor %}
+{% endif %}
 
 {# Header #}
 <header class="navbar-fixed iamthetop">
