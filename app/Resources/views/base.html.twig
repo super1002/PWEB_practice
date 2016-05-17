@@ -22,8 +22,8 @@
 </head>
 <body style="display: flex; min-height: 100vh; flex-direction: column;">
 
-{% if flashMessage in app.session.flashbag.get('modal') %}
-
+{% if app.session.flashbag.get('modal') is not empty %}
+    {% set flashMessage = app.session.flashbag.get('modal')[0] %}
     <div id="modal1" class="modal modal-fixed-footer active">
         <div class="modal-content">
             <p>{{ flashMessage }}</p>
@@ -32,6 +32,8 @@
             <a href="" class="modal-action modal-close waves-effect waves-green btn-flat ">Agree</a>
         </div>
     </div>
+
+    <script defer>$('#modal1').openModal();</script>
 
 {% endif %}
 
