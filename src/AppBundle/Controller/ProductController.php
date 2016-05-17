@@ -31,6 +31,8 @@ class ProductController extends Controller
             throw $this->createAccessDeniedException();
         }
 
+        $oldStock = $product->getStock();
+
         //preload product into add product form and process data to perform update
         $form = $this->createForm(NewProductType::class, $product);
 
@@ -133,19 +135,21 @@ class ProductController extends Controller
                 $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $product->getNormalizedName());
             }
 
-            if($this->getUser()->getBalance() - $product->getStock() > 0){
-                $this->getUser()->setBalance($this->getUser()->getBalance() - $product->getStock());
+            $newStock = $product->getStock() - $oldStock;
+            if($this->getUser()->getBalance() - $newStock >= 0){
+
+                $this->getUser()->setBalance($this->getUser()->getBalance() - $newStock);
 
                 $this->getDoctrine()->getManager()->flush();
 
-                $this->container->get('session')->getFlashbag()->set('modal','Your product was edited!');
+                $this->container->get('session')->getFlashbag()->set('modal','Your product was successfully edited!');
                 return $this->redirectToRoute('product_show', array(
                     'category' => $product->getCategory(),
                     'uuid' => $product->getNormalizedName()
                 ));
             }
             else{
-                $this->container->get('session')->getFlashbag()->set('modal','You don\'t have enough money');
+                $this->container->get('session')->getFlashbag()->set('modal','You don\'t have enough money, try recharging before editing stock');
 
                 return $this->render('default/new_product.html.twig',
                     array(
