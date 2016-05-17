@@ -46,14 +46,14 @@ class Comment
     /**
      * @var ArrayCollection
      * @ORM\ManyToOne(targetEntity="User", inversedBy="comments_done")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $author;
 
     /**
      * @var ArrayCollection
      * @ORM\ManyToOne(targetEntity="User", inversedBy="comments")
-     * @ORM\JoinColumn(name="target_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="target_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $target;
 

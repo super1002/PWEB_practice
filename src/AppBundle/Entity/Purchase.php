@@ -32,14 +32,14 @@ class Purchase
     /**
      * @var User $buyer
      * @ORM\ManyToOne(targetEntity="User", inversedBy="purchases")
-     * @ORM\JoinColumn(name="buyer_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="buyer_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $buyer;
 
     /**
-     * @var User $buyer
+     * @var Product $product
      * @ORM\ManyToOne(targetEntity="Product", inversedBy="purchases")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $product;
 
