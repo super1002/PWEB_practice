@@ -100,7 +100,7 @@ class ProfileController extends Controller
 
 
         $productPicturesTemp = null;
-        $tempPictureRoute = null;
+        $tempPictureRoute = 'uploads/Products/product-placeholder.png';
         $product = new Product();
 
         $em = $this->getDoctrine()->getManager();
@@ -359,18 +359,6 @@ class ProfileController extends Controller
             }
         }
 
-        if($tempPictureRoute === null){
-            //Posar un placeholder
-
-            /*
-            return $this->render('default/new_product.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'image' => $productPicturesTemp
-                ));
-
-            */
-        }
         return $this->render('default/new_product.html.twig',
             array(
                 'form' => $form->createView(),
