@@ -1,9 +1,10 @@
 <?php
 
 namespace AppBundle\Repository;
+use Doctrine\Common\Cache\RedisCache;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use DateTime;
-
+use Snc\RedisBundle\Client\Phpredis\Client;
 
 
 /**
@@ -30,6 +31,8 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->orderBy('p.creationDate', 'DESC')
             ->setMaxResults(7)
             ->getQuery()
+            ->useQueryCache(true)
+            ->useResultCache(true)
             ->getResult();
 
         return $products;
@@ -38,6 +41,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getMostViewedProducts()
     {
         $date = new DateTime();
+
         $products = $this->createQueryBuilder('p')
             ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
             ->where('p.expiringDate >= :date')
@@ -45,6 +49,8 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->orderBy('p.numVisits', 'DESC')
             ->setMaxResults(6)
             ->getQuery()
+            ->useQueryCache(true)
+            ->useResultCache(true)
             ->getResult();
 
         return $products;
@@ -58,6 +64,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->where('p.expiringDate >= :date')
             ->andWhere('p.stock > 0')
             ->getQuery()
+            ->setResultCacheLifetime(60)
             ->getResult();
 
         return $products;
@@ -74,6 +81,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->setMaxResults($limit)
             ->orderBy('p.numVisits', 'DESC')
             ->getQuery()
+            ->setResultCacheLifetime(60)
             ->getResult();
 
         return $products;
@@ -88,7 +96,9 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         )->setParameters(array(
             'category' => $category,
             'uuid' => $uuid
-        ))->execute();
+        ))
+            ->setResultCacheLifetime(60)
+            ->execute();
 
         return $ret !== null;
     }
@@ -98,6 +108,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         $total = $this->createQueryBuilder('p')
             ->select('count(p.numVisits)')
             ->getQuery()
+            ->setResultCacheLifetime(60)
             ->getSingleScalarResult();
         return $total;
     }
@@ -113,6 +124,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('string', '%' . $string . '%')
             ->setParameter('date', new DateTime())
             ->getQuery()
+            ->setResultCacheLifetime(60)
             ->getSingleScalarResult();
 
         $pages = ceil($total/self::SEARCH_PAGE_SIZE);
@@ -127,6 +139,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('string', '%' . $string . '%')
             ->setParameter('date', new DateTime())
             ->getQuery()
+            ->setResultCacheLifetime(60)
             ->execute();
 
         return array($results, $pages);
