@@ -316,13 +316,23 @@ class Product
     }
 
     /**
-     * Get picture
+     * Get picture 100x100
      *
      * @return string
      */
     public function getPicture()
     {
-        return $this->picture;
+        return $this->picture.'.100.png';
+    }
+
+    /**
+     * Get picture 400x300
+     *
+     * @return string
+     */
+    public function getPicture400(){
+
+        return $this->picture.'.400.png';
     }
 
     /**

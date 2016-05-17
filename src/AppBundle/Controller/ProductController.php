@@ -56,24 +56,108 @@ class ProductController extends Controller
                     $extension = 'bin';
                 }
 
-                $fileName = $product->getNormalizedName().'.400.'.$extension;
+                $resize400 = imagecreatetruecolor(400, 300);
+                $resize100 = imagecreatetruecolor(100, 100);
+
+                imagesavealpha($resize400, true);
+                imagesavealpha($resize100, true);
+
+                $makeWhite400 = imagecolorallocatealpha($resize400, 0, 0, 0, 127);
+                $makeWhite100 = imagecolorallocatealpha($resize100, 0, 0, 0, 127);
+
+                imagefill($resize400, 0, 0, $makeWhite400);
+                imagefill($resize100, 0, 0, $makeWhite100);
+
+                switch ($extension){
+                    case "gif":
+                        $source = imagecreatefromgif($file->getRealPath());
+                        break;
+                    case "png":
+                        $source = imagecreatefrompng($file->getRealPath());
+                        break;
+                    default:
+                        $source = imagecreatefromjpeg($file->getRealPath());
+                        break;
+                }
+
+                list($w, $h) = getimagesize($file->getRealPath());
+
+                $ratio = $w/$h;
+
+                dump($ratio);
+
+                if($ratio > 1){
+                    if($ratio > 4/3){
+                        //Amplada restrictiva a les dues mides
+                        $wr = 400;
+                        $hr = $wr/$ratio;
+                        imagecopyresampled($resize400, $source, 0, ((300 - $hr)/2), 0, 0, $wr, $hr, $w, $h);
+
+                        $wr = 100;
+                        $hr = $wr/$ratio;
+                        imagecopyresampled($resize100, $source, 0, ((100 - $hr)/2), 0, 0, $wr, $hr, $w, $h);
+                    }
+                    else{
+                        //Altura restrictiva a 400x300
+                        $hr = 400;
+                        $wr = $hr*$ratio;
+                        imagecopyresampled($resize400, $source, ((400 - $wr)/2), 0, 0, 0, $wr, $hr, $w, $h);
+
+                        //Amplada restrictiva a 100x100
+                        $wr = 100;
+                        $hr = $wr/$ratio;
+                        imagecopyresampled($resize100, $source, 0, ((100 - $hr)/2), 0, 0, $wr, $hr, $w, $h);
+                    }
+                }
+                else{
+                    //Altura restrictiva a les dues mides
+                    $hr = 300;
+                    $wr = $hr*$ratio;
+                    imagecopyresampled($resize400, $source, ((400 - $wr)/2), 0, 0, 0, $wr, $hr, $w, $h);
+
+                    $hr = 100;
+                    $wr = $hr*$ratio;
+                    imagecopyresampled($resize100, $source, ((100 - $wr)/2), 0, 0, 0, $wr, $hr, $w, $h);
+                }
 
                 $productPicturesDir = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/'.$product->getOwner()->getUsername().'/';
 
                 //Getting the file saved
+                $fileName = $product->getNormalizedName().'.400.png';
+                imagepng($resize400, $productPicturesDir.$fileName);
 
-                $file->move($productPicturesDir, $fileName);
-                $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $fileName);
+                $fileName = $product->getNormalizedName().'.100.png';
+                imagepng($resize100, $productPicturesDir.$fileName);
+
+                //Getting the file saved
+                $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $product->getNormalizedName());
             }
 
-            $this->getDoctrine()->getManager('AppBundle:Product')->flush();
+            if($this->getUser()->getBalance() - $product->getStock() > 0){
+                $this->getUser()->setBalance($this->getUser()->getBalance() - $product->getStock());
 
-            return $this->redirectToRoute('product_show', array('category' => $category, 'uuid' => $uuid));
+                $this->getDoctrine()->getManager()->flush();
+
+                $this->addFlash('modal','Your product was edited!');
+                return $this->redirectToRoute('product_show', array(
+                    'category' => $product->getCategory(),
+                    'uuid' => $product->getNormalizedName()
+                ));
+            }
+            else{
+                $this->addFlash('modal','You don\'t have enough money');
+
+                return $this->render('default/new_product.html.twig',
+                    array(
+                        'form' => $form->createView(),
+                        'image' => $product->getPicture()
+                    ));
+            }
         }
 
         return $this->render('default/new_product.html.twig', array(
             'form' => $form->createView(),
-            'image' => null //aqui va la imatge per precarregar :D
+            'image' => $product->getPicture()
         ));
     }
 
@@ -84,7 +168,7 @@ class ProductController extends Controller
         }else{
             $options = array('status' => 0);
         }
-        return $this->redirectToRoute('delete_success', $options);
+        return $this->redirectToRoute('profile_products', $options);
     }
 
     public function showAction($category, $uuid){
@@ -138,6 +222,8 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($purchase);
         $em->flush();
+        $mailer = $this->get('app.service.mailer.mailer_repository');
+        $mailer->sendNotificationEmail($product->getOwner(), $product);
 
         return $this->render('default/buy_result.html.twig', array(
             'product' => $product,
