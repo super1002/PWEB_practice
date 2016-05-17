@@ -20,7 +20,7 @@
                                 <div class="col s4">
                                     <div class="card">
                                         <div class="card-image bot-buffer top-buffer">
-                                            <img class= "size100 center-block" src="{{ asset(product.picture) }}" alt="{{ product.name }}">
+                                            <img class= "size100 center-block" src="{{ asset(product.getPicture100()) }}" alt="{{ product.name }}">
                                         </div>
                                         <div class="card-action navy-grey darken-2 ctitle">
                                             <span class="card-title font-m">
@@ -43,7 +43,18 @@
                                             </div>
                                             <div class="row">
                                                     <a class="flow-text font-m no_margin_vertical col s1 offset-s3" href="{{ path('product_edit', {'category': product.category, 'uuid': product.normalizedName}) }}"><i class="material-icons col s1 right-align blue-text">mode_edit</i></a>
-                                                    <a class="flow-text font-m no_margin_vertical col s1 offset-s1" href="{{ path('product_delete', {'category': product.category, 'uuid': product.normalizedName}) }}" onclick="return confirm('Are you sure you want to remove this product?')"><i class="material-icons col s1 left-align red-text">delete</i></a>
+                                                    <a class="flow-text font-m no_margin_vertical col s1 offset-s1 modal-trigger" href="{{ '#del_'~product.normalizedName }}" {#onclick="return confirm('Are you sure you want to remove this product?')"#}><i class="material-icons col s1 left-align red-text">delete</i></a>
+                                            </div>
+
+                                            <div id="{{ 'del_'~product.normalizedName }}" class="modal">
+                                                <div class="modal-content">
+                                                    <h4>Delete Product</h4>
+                                                    <p>Are you sure you want to remove this product?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
+                                                    <a href="{{ path('product_delete', {'category': product.category, 'uuid': product.normalizedName}) }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
+                                                </div>
                                             </div>
                                             {#<div class="meter grey lighten-2 navy-grey-meter valign-wrapper">
                                                 <span class="valign" style="width: {{ 100*product.numVisits/total }}%"></span>

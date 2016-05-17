@@ -17,7 +17,7 @@
                         <div class="col s8 offset-s2">
                             <div class="card">
                                 <div class="card-image">
-                                    <img class= "size400 center-block"src="{{ asset(newestProduct.picture) }}" alt="{{ newestProduct.name }}">
+                                    <img class= "size400 center-block"src="{{ asset(newestProduct.getPicture400()) }}" alt="{{ newestProduct.name }}">
                                 </div>
                                 <div class="card-action navy-grey darken-2">
                                     <span class="card-title">
@@ -46,7 +46,7 @@
                                 <div class="col s4">
                                     <div class="card">
                                         <div class="card-image bot-buffer top-buffer">
-                                            <img class= "size100 center-block" src="{{ asset(product.picture) }}" alt="{{ product.name }}">
+                                            <img class= "size100 center-block" src="{{ asset(product.getPicture100) }}" alt="{{ product.name }}">
                                         </div>
                                         <div class="card-action navy-grey darken-2 ctitle">
                                             <span class="card-title font-m">
@@ -54,7 +54,7 @@
                                             </span>
                                         </div>
                                         <div class="card-content ccontent fr-view">
-                                            {{ product.description|truncate(50, true) }}
+                                            {{ product.description|truncate(50, false) }}
                                         </div>
                                         <div class="card-action">
                                             <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff }}</b></p>
@@ -76,7 +76,7 @@
                                 <div class="col s4">
                                     <div class="card">
                                         <div class="card-image bot-buffer top-buffer">
-                                            <img class= "size100 center-block" src="{{ asset(product.picture) }}" alt="{{ product.name }}">
+                                            <img class= "size100 center-block" src="{{ asset(product.getPicture100) }}" alt="{{ product.name }}">
                                         </div>
                                         <div class="card-action navy-grey darken-2 ctitle">
                                             <span class="card-title font-m">
@@ -84,7 +84,7 @@
                                             </span>
                                         </div>
                                         <div class="card-content ccontent fr-view">
-                                            {{ product.description|truncate(50, true) }}
+                                            {{ product.description|truncate(50, false) }}
                                         </div>
                                         <div class="card-action">
                                             <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff}}</b></p>

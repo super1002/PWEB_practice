@@ -24,7 +24,7 @@
                     <tr data-href="{{ path('product_show', {'category': result.category, 'uuid': result.normalizedName}) }}" class="clickable">
                         <td class="row  left-margin2">
                             <div class="valign-wrapper left-margin">
-                                <img src="{{ asset(result.picture) }}" alt="{{ result.name }}" class="rounded medium center-align valign">
+                                <img src="{{ asset(result.getPicture100()) }}" alt="{{ result.name }}" class="rounded medium center-align valign">
                                 <p class="left-align left-margin flow-text valign">{{ result.name|upper }}</p>
                             </div>
                         </td>
