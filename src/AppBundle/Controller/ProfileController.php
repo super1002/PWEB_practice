@@ -12,6 +12,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
 use AppBundle\Form\NewProductType;
+use KMS\FroalaEditorBundle\Form\Type\FroalaEditorType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -400,9 +401,28 @@ class ProfileController extends Controller
 
     }
 
-    //for the addproductaction add an extra field on the form that consists of a choice field that allows to select the
-    //different kind of products that can be inserted and that will be used to generate the SEO like url for the products.
-    //the available options are: "tables | blades | balls | rubbers | clothing | other" if new are added notify in order
-    //to add them to the routing configuration.
+    public function makeComment($user){
+
+        //Mirar si pot fer comentari o no en el propi smarty per fer disable del boto submit
+        //Tambe en smarty mirar si estem logged per mostrar el missatge derror enves del WYSIWYG
+
+        //Tampoc es pot comentar si sha comentat ja a lusuari, pero aixo ho verificaria al fer submit i
+        //mostrem modal si ja nhi havia un mostrant error
+
+        //Amb smarty mirar si el comentari es nostre per afegir el edit/delete
+
+        //Afegir una pagina al header que ens porti a aquesta pagina per veure els coments sobre nosaltres
+
+        $form = $this->createFormBuilder()
+            ->add('description', FroalaEditorType::class)
+            ->add('submit', SubmitType::class)
+            ->getForm();
+
+        return $this->render('default/view_profile.html.twig',
+            array(
+                'form' => $form->createView(),
+                'user' => $user
+            ));
+    }
 
 }

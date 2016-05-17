@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'form/FormMaterializeCssTheme.html.twig' %}
+
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col s12 card-panel navy-grey darken-5 z-depth-5">
+                <div class="col s12  center-align card-panel grey lighten-4 padding2">
+
+                    <div class="row valign-wrapper">
+                        <h2 class="left-align  col s12 flow-text left-margin"><b>{{ user.username|capitalize }}</b></h2>
+                    </div>
+                    <hr class="row col s12">
+
+                    <div class="row">
+
+                        <div class="col s12 l6">
+                            <img class="col s12 responsive-img" src="{{ asset(user.profile_picture) }}" alt="{{ user.username }}">
+                            <hr class="col s12">
+                        </div>
+
+                        <div class="col s12 l6 left-align left-buffer2 padding2">
+                            <div class="row valign-wrapper flow-text font-m">
+                                <p><strong>Score: </strong> {{ user.score }}</p>
+                                {% if product.owner.score < 100 %}
+                                    {% set medal = asset('images/bronze_medal.png') %}
+                                    {% set step = 20 %}
+                                {% elseif product.owner.score < 1000 %}
+                                    {% set medal = asset('images/silver_medal.png') %}
+                                    {% set step = 200 %}
+                                {% elseif product.owner.score < 10000 %}
+                                    {% set medal = asset('images/gold_medal.png') %}
+                                    {% set step = 2000 %}
+                                {% else %}
+                                    {% set medal = asset('images/logo_symfony.png') %}
+                                    {% set step = product.owner.score %}
+                                {% endif %}
+                                {% for i in range(0, product.owner.score, step) %}
+                                    <img src="{{ medal }}" alt="this is a wonderful medal" class="circle valign" style="width: 45px; height: 60px;">
+                                {% endfor %}
+                            </div>
+                            <p class="row flow-text font-m no_margin_vertical"> Products sold: <b>{{ user.purchases.count }}</b></p>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="s12 col">
+                                {% for comment in user.comments %}
+                                    <div class="col s12">
+                                        <div class=" row card-panel padding grey lighten-3">
+                                            <div class="left-margin row no-margin-bot half-top-margin">
+                                                <h5 class="no-margin-vertical right-margin2">{{ comment.title|capitalize }} <span class=" left-margin yellow-text text-darken-2">({{ comment.score ~ '/10' }})</span></h5>
+                                            </div>
+                                            <div class="left-margin row valign-wrapper no_padding_vertical  top-margin half-bot-margin">
+                                                <img src="{{ asset(comment.author.profilePicture) }}" alt="this is a handsome dude" class=" left-margin half-right-margin circle valign" style="width: 30px; height: 30px;">
+                                                <p class="valign no-margin-vertical">{{ comment.author.username }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row card-panel orange-grey lighten-5 fr-view">
+                                            {{ comment.comment|raw }}
+                                        </div>
+                                        <hr>
+                                    </div>
+                                {% else %}
+                                    <p class="center-align orange-grey-text accent-3"> There are no comments for this seller </p>
+                                {% endfor %}
+
+
+                            {{ form.start(form) }}
+                                <div class="col s12">
+                                    {{ form_row(form.description,  {'label': ' '}, {'attr': {'length' : '500', 'class' : 'materialize-textarea white-text'}}) }}
+                                </div>
+                                <div class="col right top-margin3">
+                                    {{ form_row(form.submit, { 'label': 'Submit' }) }}
+                                </div>
+                            {{ form.end(form) }}
+
+                        </div>
+                        <!--Aqui posem el WYSIWYG del comentari-->
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

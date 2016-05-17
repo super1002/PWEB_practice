@@ -22,20 +22,20 @@
 </head>
 <body style="display: flex; min-height: 100vh; flex-direction: column;">
 
-{% if app.session.flashbag.get('modal') is not empty %}
-    {% set flashMessage = app.session.flashbag.get('modal')[0] %}
-    <div id="modal1" class="modal modal-fixed-footer active">
+{% for flashMessage in app.session.flashbag.get('modal') %}
+
+<div id="modal_top" class="modal modal active">
         <div class="modal-content">
             <p>{{ flashMessage }}</p>
         </div>
         <div class="modal-footer">
-            <a href="" class="modal-action modal-close waves-effect waves-green btn-flat ">Agree</a>
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">OK</a>
         </div>
     </div>
 
-    <script defer>$('#modal1').openModal();</script>
+    <script defer>$(document).ready(function(){openMaModal()})</script>
 
-{% endif %}
+{% endfor %}
 
 {# Header #}
 <header class="navbar-fixed iamthetop">

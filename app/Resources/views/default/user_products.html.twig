@@ -28,7 +28,7 @@
                                             </span>
                                         </div>
                                         <div class="card-content ccontent fr-view">
-                                            {{ product.description|truncate(50, true) }}
+                                            {{ product.description|truncatehtml(50)|raw }}
                                         </div>
                                         <div class="card-action">
                                             <p class="row flow-text font-m no_margin_vertical"> Expires <b>{{ product.expiringDate|time_diff}}</b></p>
