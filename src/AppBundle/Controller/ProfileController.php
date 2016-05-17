@@ -99,6 +99,11 @@ class ProfileController extends Controller
     public function addProductAction(Request $request){
 
 
+        $fileSystem = new Filesystem();
+        if(!$fileSystem->exists('uploads/Products/'.$this->getUser()->getUsername())){
+            $fileSystem->mkdir('uploads/Products/'.$this->getUser()->getUsername());
+        }
+
         $productPicturesTemp = null;
         $tempPictureRoute = 'uploads/Products/product-placeholder.png';
         $product = new Product();
@@ -211,7 +216,6 @@ class ProfileController extends Controller
             }
             else{
 
-                $fileSystem = new Filesystem();
                 if($fileSystem->exists($this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/'.$this->getUser()->getUsername().'.400.png')){
 
                     var_dump("fileExists");

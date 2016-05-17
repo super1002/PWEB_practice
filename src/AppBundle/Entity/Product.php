@@ -226,7 +226,17 @@ class Product
      */
     public function getDescription()
     {
-        return $this->description;
+        $this->description;
+
+        dump($this->description);
+
+        $ltrimmed = ltrim($this->description, "\"");
+        $trimmed = rtrim($ltrimmed, "\"");
+        dump($trimmed);
+
+        dump("Hola");
+
+        return $trimmed;
     }
 
     /**
