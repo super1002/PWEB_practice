@@ -67,6 +67,11 @@ services:
       arguments:
         twig: "@twig"
 
+  truncatehtml.twig.extension:
+      class: AppBundle\Services\Twig\TruncateHtmlExtension
+      tags:
+        - { name: twig.extension }
+
 
 #    service_name:
 #        class: AppBundle\Directory\ClassName

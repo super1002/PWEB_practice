@@ -99,8 +99,13 @@ class ProfileController extends Controller
     public function addProductAction(Request $request){
 
 
+        $fileSystem = new Filesystem();
+        if(!$fileSystem->exists('uploads/Products/'.$this->getUser()->getUsername())){
+            $fileSystem->mkdir('uploads/Products/'.$this->getUser()->getUsername());
+        }
+
         $productPicturesTemp = null;
-        $tempPictureRoute = null;
+        $tempPictureRoute = 'uploads/Products/product-placeholder.png';
         $product = new Product();
 
         $em = $this->getDoctrine()->getManager();
@@ -211,7 +216,6 @@ class ProfileController extends Controller
             }
             else{
 
-                $fileSystem = new Filesystem();
                 if($fileSystem->exists($this->getParameter('kernel.root_dir').'/../web/uploads/Products/TEMP/'.$this->getUser()->getUsername().'.400.png')){
 
                     var_dump("fileExists");
@@ -359,18 +363,6 @@ class ProfileController extends Controller
             }
         }
 
-        if($tempPictureRoute === null){
-            //Posar un placeholder
-
-            /*
-            return $this->render('default/new_product.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'image' => $productPicturesTemp
-                ));
-
-            */
-        }
         return $this->render('default/new_product.html.twig',
             array(
                 'form' => $form->createView(),

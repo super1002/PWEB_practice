@@ -22,8 +22,8 @@
 </head>
 <body style="display: flex; min-height: 100vh; flex-direction: column;">
 
-{% for flashMessage in app.session.flashbag.get('modal') %}
-
+{% if app.session.flashbag.get('modal') is not empty %}
+    {% set flashMessage = app.session.flashbag.get('modal')[0] %}
     <div id="modal1" class="modal modal-fixed-footer active">
         <div class="modal-content">
             <p>{{ flashMessage }}</p>
@@ -33,7 +33,9 @@
         </div>
     </div>
 
-{% endfor %}
+    <script defer>$('#modal1').openModal();</script>
+
+{% endif %}
 
 {# Header #}
 <header class="navbar-fixed iamthetop">
