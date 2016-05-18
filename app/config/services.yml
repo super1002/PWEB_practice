@@ -49,6 +49,13 @@ services:
       # small performance boost
       public: false
 
+  app.voter.comment_voter:
+      class: AppBundle\Voter\CommentVoter
+      tags:
+          - { name: security.voter }
+      # small performance boost
+      public: false
+
 
   app.service.mailer.mailer_repository:
     class: AppBundle\Services\Mailer\MailerRepository

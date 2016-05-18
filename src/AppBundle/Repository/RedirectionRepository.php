@@ -10,4 +10,44 @@ namespace AppBundle\Repository;
  */
 class RedirectionRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function getNumberRedirections($partial){
+
+        $total = $this->createQueryBuilder('r')
+            ->select('count(r)')
+            ->where('r.source LIKE :string')
+            ->setParameter('string', $partial . '%')
+            ->getQuery()
+            ->setResultCacheLifetime(60)
+            ->getSingleScalarResult();
+
+        return $total;
+
+    }
+
+    public function updateRedirections($source, $destination){
+
+        $this->createQueryBuilder('r')
+            ->update('AppBundle:Redirection', 'r')
+            ->where('r.destination LIKE :source')
+            ->set('r.destination', ':destination')
+            ->setParameter('source', $source)
+            ->setParameter('destination', $destination)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function removeRedirections($destination)
+    {
+
+        $this->createQueryBuilder('r')
+            ->delete('AppBundle:Redirection', 'r')
+            ->where('r.destination LIKE :destination')
+            ->setParameter('destination', $destination)
+            ->getQuery()
+            ->execute();
+
+    }
+
+
 }

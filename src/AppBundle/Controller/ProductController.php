@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Purchase;
+use AppBundle\Entity\Redirection;
 use AppBundle\Form\NewProductType;
 use AppBundle\Form\SearchBarType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,13 +39,43 @@ class ProductController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $resultset = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('name' => $product->getName()));
-            dump($resultset);
-            if(is_null($resultset) or empty($resultset)){
-                $product->setNormalizedName(join('-', preg_split('/\s/', strtolower($product->getName()))));
-            }else{
-                $product->setNormalizedName($resultset[0]->getNormalizedName() . '-' . count($resultset));
+
+            $last_name = ($this->container->get('session')->getFlashbag()->get('name'));
+            $last_category = ($this->container->get('session')->getFlashbag()->get('category'));
+            $last_category = $last_category[0];
+            $last_name = $last_name[0];
+
+            $repo = null;
+            $redirection = null;
+            $last_norm_name = null;
+
+            if ( $product->getName() != $last_name or
+                $product->getCategory() != $last_category){
+
+                $last_norm_name = $product->getNormalizedName();
+
+                if( $product->getName() != $last_name ){
+
+                    $resultset = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('name' => $product->getName()));
+                    $partial = join('-', preg_split('/\s/', strtolower($product->getName())));
+                    $redirections = $this->getDoctrine()->getRepository('AppBundle:Redirection')->getNumberRedirections($partial);
+
+                    if((is_null($resultset) or empty($resultset)) and $redirections == 0){
+                        $product->setNormalizedName($partial);
+                    }else{
+                        $product->setNormalizedName($partial . '-' . (count($resultset) + $redirections));
+                    }
+
+                }
+
+                //add redirections to redirection table
+                $repo = $this->getDoctrine()->getRepository('AppBundle:Redirection');
+                $redirection = new Redirection();
+                $redirection->setSource($last_category . '/' . $last_norm_name);
+                $redirection->setDestination($product->getCategory() . '/' . $product->getNormalizedName());
+
             }
+
             $product->setCreationDate(new \DateTime());
 
             $file = $product->getFile();
@@ -136,6 +167,14 @@ class ProductController extends Controller
             if($this->getUser()->getBalance() - $product->getStock() > 0){
                 $this->getUser()->setBalance($this->getUser()->getBalance() - $product->getStock());
 
+                if ( $product->getName() != $last_name or
+                    $product->getCategory() != $last_category ) {
+
+                    $repo->updateRedirections($last_category . '/' . $last_norm_name,
+                        $product->getCategory() . '/' . $product->getNormalizedName());
+                    $this->getDoctrine()->getManager()->persist($redirection);
+
+                }
                 $this->getDoctrine()->getManager()->flush();
 
                 $this->container->get('session')->getFlashbag()->set('modal','Your product was edited!');
@@ -155,6 +194,9 @@ class ProductController extends Controller
             }
         }
 
+        $this->container->get('session')->getFlashbag()->set('name', $product->getName());
+        $this->container->get('session')->getFlashbag()->set('category', $product->getCategory());
+
         return $this->render('default/new_product.html.twig', array(
             'form' => $form->createView(),
             'image' => $product->getPicture()
@@ -168,6 +210,9 @@ class ProductController extends Controller
         }else{
             $this->container->get('session')->getFlashbag()->set('modal', 'The product was not removed succesfully');
         }
+
+        $this->getDoctrine()->getRepository('AppBundle:Redirection')->removeRedirections($category . '/' . $uuid);
+
         return $this->redirectToRoute('profile_products');
     }
 
@@ -181,7 +226,7 @@ class ProductController extends Controller
             if( is_null($target) ){
                 throw $this->createNotFoundException();
             }else{
-                return $this->redirect($target->getDestination());
+                return $this->redirect('/' . $target->getDestination());
             }
         }
 
