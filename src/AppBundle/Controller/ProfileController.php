@@ -433,7 +433,6 @@ class ProfileController extends Controller
             }
         }
 
-        dump($userComment);
         $canComment2 = false;
         foreach($this->getUser()->getPurchases() as $purchase){
             if($purchase->getProduct()->getOwner() == $user){
@@ -446,6 +445,7 @@ class ProfileController extends Controller
 
         $formCreate = $this->createForm(CommentType::class, $newComment, array('username' => $username));
 
+        dump($userComment);
         $formEdit = $this->createForm(CommentType::class, $userComment, array('username' => $username,
             'route' => 'edit_comment'));
 
@@ -530,10 +530,7 @@ class ProfileController extends Controller
             }
         }
 
-        dump($userComment);
-
         if(!is_null($userComment)){
-            dump("Hallo");
             $this->getDoctrine()->getManager()->remove($userComment);
             $this->getDoctrine()->getManager()->flush();
         }

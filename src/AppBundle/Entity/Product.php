@@ -75,6 +75,9 @@ class Product
 
     /**
      * @var DateTime
+     * @Validator\Range(
+     *     min="now"
+     *     )
      *
      * @ORM\Column(name="expiring_date", type="datetime")
      */
@@ -83,9 +86,7 @@ class Product
     /**
      * @var string
      *
-     * @Validator\Range(
-     *     min="now"
-     *     )
+     *
      * @ORM\Column(name="picture", type="string", length=550)
      *
      */

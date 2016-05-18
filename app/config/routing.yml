@@ -232,6 +232,7 @@ delete_comment:
     _controller: AppBundle:Profile:deleteComment
     _format: html
   methods:
+    - GET
     - POST
 
 resend_email:
