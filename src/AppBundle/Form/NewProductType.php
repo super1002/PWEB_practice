@@ -30,7 +30,7 @@ class NewProductType extends AbstractType{
             ->add('expiringDate', DateType::class, array(
                 'format' => 'dd MMMM, yyyy',
                 'widget' => 'single_text'))
-            ->add('file', FileType::class, array('label' => 'Product Picture', 'data_class'=> UploadedFile::class))
+            ->add('file', FileType::class, array('label' => 'Product Picture', 'data_class'=> UploadedFile::class, 'required' => false))
             ->add('category', ChoiceType::class, array(
                 'choices'  => array(
                     'Table' => 'table',

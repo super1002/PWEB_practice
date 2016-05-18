@@ -55,3 +55,8 @@ function submitSearch(){
     $('button.hidden').click();
 
 }
+
+function submitEdit(){
+
+    $('button.hidden').click();
+}
