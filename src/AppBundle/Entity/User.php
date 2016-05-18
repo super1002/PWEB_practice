@@ -261,7 +261,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
     public function eraseCredentials()
     {
-        $this->plain_password = "";
+        //$this->plain_password = "";
     }
 
     public function getUsername()
