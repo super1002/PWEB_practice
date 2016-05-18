@@ -62,7 +62,9 @@
                                 <div class="col s3">
                                     <img src="{{ asset(app.user.ProfilePicture) }}" alt="" class="circle valign" style="width: 30px; height: 30px;">
                                 </div>
-                                <span class="valign col s5 left-align -_1px-left-margin">{{ app.user.username | capitalize }}</span>
+                                <a href="{{ path('profile', {'username': app.user.username}) }}">
+                                    <span class="valign col s5 left-align -_1px-left-margin">{{ app.user.username }}</span>
+                                </a>
                                 <i class="material-icons col s3">arrow_drop_down</i>
                             </div>
 
