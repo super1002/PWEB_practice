@@ -39,7 +39,7 @@ class RegisterController extends Controller
             $encoder = $factory->getEncoder($user);
 
             $user->setPassword($encoder->encodePassword($user->getPlainPassword(), $user->getSalt()));
-            $user->eraseCredentials();
+            //$user->eraseCredentials();
             //make csrf check. no idea how that's done.
 
             /** @var UploadedFile $file */
@@ -70,6 +70,8 @@ class RegisterController extends Controller
             //store the user information on the database
             //persist the confirmation token mapped to the email
             $em->flush();
+
+            dump($user);
 
             //send the email with the confirmation url
             /**

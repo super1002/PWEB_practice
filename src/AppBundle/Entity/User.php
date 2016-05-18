@@ -79,8 +79,8 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     private $password;
 
     /**
-     * @ORM\Column(name="plain_password", type="string", length=255)
-     * @var String
+     *
+     * @var String $plain_password
      * @Validator\NotBlank()
      * @Validator\Length(
      *      min = 6,
@@ -88,6 +88,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      *      minMessage = "Your password must be at least {{ limit }} characters long",
      *      maxMessage = "Your password cannot be longer than {{ limit }} characters"
      * )
+     * @ORM\Column(name="plain_password", type="string", length=255, nullable=false)
      */
     private $plain_password;
 
@@ -788,13 +789,13 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     /**
      * Add purchase
      *
-     * @param \AppBundle\Entity\Product $purchase
+     * @param \AppBundle\Entity\Purchase $purchase
      *
      * @return User
      */
-    public function addPurchase(\AppBundle\Entity\Product $purchase)
+    public function addPurchase(\AppBundle\Entity\Purchase $purchase)
     {
-        $this->purchases[] = $purchase;
+        $this->purchases->add($purchase);
 
         return $this;
     }
@@ -802,9 +803,9 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     /**
      * Remove purchase
      *
-     * @param \AppBundle\Entity\Product $purchase
+     * @param \AppBundle\Entity\Purchase $purchase
      */
-    public function removePurchase(\AppBundle\Entity\Product $purchase)
+    public function removePurchase(\AppBundle\Entity\Purchase $purchase)
     {
         $this->purchases->removeElement($purchase);
     }

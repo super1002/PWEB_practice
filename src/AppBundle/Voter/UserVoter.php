@@ -18,19 +18,30 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class UserVoter extends Voter
 {
 
-    const COMMENT = "comment";
+    const COMMENT = "COMMENT";
+
+    private $doctrine;
 
     /**
      * Determines if the attribute and comment are supported by this voter.
      *
      * @param string $attribute An attribute
-     * @param mixed $comment The comment to secure, e.g. an object the user wants to access or any other PHP type
+     * @param mixed $subject The comment to secure, e.g. an object the user wants to access or any other PHP type
      *
      * @return bool True if the attribute and subject are supported, false otherwise
      */
-    protected function supports($attribute, $comment)
+
+    public function __construct(\Doctrine\ORM\EntityManager $doctrine){
+        $this->doctrine = $doctrine;
+    }
+
+    protected function supports($attribute, $subject)
     {
-        if(!($comment instanceof Comment)) return false;
+        dump(-1);
+        if(!($subject instanceof User)){
+            dump(-2);
+            return false;
+        }
 
         if(!in_array($attribute, array(self::COMMENT))) return false;
 
@@ -48,15 +59,21 @@ class UserVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
+        /**
+         * @var User $user
+         */
         $user = $token->getUser();
 
-        if (!$user instanceof User) {
+        $user = $this->doctrine->getRepository('AppBundle:User')->find($user->getId());
+
+        /*if (!$user instanceof User) {
             // the user must be logged in; if not, deny access
+            dump(1);
             return false;
-        }
+        }*/
 
         // you know $comment is a Comment object, thanks to supports
-
+        dump(10);
 
         switch($attribute) {
             case self::COMMENT:
@@ -77,16 +94,22 @@ class UserVoter extends Voter
      */
     private function canComment($subject, $user)
     {
+        dump($subject);
+        dump($user);
+
         foreach($user->getPurchases() as $purchase){
             if($purchase->getBuyer() == $subject){
                 foreach($subject->getComments() as $comment){
                     if($comment->getAuthor() == $user){
+                        dump(2);
                         return false;
                     }
                 }
+                dump(3);
                 return true;
             }
         }
+        dump(4);
         return false;
     }
 }
