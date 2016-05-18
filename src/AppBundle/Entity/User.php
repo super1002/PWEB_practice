@@ -42,7 +42,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      * @var String
      * @Validator\NotBlank()
      * @Validator\Regex(
-     *     pattern="\@[a-zA-Z0-9_]{1,16}",
+     *     pattern="^@\w{1,16}^",
      *     match=true,
      *     message="The twitter account must begin with @"
      * )
@@ -61,7 +61,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
      * )
      * @Validator\Regex(
-     *     pattern="^\w{6,}$",
+     *     pattern="^\w{6,}^",
      *     match=true,
      *     message="The username cannot contain blank spaces"
      * )

@@ -94,7 +94,8 @@
 
                     {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         {{  render(controller('AppBundle:Authentication:showBar', { 'target': path(app.request.get('_route'),
-                            {'category': app.request.get('category'), 'uuid': app.request.get('uuid')})})) }}
+                            {'category': app.request.get('category'), 'uuid': app.request.get('uuid'),
+                                'username': app.request.get('username')})})) }}
                     {% endif %}
 
                 </div>

@@ -379,19 +379,28 @@ class ProfileController extends Controller
 
         $allProducts = $this->getUser()->getProducts()->toArray();
         $limit = 12;
+        $products = null;
         $totalProducts = count($allProducts);
         dump($totalProducts);
         dump($allProducts);
         $maxPages = ceil($totalProducts / $limit);
 
-        if ($page > $maxPages || $page < 1)
-        {
-            throw $this->createNotFoundException();
+        if ($page < 1){
+
+            $this->redirectToRoute('profile_products', array('page' => 1));
+        }elseif ($page > $maxPages){
+
+            $this->redirectToRoute('profile_products', array('page' => $maxPages));
         }
 
-        $pageProducts = array_chunk($allProducts, 12);
-        dump($pageProducts);
-        $products = array_chunk($pageProducts[$page - 1], 3);
+
+        if ($allProducts){
+
+            $pageProducts = array_chunk($allProducts, 12);
+            dump($pageProducts);
+            $products = array_chunk($pageProducts[$page - 1], 3);
+        }
+
 
 
         return $this->render('default/user_products.html.twig',

@@ -265,6 +265,7 @@ class ProductController extends Controller
         $this->getUser()->setBalance($this->getUser()->getBalance() - $product->getPrice());
         $product->getOwner()->setBalance($product->getPrice() + $product->getOwner()->getBalance());
         $product->setStock($product->getStock() - 1);
+        $product->setNumSells($product->getNumSells() + 1);
         $purchase = new Purchase();
         $purchase->setBuyer($this->getUser());
         $purchase->setProduct($product);

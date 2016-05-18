@@ -30,7 +30,11 @@
                     <div class="col s12 top-margin2">
                         {{ form_row(form.submit, { 'label': 'Login' }) }}
                     </div>
-                    <a href="{{ path('password_recovery', {'username': lastUsername }) }}">Forgot your password?</a>
+                    {% if error %}
+                        <div class="col s12 top-margin2">
+                            <a href="{{ path('password_recovery', {'username': lastUsername }) }}">Forgot your password?</a>
+                        </div>
+                    {% endif %}
                     {{ form_row(form._target_path, {'attr': {'value' : app.request.headers.get('referer') }}) }}
                     {{ form_end(form) }}
 

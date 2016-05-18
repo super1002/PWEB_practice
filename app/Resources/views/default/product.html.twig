@@ -13,7 +13,19 @@
                         {% if is_granted("EDIT", product) %}
                             <h2 class="left-align  col s10 flow-text left-margin">{{ product.name|capitalize }}</h2>
                             <a href="{{ path('product_edit', {'category': product.category, 'uuid': product.normalizedName}) }}"><i class="material-icons col s1 right-align">mode_edit</i></a>
-                            <a href="{{ path('product_delete', {'category': product.category, 'uuid': product.normalizedName}) }}"><i class="material-icons col s1 left-align red-text">delete</i></a>
+                            <a class="modal-trigger" href="{{ '#del_'~product.normalizedName }}"><i class="material-icons col s1 left-align red-text">delete</i></a>
+
+                            <div id="{{ 'del_'~product.normalizedName }}" class="modal">
+                                <div class="modal-content">
+                                    <h4>Delete Product</h4>
+                                    <p>Are you sure you want to remove this product?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{{ path('product_delete', {'category': product.category, 'uuid': product.normalizedName}) }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
+                                    <a href="" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
+                                </div>
+                            </div>
+
                         {% else %}
                             <h2 class="left-align  col s12 flow-text left-margin">{{ product.name|capitalize }}</h2>
                         {% endif %}
@@ -31,7 +43,7 @@
                             <div class="row valign-wrapper flow-text font-m">
                                 Seller:
                                 <img src="{{ asset(product.owner.profilePicture) }}" alt="this is a handsome dude" class=" left-margin half-right-margin circle valign" style="width: 30px; height: 30px;">
-                                <p class="valign flow-text font-m no_margin_vertical half-right-margin"><b>{{ product.owner.username }}</b></p>
+                                <a href="{{ path('profile', {'username': product.owner.username}) }}" class="valign flow-text font-m no_margin_vertical half-right-margin black-text"><b>{{ product.owner.username }}</b></a>
                                 {% if product.owner.score < 100 %}
                                     {% set medal = asset('images/bronze_medal.png') %}
                                     {% set step = 20 %}

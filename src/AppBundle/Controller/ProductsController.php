@@ -31,6 +31,7 @@ class ProductsController extends Controller
 
         $products = array_chunk($repo->getOrderedByPopular($page, $limit), 3);
         $totalVisits = $repo->countTotalVisits();
+        dump($totalVisits);
 
         return $this->render('default/popular.html.twig', array(
             'products' => $products,
@@ -75,18 +76,6 @@ class ProductsController extends Controller
             $results = $resultset[0];
             $pages = $resultset[1];
             $this->container->get('session')->getFlashbag()->set('search_string', $string);
-        }
-
-        if($results == null){
-
-            if(($form->isValid() and $form->isSubmitted())){
-                $this->container->get('session')->getFlashbag()->set('search_string', $form->get('search')->getData());
-            }else if ($this->container->get('session')->getFlashbag()->has('search_string')[0]){
-                $this->container->get('session')->getFlashbag()->set('search_string', $this->container->get('session')
-                    ->getFlashbag()->get('search_string')[0]);
-            }
-
-            return $this->redirectToRoute('search', array('page' => $pages));
         }
 
         return $this->render('default/search_result.html.twig', array(

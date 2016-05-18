@@ -228,13 +228,10 @@ class Product
     {
         $this->description;
 
-        dump($this->description);
 
         $ltrimmed = ltrim($this->description, "\"");
         $trimmed = rtrim($ltrimmed, "\"");
-        dump($trimmed);
 
-        dump("Hola");
 
         return $trimmed;
     }

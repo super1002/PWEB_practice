@@ -106,9 +106,8 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
      public function countTotalVisits()
     {
         $total = $this->createQueryBuilder('p')
-            ->select('count(p.numVisits)')
+            ->select("sum(p.numVisits)")
             ->getQuery()
-            ->setResultCacheLifetime(60)
             ->getSingleScalarResult();
         return $total;
     }
