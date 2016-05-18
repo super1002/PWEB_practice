@@ -45,8 +45,8 @@ class Comment
     private $score;
 
     /**
-     * @var DateTime $creationDate
-     * @ORM\Column(name="creation_date", type="datetime")
+     * @var DateTime $date
+     * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
@@ -199,5 +199,29 @@ class Comment
     public function getTarget()
     {
         return $this->target;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Comment
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }

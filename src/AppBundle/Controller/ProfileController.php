@@ -413,8 +413,12 @@ class ProfileController extends Controller
 
     public function showAction($username){
 
-
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy(array('username' => $username));
+
+        if(is_null($user) or empty($user) ){
+            throw $this->createNotFoundException();
+        }
+
         $userComment = null;
 
         foreach ($user->getComments() as $ele) {
