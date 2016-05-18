@@ -118,6 +118,7 @@ class RegisterController extends Controller
             $this->addFlash('modal', 'Welcome to KingPong. Your account has been succesfully activated.');
             return $this->redirectToRoute('homepage');
 
+
         }else{
 
             throw $this->createNotFoundException();
