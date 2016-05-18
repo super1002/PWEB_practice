@@ -40,13 +40,12 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
     /**
      * @var String
-     * @Validator\NotBlank()
      * @Validator\Regex(
      *     pattern="^@\w{1,16}^",
      *     match=true,
      *     message="The twitter account must begin with @"
      * )
-     * @ORM\Column(name="twitter", type="string", length=255)
+     * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
      */
     protected $twitter_user;
 
@@ -220,7 +219,6 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         $this->products = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->purchases = new ArrayCollection();
-
         $this->locked = false;
         $this->expired = false;
         $this->isEnabled = false;
