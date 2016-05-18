@@ -230,7 +230,7 @@ class ProductController extends Controller
             if( is_null($target) ){
                 throw $this->createNotFoundException();
             }else{
-                return $this->redirect('/' . $target->getDestination());
+                return $this->redirect('/' . $target->getDestination(), 301);
             }
         }
 

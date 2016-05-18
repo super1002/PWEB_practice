@@ -197,7 +197,6 @@ product_show:
   requirements:
     category: "table|blade|ball|rubber|clothing|other"
   defaults:
-    permanent: true
     _controller: AppBundle:Product:show
     _format: html
   methods:
