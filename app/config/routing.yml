@@ -100,7 +100,7 @@ profile_recharge:
     - POST #will be used to process recharge form
 
 profile:
-  path: /user/{username}
+  path: /profile/{username}
   defaults:
     _controller: AppBundle:Profile:show
     _format: html
@@ -209,6 +209,33 @@ buy_product:
     _format: html
   methods:
     - GET
+
+post_comment:
+  path: /profile/{username}
+  defaults:
+    _controller: AppBundle:Profile:postComment
+    _format:
+  methods:
+    - GET
+    - POST
+
+edit_comment:
+  path: /profile/{username}/comment-edit
+  defaults:
+    _controller: AppBundle:Profile:editComment
+    _format:
+  methods:
+    - GET
+    - POST
+
+delete_comment:
+  path: /profile/{username}/comment-delete
+  defaults:
+    _controller: AppBundle:Profile:deleteComment
+    _format:
+  methods:
+    - GET
+    - POST
 
 welcome:
   path: /welcome
