@@ -21,7 +21,14 @@ services:
     arguments:
       router: "@router"
     tags:
-      - { name: form.type, alias: search}
+      - { name: form.type, alias: search }
+
+  app.form.comment_type:
+      class: AppBundle\Form\CommentType
+      arguments:
+        router: "@router"
+      tags:
+        - { name: form.type, alias: comment }
 
   app.form.login_bar_type:
       class: AppBundle\Form\LoginBarType
