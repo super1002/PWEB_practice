@@ -269,6 +269,7 @@ class ProductController extends Controller
         $purchase = new Purchase();
         $purchase->setBuyer($this->getUser());
         $purchase->setProduct($product);
+        $this->getUser()->addPurchase($purchase);
         $em = $this->getDoctrine()->getManager();
         $em->persist($purchase);
         $em->flush();

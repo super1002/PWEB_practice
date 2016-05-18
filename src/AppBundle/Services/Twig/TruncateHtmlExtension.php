@@ -51,9 +51,10 @@ class TruncateHtmlString {
             if(mb_strlen($ele->nodeValue, $this->encoding) + $this->charCount >= $this->limit) {
 
                 $newEle = $this->newDiv->importNode($ele);
+                $endchar = '&hellip;';
                 //If the last word is too long to keep intact, we cut it
                 if(mb_strlen($ele->nodeValue, $this->encoding) - $this->charCount >= 10){
-                    $newEle->nodeValue = substr($newEle->nodeValue, 0, $this->limit - $this->charCount);
+                    $newEle->nodeValue = substr($newEle->nodeValue, 0, $this->limit - $this->charCount) . $endchar;
                 }
                 $newParent->appendChild($newEle);
                 return true;
@@ -75,8 +76,8 @@ class TruncateHtmlExtension extends \Twig_Extension {
     public function getFilters() {
         return array('truncatehtml' => new \Twig_Filter_Method($this, 'truncatehtml'));
     }
-    public function truncatehtml($html, $limit, $endchar = '&hellip;') {
+    public function truncatehtml($html, $limit) {
         $output = new TruncateHtmlString($html, $limit);
-        return $output->cut() . $endchar;
+        return $output->cut();
     }
 }
