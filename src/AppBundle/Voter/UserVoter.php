@@ -77,9 +77,9 @@ class UserVoter extends Voter
      */
     private function canComment($subject, $user)
     {
-        foreach($subject->getPurchases() as $purchase){
-            if($purchase->getBuyer() == $user){
-                foreach($purchase->getProduct()->getOwner->getComments() as $comment){
+        foreach($user->getPurchases() as $purchase){
+            if($purchase->getBuyer() == $subject){
+                foreach($subject->getComments() as $comment){
                     if($comment->getAuthor() == $user){
                         return false;
                     }
