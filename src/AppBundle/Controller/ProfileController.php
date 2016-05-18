@@ -270,8 +270,8 @@ class ProfileController extends Controller
 
                 return $this->render('default/new_product.html.twig',
                     array(
-                        'form' => $form->createView($product),
-                        'image' => $product->getPicture400()
+                        'form' => $form->createView(),
+                        'image' => $product->getPicture100()
                     ));
             }
             //HUE
@@ -459,13 +459,13 @@ class ProfileController extends Controller
             ->add('submit', SubmitType::class)
             ->getForm();
 
+        dump($userComment);
         $formEdit = $this->createFormBuilder($userComment)
             ->setAction($this->generateUrl('edit_comment', array('username' => $username)))
             ->add('title', TextType::class)
             ->add('comment', FroalaEditorType::class)
             ->add('submit', SubmitType::class)
             ->getForm();
-
 
 
         return $this->render('default/view_profile.html.twig',

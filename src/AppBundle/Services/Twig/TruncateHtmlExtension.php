@@ -51,10 +51,9 @@ class TruncateHtmlString {
             if(mb_strlen($ele->nodeValue, $this->encoding) + $this->charCount >= $this->limit) {
 
                 $newEle = $this->newDiv->importNode($ele);
-                $endchar = '&hellip;';
                 //If the last word is too long to keep intact, we cut it
                 if(mb_strlen($ele->nodeValue, $this->encoding) - $this->charCount >= 10){
-                    $newEle->nodeValue = substr($newEle->nodeValue, 0, $this->limit - $this->charCount) . $endchar;
+                    $newEle->nodeValue = substr($newEle->nodeValue, 0, $this->limit - $this->charCount) . ' ...';
                 }
                 $newParent->appendChild($newEle);
                 return true;
