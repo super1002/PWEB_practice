@@ -53,7 +53,7 @@ class Product
     /**
      * @var float
      * @Validator\Range(
-     *     min = 0,
+     *     min = 0.01,
      *     minMessage = "The product cannot have a negative cost"
      *     )
      *
@@ -74,7 +74,10 @@ class Product
 
     /**
      * @var DateTime
-     *
+     * @Validator\Range(
+     *     min="now",
+     *     minMessage="The expiring date has to be a future date"
+     * )
      * @ORM\Column(name="expiring_date", type="datetime")
      */
     private $expiringDate;
@@ -96,7 +99,10 @@ class Product
     /**
      * @Validator\Image(
      *     mimeTypes= {"image/png", "image/gif", "image/jpg", "image/jpeg", "image/pjpeg"},
-     *     mimeTypesMessage="Unsupported file type, use gif, jpg or png"
+     *     mimeTypesMessage="Unsupported file type, use gif, jpg or png",
+     *     maxSize="2M",
+     *     maxSizeMessage="This file is too large. Upload a file of less than 2MB"
+     *
      * )
      * @var UploadedFile
      */

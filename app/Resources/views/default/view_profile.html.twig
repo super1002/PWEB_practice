@@ -111,7 +111,7 @@
                             {% if not is_granted('ROLE_USER') %}
                                 <p class="center-align orange-grey-text accent-3"> You need to <strong>login</strong> to leave a comment </p>
                             {% else %}
-                                {% if not is_granted("COMMENT", user) %}
+                                {% if not canComment %}
                                     <p class="center-align orange-grey-text accent-3"> You need to purchase a product from this user to leave a comment. <strong>Remember!</strong> You can only post one comment per user </p>
                                 {% else %}
                                     {{ form_start(formCreate) }}

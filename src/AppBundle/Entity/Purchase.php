@@ -48,8 +48,8 @@ class Purchase
      */
     public function __construct()
     {
-        $this->buyer = new ArrayCollection();
-        $this->product = new ArrayCollection();
+        //$this->buyer = new ArrayCollection();
+        //$this->product = new ArrayCollection();
         $this->timestamp = new \DateTime();
     }
 
