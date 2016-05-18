@@ -75,6 +75,10 @@ class Product
     /**
      * @var DateTime
      *
+     * @Validator\Range(
+     *      min = "now"
+     *     )
+     *
      * @ORM\Column(name="expiring_date", type="datetime")
      */
     private $expiringDate;

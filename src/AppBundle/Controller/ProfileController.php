@@ -413,6 +413,9 @@ class ProfileController extends Controller
 
     public function showAction($username){
 
+        $canComment1 = true;
+        $canComment2 = false;
+
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy(array('username' => $username));
 
         if(is_null($user) or empty($user) ){
@@ -424,9 +427,20 @@ class ProfileController extends Controller
         foreach ($user->getComments() as $ele) {
             if ($ele->getAuthor()->getUsername() == $this->getUser()->getUsername()) {
                 $userComment = $ele;
+                $canComment1 = false;
                 break;
             }
         }
+
+        $canComment2 = false;
+        foreach($this->getUser()->getPurchases() as $purchase){
+            if($purchase->getProduct()->getOwner() == $user){
+                $canComment2 = true;
+                break;
+            }
+        }
+
+        $canComment = $canComment1 && $canComment2;
 
         //Mirar si pot fer comentari o no en el propi smarty per fer disable del boto submit
         //Tambe en smarty mirar si estem logged per mostrar el missatge derror enves del WYSIWYG
@@ -458,7 +472,8 @@ class ProfileController extends Controller
             array(
                 'formCreate' => $formCreate->createView(),
                 'formEdit' => $formEdit->createView(),
-                'user' => $user
+                'user' => $user,
+                'canComment' => $canComment
             ));
     }
 
