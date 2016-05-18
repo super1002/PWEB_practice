@@ -79,6 +79,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     private $password;
 
     /**
+     * @ORM\Column(name="plain_password", type="string", length=255)
      * @var String
      * @Validator\NotBlank()
      * @Validator\Length(

@@ -79,6 +79,7 @@ class RegisterController extends Controller
             $mailer->sendConfirmationEmailMessage($user, $token->getToken());
 
             //Redirigim perque no puguin fer refresh i "reenviar" les dades.
+            $this->container->get('session')->getFlashbag()->set('user_id', $user->getId());
             return $this->redirectToRoute('registration_success');
         }
 
@@ -114,20 +115,48 @@ class RegisterController extends Controller
 
             $em->remove($conf_token);
             $em->flush();
-            $this->addFlash('modal', 'Welcome to KingPong');
+            $this->addFlash('modal', 'Welcome to KingPong. Your account has been succesfully activated.');
             return $this->redirectToRoute('homepage');
 
         }else{
 
-
-            return $this->redirectToRoute('invalid_token');
+            throw $this->createNotFoundException();
+            //return $this->redirectToRoute('invalid_token');
         }
 
     }
 
     public function successAction(Request $request){
 
-        //falta montar el fet de reenviar el mail quan es prem el boto de reenviar
+        $ru = $this->container->get('session')->getFlashbag()->get('user_id')[0];
+        $this->container->get('session')->getFlashbag()->set('registered_user', $ru);
+
         return $this->render('default/register_success.html.twig');
     }
+
+
+    public function resendEmailAction(Request $request){
+
+        $u_id = $this->container->get('session')->getFlashbag()->get('registered_user')[0];
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($u_id);
+        //generate a confirmationToken
+        $token = $this->getDoctrine()->getRepository('AppBundle:ConfirmationToken')->findOneBy(array('email' => $user->getEmail()));
+        $token->setToken( $user->generateConfirmationToken() );
+        //store the user information on the database
+        //persist the confirmation token mapped to the email
+        $this->getDoctrine()->getManager()->flush();
+
+        //send the email with the confirmation url
+        /**
+         * MailerRepository $mailer
+         */
+        $mailer = $this->get('app.service.mailer.mailer_repository');
+        $mailer->sendConfirmationEmailMessage($user, $token->getToken());
+        $this->container->get('session')->getFlashbag()->set('user_id', $user->getId());
+        $email = $user->getEmail();
+        $this->container->get('session')->getFlashbag()->set('modal', "The email has been succesfully re-sent to $email.");
+
+        return $this->redirectToRoute('registration_success');
+    }
+
 }
