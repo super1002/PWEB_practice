@@ -517,8 +517,11 @@ class ProfileController extends Controller
             }
         }
 
-        if(is_null($userComment)){
-            $user->removeComment($userComment);
+        dump($userComment);
+
+        if(!is_null($userComment)){
+            dump("Hallo");
+            $this->getDoctrine()->getManager()->remove($userComment);
             $this->getDoctrine()->getManager()->flush();
         }
 
