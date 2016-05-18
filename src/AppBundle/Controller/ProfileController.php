@@ -124,11 +124,12 @@ class ProfileController extends Controller
 
             $repo = $this->getDoctrine()->getRepository('AppBundle:Product');
             $resultset = $repo->findBy(array('name' => $product->getName()));
-            dump($resultset);
-            if(is_null($resultset) or empty($resultset)){
-                $product->setNormalizedName(join('-', preg_split('/\s/', strtolower($product->getName()))));
+            $partial = join('-', preg_split('/\s/', strtolower($product->getName())));
+            $redirections = $this->getDoctrine()->getRepository('AppBundle:Redirection')->getNumberRedirections($partial);
+            if((is_null($resultset) or empty($resultset)) and $redirections == 0){
+                $product->setNormalizedName($partial);
             }else{
-                $product->setNormalizedName($resultset[0]->getNormalizedName() . '-' . count($resultset));
+                $product->setNormalizedName($partial . '-' . (count($resultset) + $redirections));
             }
             $product->setCreationDate(new \DateTime());
 
