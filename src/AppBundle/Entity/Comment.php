@@ -224,4 +224,14 @@ class Comment
     {
         return $this->date;
     }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDateString()
+    {
+        return $this->date->format("d/m/y");
+    }
 }

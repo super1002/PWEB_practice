@@ -476,9 +476,7 @@ class ProfileController extends Controller
         $comment->setAuthor($this->getUser());
         $comment->setTarget($user);
 
-        dump($comment);
         $formCreate = $this->createForm(CommentType::class, $comment, array('username' => $username));
-        dump($comment);
 
         $formCreate->handleRequest($request);
 
@@ -493,7 +491,13 @@ class ProfileController extends Controller
     public function editCommentAction(Request $request, $username){
 
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy(array('username' => $username));
-        $userComment = null;
+
+        $userComment = new Comment();
+        $userComment->setAuthor($this->getUser());
+        $userComment->setTarget($user);
+
+        $this->getDoctrine()->getManager()->persist($userComment);
+
 
         foreach ($user->getComments() as $ele) {
             if ($ele->getAuthor()->getUsername() == $this->getUser()->getUsername()) {
@@ -502,11 +506,8 @@ class ProfileController extends Controller
             }
         }
 
-        dump($userComment);
         $formEdit = $this->createForm(CommentType::class, $userComment, array('username' => $username));
         $formEdit->handleRequest($request);
-        dump("mid");
-        dump($userComment);
 
         if($formEdit->isSubmitted() && $formEdit->isValid()){
             $this->getDoctrine()->getManager()->flush();

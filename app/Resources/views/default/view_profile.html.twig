@@ -57,7 +57,7 @@
                                     <li class="collection-item avatar">
                                         <img src="{{ asset(comment.author.profilePicture) }}" alt="this is a handsome dude" class="circle">
                                         <span class="title"><strong>{{ comment.title|upper }}</strong></span>
-                                        <p>by {{ comment.author.username }} on {{ comment.date }}<br>
+                                        <p>by {{ comment.author.username }} on {{ comment.getDateString }}<br>
                                             <div class="card-panel orange-grey lighten-5 fr-view">
                                                 {{ comment.comment|raw }}
                                             </div>
