@@ -1,0 +1,25 @@
+ <div class="row card">
+    <table class="responsive-table centered highlight">
+        <thead>
+        <tr>
+            <th data-field="product_name">Product</th>
+            <th data-field="product_owner">Owner</th>
+            <th data-field="product_price">Price</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {%  for purchase in app.user.purchases %}
+            {% if purchase.product.isNotAvailable() %}
+                <tr>
+            {% else %}
+                <tr data-href="{{ path('product_show', {'category': purchase.product.category, 'uuid': purchase.product.normalizedName}) }}" class="clickable">
+            {% endif %}
+                <td>{{ purchase.product.name }}</td>
+                <td>{{ purchase.product.owner.username }}</td>
+                <td>{{ purchase.product.price ~ '€'}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

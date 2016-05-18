@@ -20,7 +20,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class UserRepository extends EntityRepository implements UserLoaderInterface, UserProviderInterface
 {
     public function loadUserByUsername($username) {
-        dump($username);
 
         $retvar = $this->createQueryBuilder('u')
             ->setParameter('username', $username)
@@ -30,7 +29,6 @@ class UserRepository extends EntityRepository implements UserLoaderInterface, Us
             ->getOneOrNullResult();
 
 
-        dump($retvar);
 
         if ($retvar) {
 

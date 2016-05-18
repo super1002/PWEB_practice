@@ -16,6 +16,27 @@ services:
     tags:
       - { name: form.type, alias: authenticate }
 
+  app.form.search_bar_type:
+    class: AppBundle\Form\SearchBarType
+    arguments:
+      router: "@router"
+    tags:
+      - { name: form.type, alias: search }
+
+  app.form.comment_type:
+      class: AppBundle\Form\CommentType
+      arguments:
+        router: "@router"
+      tags:
+        - { name: form.type, alias: comment }
+
+  app.form.login_bar_type:
+      class: AppBundle\Form\LoginBarType
+      arguments:
+        router: "@router"
+      tags:
+        - { name: form.type, alias: authenticate }
+
   app.metadata.user:
       class: Doctrine\ORM\Mapping\ClassMetadata
       factory_service: doctrine # this is an instance of Registry
@@ -35,6 +56,22 @@ services:
       # small performance boost
       public: false
 
+  app.voter.comment_voter:
+      class: AppBundle\Voter\CommentVoter
+      tags:
+          - { name: security.voter }
+      # small performance boost
+      public: false
+
+  app.voter.user_voter:
+      class: AppBundle\Voter\UserVoter
+      arguments:
+          doctrine: "@doctrine.orm.entity_manager"
+      tags:
+          - { name: security.voter }
+      # small performance boost
+      public: false
+
 
   app.service.mailer.mailer_repository:
     class: AppBundle\Services\Mailer\MailerRepository
@@ -44,10 +81,22 @@ services:
       templating: "@twig"               # {type: "service", id: "templating"}
       parameters:
         confirmation.template: 'mail/confirmation.mail.twig'
+        recovery.template: 'mail/recovery.mail.twig'
+        notification.template: 'mail/notification.mail.twig'
         from_email: %email%
+
+  app.service.security.entry_point:
+      class: AppBundle\Services\Security\ForbiddenEntryPoint
+      arguments:
+        twig: "@twig"
+
+  truncatehtml.twig.extension:
+      class: AppBundle\Services\Twig\TruncateHtmlExtension
+      tags:
+        - { name: twig.extension }
+
 
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
-
 

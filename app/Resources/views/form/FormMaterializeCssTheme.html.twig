@@ -10,7 +10,7 @@
 
 {%- block form_widget_simple -%}
     {%- set type = type|default('text') -%}
-    <input type="{{ type }}" class="validate" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    <input type="{{ type }}" {{ block('widget_attributes') }} class="validate" {% if value is not empty %}value="{{ value }}" {% endif %}/>
 {%- endblock form_widget_simple -%}
 
 {%- block form_widget_compound -%}
@@ -41,7 +41,7 @@
             <input type="file" {{ block('widget_attributes') }}>
         </div>
         <div class="file-path-wrapper">
-            <input class="file-path validate" type="text">
+            <input class="file-path" type="text">
         </div>
     </div>
 {%- endblock file_widget -%}
@@ -221,7 +221,7 @@
             {% set label = name|humanize %}
         {%- endif -%}
     {%- endif -%}
-    <button type="{{ type|default('button') }}" {{ block('button_attributes') }} class=" navy-grey btn waves-effect waves-light">{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}<i class="material-icons right">send</i></button>
+    <button type="{{ type|default('button') }}" {{ block('button_attributes') }} class=" navy-grey btn waves-effect waves-light">{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}{% if 'no_icon' not in block('button_attributes') %}<i class="material-icons right">send</i>{% endif %}</button>
 {%- endblock submit_widget -%}
 
 {%- block reset_widget -%}

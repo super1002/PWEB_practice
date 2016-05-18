@@ -2,6 +2,10 @@
     #resource: "@AppBundle/Controller/"
     #type:     annotation #commented this to create routes on yaml file
 
+kms_froala_editor:
+  resource: "@KMSFroalaEditorBundle/Resources/config/routing.yml"
+  prefix:   /froalaeditor
+
 
 #actions that may handle a form need to accept also post request
 # /user/* refers to the private area of the application. So controllers must extend from PrivateBaseController
@@ -15,7 +19,7 @@
 homepage:
   path: /
   defaults:
-    _controller: AppBundle:HomePage:show
+    _controller: AppBundle:Homepage:show
     _format: html
   methods:
     - GET
@@ -24,17 +28,26 @@ homepage:
 welcome:
   path: /welcome
   defaults:
-    _controller: AppBundle:HomePage:welcome
+    _controller: AppBundle:Homepage:welcome
     _format: html
   methods:
     - GET
 
+password_recovery:
+  path: /password-recovery/{username}
+  defaults:
+    username: null
+    _controller: AppBundle:Authentication:recovery
+    _format: html
+  methods:
+    - GET
 
 profile_products:
-  path: /user/products
+  path: /user/products/{page}
   defaults:
     _controller: AppBundle:Profile:showProducts
-    _format:
+    _format: html
+    page: 1
   methods:
     - GET
     - POST #will be used to process the delete form submit
@@ -48,16 +61,26 @@ product_add:
     - GET
     - POST #will be used also to process the add form submit
 
-product_delete: # that will be changed since voters will be implemented to allow edit access to the products instead of
-                #accessing through the /user/username/uuid path it will be /uuid/edit and access will be handled through
-                # autoritzation for the logged in user.
-  path: /user/edit/{uuid}
+product_delete:
+  path: /user/delete/{category}/{uuid}
+  requirements:
+    category: "table|blade|ball|rubber|clothing|other"
   defaults:
-    _controller: AppBundle:Product:edit
+    _controller: AppBundle:Product:delete
     _format: html
   methods:
     - GET
-    - POST #will be used to process edit and delete form submit
+
+product_edit:
+  path: /user/edit/{category}/{uuid}
+  requirements:
+   category: "table|blade|ball|rubber|clothing|other"
+  defaults:
+   _controller: AppBundle:Product:edit
+   _format: html
+  methods:
+   - GET
+   - POST
 
 profile_edit:
   path: /user/{username}/edit-profile
@@ -76,9 +99,8 @@ profile_recharge:
     - GET
     - POST #will be used to process recharge form
 
-
 profile:
-  path: /user/{username}
+  path: /profile/{username}
   defaults:
     _controller: AppBundle:Profile:show
     _format: html
@@ -95,18 +117,21 @@ products:
     - GET
 
 search:
-  path: /search
+  path: /search/{page}
   defaults:
-    _controller: AppBundle:Search:showResults
+    page: 1
+    _controller: AppBundle:Products:searchResults
     _format: html
   methods:
     - POST #handles the form received on search and loads the results
+    - GET
 
 popular:
-  path: /products/popular
+  path: /popular/{page}
   defaults:
     _controller: AppBundle:Products:showPopular
     _format: html
+    page: 1
   methods:
     - GET
 
@@ -170,10 +195,50 @@ logout:
 product_show:
   path: /{category}/{uuid} #category must be reserved words that cannot appear on any route so it will default here
   requirements:
-    category: "tables|paddles|balls|robots|accessories|other"
+    category: "table|blade|ball|rubber|clothing|other"
   defaults:
     _controller: AppBundle:Product:show
-    _format:
+    _format: html
+  methods:
+    - GET
+
+buy_product:
+  path: /buy/{category}/{uuid}
+  defaults:
+    _controller: AppBundle:Product:buy
+    _format: html
+  methods:
+    - GET
+
+post_comment:
+  path: /profile/{username}
+  defaults:
+    _controller: AppBundle:Profile:postComment
+    _format: html
+  methods:
+    - POST
+
+edit_comment:
+  path: /profile/{username}/comment-edit
+  defaults:
+    _controller: AppBundle:Profile:editComment
+    _format: html
+  methods:
+    - POST
+
+delete_comment:
+  path: /profile/{username}/comment-delete
+  defaults:
+    _controller: AppBundle:Profile:deleteComment
+    _format: html
+  methods:
+    - POST
+
+resend_email:
+  path: /resend
+  defaults:
+    _controller: AppBundle:Register:resendEmail
+    _format: html
   methods:
     - GET
 

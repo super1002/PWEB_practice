@@ -19,3 +19,48 @@ $(document).ready(function(){
 
     }); // end of document ready
 })(jQuery); // end of jQuery name space
+
+$(document).ready(function() {
+    $('select').material_select();
+});
+
+$('.datepicker').on('focusin', function () {
+    $('.datepicker').pickadate('open');
+});
+
+$('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15 // Creates a dropdown of 15 years to control year
+});
+
+$(document).ready(function(){
+    $('tr.clickable').click(function(){
+        window.location = $(this).data('href');
+        return false;
+    });
+});
+
+
+function openMaModal(){
+    $('#modal_top').ready($('#modal_top').openModal());
+}
+
+$(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal-trigger').leanModal({
+            dismissible: true, // Modal can be dismissed by clicking outside of the modal
+            opacity: .0 // Opacity of modal background
+        }
+    );
+});
+
+function submitSearch(){
+
+    $('button.hidden').click();
+
+}
+
+function submitEdit(){
+    alert('patata');
+    $('button.hidden').click();
+}

@@ -1,0 +1,17 @@
+{% block subject %}
+
+    Your product was sold!
+
+{% endblock %}
+
+{% block body_html %}
+
+    <h5> {{  "Dear " ~ user.getUsername() }}, </h5>
+    <br>
+    <br>
+    <p> We are glad to inform you that your product "<b>{{ product.getName }}</b>" was recently sold.</p>
+    <br>
+    <p> Yours sincerelly,</p>
+    <p> The King Pong Team</p>
+    
+{% endblock %}

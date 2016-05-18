@@ -32,7 +32,9 @@ class LoginType extends AbstractType{
     {
         $builder
             ->setAction($this->router->generate('login_check'))
-            ->add('username', TextType::class)
+            ->add('username', TextType::class, array(
+                'block_name' => 'uname'
+            ))
             ->add('password', PasswordType::class)
             ->add('submit', SubmitType::class)
             ->add('_target_path', HiddenType::class, array(

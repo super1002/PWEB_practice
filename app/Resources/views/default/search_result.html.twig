@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="card-panel navy-grey lighten-2 row">
+            <h2 class="flow-text center-align">Search results for <span class="orange-grey-text bold accent-2">{{ string }}</span></h2>
+        </div>
+
+        {{  render(controller('AppBundle:Product:search')) }}
+
+        <div class="row card-panel center-align">
+            <table class="responsive-table centered highlight striped">
+                <thead>
+                <tr>
+                    <th data-field="product">Product</th>
+                    <th data-field="seller">Seller</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for result in results if not result.isNotAvailable() %}
+                    <tr data-href="{{ path('product_show', {'category': result.category, 'uuid': result.normalizedName}) }}" class="clickable">
+                        <td class="row  left-margin2">
+                            <div class="valign-wrapper left-margin">
+                                <img src="{{ asset(result.getPicture100()) }}" alt="{{ result.name }}" class="rounded medium center-align valign">
+                                <p class="left-align left-margin flow-text valign">{{ result.name|upper }}</p>
+                            </div>
+                        </td>
+                        <td class="row">
+                            <div class="valign-wrapper flow-text font-m right right-margin3">
+                                <p class="valign">Seller:</p>
+                                <img src="{{ asset(result.owner.profilePicture) }}" alt="this is a handsome dude" class=" left-margin half-right-margin circle valign little">
+                                <p class="valign flow-text font-m no-margin-vertical half-right-margin"><b>{{ result.owner.username }}</b></p>
+                                {% if result.owner.score < 100 %}
+                                    {% set medal = asset('images/bronze_medal.png') %}
+                                    {% set step = 20 %}
+                                {% elseif result.owner.score < 1000 %}
+                                    {% set medal = asset('images/silver_medal.png') %}
+                                    {% set step = 200 %}
+                                {% elseif result.owner.score < 10000 %}
+                                    {% set medal = asset('images/gold_medal.png') %}
+                                    {% set step = 2000 %}
+                                {% else %}
+                                    {% set medal = asset('images/logo_symfony.png') %}
+                                    {% set step = product.owner.score %}
+                                {% endif %}
+                                {% for i in range(0, result.owner.score, step) %}
+                                    <img src="{{ medal }}" alt="this is a wonderful medal" class="circle valign" style="width: 15px; height: 20px;">
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pages > 1 %}
+                <ul class="pagination">
+                    <li class="{{ page == 1 ? 'disabled' : 'waves-effect' }}"><a href="{{ page == 1 ? '#!' : path('search', {'page': page - 1}) }}"><i class="material-icons">chevron_left</i></a></li>
+                    {% for i in page-2..page+2 %}
+                        {% if i > 0 and i <= pages %}
+                            <li class="{{ i == page ? 'active navy-grey darken-2' : 'waves-effect' }}"><a href="{{ path('search', {'page': i}) }}">{{ i }}</a></li>
+                        {% endif %}
+                    {%  endfor %}
+                    <li class="{{ page == pages ? 'disabled' : 'waves-effect' }}"><a href="{{ page == pages ? '#!' : path('search', {'page': page + 1}) }}"><i class="material-icons">chevron_right</i></a></li>
+                </ul>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+

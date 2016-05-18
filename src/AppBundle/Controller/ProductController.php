@@ -9,55 +9,289 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Entity\Product;
-use AppBundle\Entity\User;
+use AppBundle\Entity\Purchase;
+use AppBundle\Entity\Redirection;
+use AppBundle\Form\NewProductType;
+use AppBundle\Form\SearchBarType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductController extends Controller
 {
 
-    public function editAction(){
+    public function editAction($category, $uuid, Request $request){
+
+        $product = $this->getDoctrine()->getRepository('AppBundle:Product')->findOneBy(array('category' => $category,
+            'normalizedName' => $uuid));
+
+        if(is_null($product) or empty($product) ){
+            throw $this->createNotFoundException();
+        }
+
+        if( ! $this->isGranted('EDIT', $product) ){
+            throw $this->createAccessDeniedException();
+        }
+
+        $oldStock = $product->getStock();
+
+        //preload product into add product form and process data to perform update
+        $form = $this->createForm(NewProductType::class, $product);
+
+        // ???
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $last_name = ($this->container->get('session')->getFlashbag()->get('name'));
+            $last_category = ($this->container->get('session')->getFlashbag()->get('category'));
+            $last_category = $last_category[0];
+            $last_name = $last_name[0];
+
+            $repo = null;
+            $redirection = null;
+            $last_norm_name = null;
+
+            if ( $product->getName() != $last_name or
+                $product->getCategory() != $last_category){
+
+                $last_norm_name = $product->getNormalizedName();
+
+                if( $product->getName() != $last_name ){
+
+                    $resultset = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('name' => $product->getName()));
+                    $partial = join('-', preg_split('/\s/', strtolower($product->getName())));
+                    $redirections = $this->getDoctrine()->getRepository('AppBundle:Redirection')->getNumberRedirections($partial);
+
+                    if((is_null($resultset) or empty($resultset)) and $redirections == 0){
+                        $product->setNormalizedName($partial);
+                    }else{
+                        $product->setNormalizedName($partial . '-' . (count($resultset) + $redirections));
+                    }
+
+                }
+
+                //add redirections to redirection table
+                $repo = $this->getDoctrine()->getRepository('AppBundle:Redirection');
+                $redirection = new Redirection();
+                $redirection->setSource($last_category . '/' . $last_norm_name);
+                $redirection->setDestination($product->getCategory() . '/' . $product->getNormalizedName());
+
+            }
+
+            $product->setCreationDate(new \DateTime());
+
+            $file = $product->getFile();
+            if (null !== $file) {
+
+                $extension =  $file->guessExtension();
+                if (!$extension) {
+                    // extension cannot be guessed
+                    $extension = 'bin';
+                }
+
+                $resize400 = imagecreatetruecolor(400, 300);
+                $resize100 = imagecreatetruecolor(100, 100);
+
+                imagesavealpha($resize400, true);
+                imagesavealpha($resize100, true);
+
+                $makeWhite400 = imagecolorallocatealpha($resize400, 0, 0, 0, 127);
+                $makeWhite100 = imagecolorallocatealpha($resize100, 0, 0, 0, 127);
+
+                imagefill($resize400, 0, 0, $makeWhite400);
+                imagefill($resize100, 0, 0, $makeWhite100);
+
+                switch ($extension){
+                    case "gif":
+                        $source = imagecreatefromgif($file->getRealPath());
+                        break;
+                    case "png":
+                        $source = imagecreatefrompng($file->getRealPath());
+                        break;
+                    default:
+                        $source = imagecreatefromjpeg($file->getRealPath());
+                        break;
+                }
+
+                list($w, $h) = getimagesize($file->getRealPath());
+
+                $ratio = $w/$h;
+
+                dump($ratio);
+
+                if($ratio > 1){
+                    if($ratio > 4/3){
+                        //Amplada restrictiva a les dues mides
+                        $wr = 400;
+                        $hr = $wr/$ratio;
+                        imagecopyresampled($resize400, $source, 0, ((300 - $hr)/2), 0, 0, $wr, $hr, $w, $h);
+
+                        $wr = 100;
+                        $hr = $wr/$ratio;
+                        imagecopyresampled($resize100, $source, 0, ((100 - $hr)/2), 0, 0, $wr, $hr, $w, $h);
+                    }
+                    else{
+                        //Altura restrictiva a 400x300
+                        $hr = 400;
+                        $wr = $hr*$ratio;
+                        imagecopyresampled($resize400, $source, ((400 - $wr)/2), 0, 0, 0, $wr, $hr, $w, $h);
+
+                        //Amplada restrictiva a 100x100
+                        $wr = 100;
+                        $hr = $wr/$ratio;
+                        imagecopyresampled($resize100, $source, 0, ((100 - $hr)/2), 0, 0, $wr, $hr, $w, $h);
+                    }
+                }
+                else{
+                    //Altura restrictiva a les dues mides
+                    $hr = 300;
+                    $wr = $hr*$ratio;
+                    imagecopyresampled($resize400, $source, ((400 - $wr)/2), 0, 0, 0, $wr, $hr, $w, $h);
+
+                    $hr = 100;
+                    $wr = $hr*$ratio;
+                    imagecopyresampled($resize100, $source, ((100 - $wr)/2), 0, 0, 0, $wr, $hr, $w, $h);
+                }
+
+                $productPicturesDir = $this->getParameter('kernel.root_dir').'/../web/uploads/Products/'.$product->getOwner()->getUsername().'/';
+
+                //Getting the file saved
+                $fileName = $product->getNormalizedName().'.400.png';
+                imagepng($resize400, $productPicturesDir.$fileName);
+
+                $fileName = $product->getNormalizedName().'.100.png';
+                imagepng($resize100, $productPicturesDir.$fileName);
+
+                //Getting the file saved
+                $product->setPicture('uploads/Products/'.$product->getOwner()->getUsername().'/'. $product->getNormalizedName());
+            }
+
+            $newStock = $product->getStock() - $oldStock;
+            if($this->getUser()->getBalance() - $newStock >= 0){
+
+                $this->getUser()->setBalance($this->getUser()->getBalance() - $newStock);
+
+                if ( $product->getName() != $last_name or
+                    $product->getCategory() != $last_category ) {
+
+                    $repo->updateRedirections($last_category . '/' . $last_norm_name,
+                        $product->getCategory() . '/' . $product->getNormalizedName());
+                    $this->getDoctrine()->getManager()->persist($redirection);
+
+                }
+                $this->getDoctrine()->getManager()->flush();
+
+                $this->container->get('session')->getFlashbag()->set('modal','Your product was successfully edited!');
+                return $this->redirectToRoute('product_show', array(
+                    'category' => $product->getCategory(),
+                    'uuid' => $product->getNormalizedName()
+                ));
+            }
+            else{
+                $this->container->get('session')->getFlashbag()->set('modal','You don\'t have enough money, try recharging before editing stock');
+
+                return $this->render('default/new_product.html.twig',
+                    array(
+                        'form' => $form->createView(),
+                        'image' => $product->getPicture()
+                    ));
+            }
+        }
+
+        $this->container->get('session')->getFlashbag()->set('name', $product->getName());
+        $this->container->get('session')->getFlashbag()->set('category', $product->getCategory());
+
+        return $this->render('default/new_product.html.twig', array(
+            'form' => $form->createView(),
+            'image' => $product->getPicture()
+        ));
+    }
+
+    public function deleteAction($category, $uuid){
+
+        if($this->getDoctrine()->getRepository('AppBundle:Product')->remove($category, $uuid)){
+            $this->container->get('session')->getFlashbag()->set('modal', 'The product was removed succesfully');
+        }else{
+            $this->container->get('session')->getFlashbag()->set('modal', 'The product was not removed succesfully');
+        }
+
+        $this->getDoctrine()->getRepository('AppBundle:Redirection')->removeRedirections($category . '/' . $uuid);
+
+        return $this->redirectToRoute('profile_products');
+    }
+
+    public function showAction($category, $uuid){
+
+        $product = $this->getDoctrine()->getRepository('AppBundle:Product')->findOneBy(array('category' => $category, 'normalizedName' => $uuid));
+
+        if( is_null($product) ){
+            //check if has been moved
+            $target = $this->getDoctrine()->getRepository('AppBundle:Redirection')->find($category . '/' . $uuid);
+            if( is_null($target) ){
+                throw $this->createNotFoundException();
+            }else{
+                return $this->redirect('/' . $target->getDestination(), 301);
+            }
+        }
+
+        if( $product->isNotAvailable() ){
+            throw $this->createNotFoundException();
+        }
+
+        $product->setNumvisits($product->getNumvisits() + 1);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->render('default/product.html.twig', array(
+            'product' => $product
+        ));
 
     }
 
-    public function showAction(){
+    public function buyAction($category, $uuid){
 
+        $product = $this->getDoctrine()->getRepository('AppBundle:Product')
+            ->findOneBy( array('category' => $category, 'normalizedName' => $uuid));
 
-        $p = new Product();
-        $p->setName('This is a large name to fuck the view test product');
-        $p->setDescription('The standard Lorem Ipsum passage, used since the 1500s
+        if( is_null($product) or $product->isNotAvailable()){
+            throw $this->createNotFoundException();
+        }
 
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        if( $this->getUser()->getBalance() < $product->getPrice() ){
+            $this->container->get('session')->getFlashbag()->set('modal', 'You do not have enough money to purchase this product. Recharge your account\'s
+            balance and proceed again with the purchase');
+            return $this->redirectToRoute('product_show', array('category' => $category, 'uuid' => $uuid));
+        }
 
-Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC
+        $this->getUser()->setBalance($this->getUser()->getBalance() - $product->getPrice());
+        $product->getOwner()->setBalance($product->getPrice() + $product->getOwner()->getBalance());
+        $product->setStock($product->getStock() - 1);
+        $product->setNumSells($product->getNumSells() + 1);
+        $purchase = new Purchase();
+        $purchase->setBuyer($this->getUser());
+        $purchase->setProduct($product);
+        $this->getUser()->addPurchase($purchase);
+        $product->addPurchase($purchase);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($purchase);
+        $em->flush();
+        $mailer = $this->get('app.service.mailer.mailer_repository');
+        $mailer->sendNotificationEmail($product->getOwner(), $product);
+        dump($purchase);
+        dump($this->getUser());
+        dump($product);
 
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+        return $this->render('default/buy_result.html.twig', array(
+            'product' => $product,
+            'historic' => $this->getUser()->getPurchases()
+        ));
+    }
 
-1914 translation by H. Rackham
+    public function searchAction(){
 
-"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?"
+        $form = $this->createForm(SearchBarType::class, null);
 
-Section 1.10.33 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC
-
-"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
-
-1914 translation by H. Rackham
-
-"On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains."');
-
-        $p->setExpiringDate(new \DateTime());
-        $p->getExpiringDate()->setDate(2016, 4, 22);
-        $p->setPrice(99.99);
-        $p->setPicture('/uploads/ProfilePictures/guidola.png');
-        $p->setStock(0);
-        $p->setOwner(new User());
-        $p->getOwner()->setUsername('menganito de los palotes');
-        $p->getOwner()->setProfilePicture('/images/background1.jpg');
-        $p->getOwner()->setScore(500);
-
-        return $this->render('default/product.html.twig', array(
-            'product' => $p
+        return $this->render('default/search_bar.html.twig', array(
+            'form' => $form->createView()
         ));
 
     }

@@ -17,8 +17,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class ProductVoter extends Voter
 {
 
-    const VIEW = 'view';
-    const EDIT = 'edit';
+    const VIEW = 'VIEW';
+    const EDIT = 'EDIT';
 
     /**
      * Determines if the attribute and subject are supported by this voter.

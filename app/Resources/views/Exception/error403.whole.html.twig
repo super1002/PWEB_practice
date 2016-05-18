@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    403 Forbidden
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="be-background-ma-friend black"></div>
+
+
+    <div class="padding2 top-margin3 bot-buffer fill_viewport clear">
+
+        <div class="row valign-wrapper ">
+            <div class="col s5 valign">
+                <img class="full-width"  src="{{ asset('images/403.jpg') }}" alt="A 403 angry pal">
+            </div>
+            <div class="col s4 valign white-text right-margin3">
+                <h2>Beware!</h2>
+                <h5 class="grey-text">We understood your request, however, we have declined to honor it.</h5>
+                <p>
+                    This page is often seen by hackers or people that are trying to access a restricted resource without
+                    proper authorization. If the resource you were trying to access belongs to you, please
+                    <a href="{{ path('login') }}">login</a> into your account. Otherwise darling, would be nice if you minded your own
+                    business.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

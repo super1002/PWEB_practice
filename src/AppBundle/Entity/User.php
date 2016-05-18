@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Validator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * User
@@ -23,6 +24,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(
  *     fields={"username"},
  *     message="This username is not available")
+ *
  *
  */
 class User implements UserInterface, AdvancedUserInterface, EquatableInterface, EncoderAwareInterface
@@ -38,13 +40,12 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
     /**
      * @var String
-     * @Validator\NotBlank()
      * @Validator\Regex(
-     *     pattern="^@\w{1,15}^",
+     *     pattern="^@\w{1,16}^",
      *     match=true,
      *     message="The twitter account must begin with @"
      * )
-     * @ORM\Column(name="twitter", type="string", length=255)
+     * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
      */
     protected $twitter_user;
 
@@ -57,6 +58,11 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      *      max = 25,
      *      minMessage = "Your username must be at least {{ limit }} characters long",
      *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
+     * )
+     * @Validator\Regex(
+     *     pattern="^\w{6,}^",
+     *     match=true,
+     *     message="The username cannot contain blank spaces"
      * )
      */
     private $username;
@@ -72,7 +78,8 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     private $password;
 
     /**
-     * @var String
+     *
+     * @var String $plain_password
      * @Validator\NotBlank()
      * @Validator\Length(
      *      min = 6,
@@ -80,6 +87,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      *      minMessage = "Your password must be at least {{ limit }} characters long",
      *      maxMessage = "Your password cannot be longer than {{ limit }} characters"
      * )
+     * @ORM\Column(name="plain_password", type="string", length=255, nullable=false)
      */
     private $plain_password;
 
@@ -152,12 +160,13 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
     /**
      * @var float
-     * @Validator\NotBlank()
+     * @Validator\NotBlank(groups={"recharge"})
      * @Validator\Range(
      *     min="1",
      *     minMessage="You must recharge at least 1€",
      *     max="100",
-     *     maxMessage="You cannot do a recharge higher than 100€"
+     *     maxMessage="You cannot do a recharge higher than 100€",
+     *     groups={"recharge"}
      * )
      */
     private $recharge;
@@ -188,20 +197,29 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      */
     private $comments_done;
 
+    /**
+     * @var Arraycollection $purchases
+     * @ORM\OneToMany(targetEntity="Purchase", mappedBy="buyer")
+     *
+     */
+    private $purchases;
+
 
     public function __construct()
     {
         $this->isActive = false;
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
 
+        $this->score = 0;
         $this->roles = array("ROLE_USER");
         $this->path = null;
         $this->file = null;
         $this->balance = 0;
         $this->recharge = 0;
+        $this->profile_picture = 'uploads/profile-placeholder.png';
         $this->products = new ArrayCollection();
         $this->comments = new ArrayCollection();
-
+        $this->purchases = new ArrayCollection();
         $this->locked = false;
         $this->expired = false;
         $this->isEnabled = false;
@@ -243,7 +261,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
 
     public function eraseCredentials()
     {
-        $this->plain_password = "";
+        //$this->plain_password = "";
     }
 
     public function getUsername()
@@ -730,7 +748,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
      */
     public function addCommentsDone(\AppBundle\Entity\Comment $commentsDone)
     {
-        $this->comments_done[] = $commentsDone;
+        $this->comments_done = $commentsDone;
 
         return $this;
     }
@@ -743,5 +761,61 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
     public function removeCommentsDone(\AppBundle\Entity\Comment $commentsDone)
     {
         $this->comments_done->removeElement($commentsDone);
+    }
+
+
+    /**
+     * @param User $user
+     * @param ExecutionContextInterface $context
+     * @Validator\Callback(
+     *     groups = {"recharge"}
+     * )
+     */
+    public function recharge(ExecutionContextInterface $context){
+        dump('hola');
+        if($this->getRecharge() + $this->getBalance() > 1000){
+
+            //$context->addViolation(, array(
+            $context->buildViolation('Recharge not allowed. You are exceding your maximum balance. (1000€)')
+                ->atPath('recharge')
+                ->addViolation();
+
+
+        }
+
+    }
+
+    /**
+     * Add purchase
+     *
+     * @param \AppBundle\Entity\Purchase $purchase
+     *
+     * @return User
+     */
+    public function addPurchase(\AppBundle\Entity\Purchase $purchase)
+    {
+        $this->purchases->add($purchase);
+
+        return $this;
+    }
+
+    /**
+     * Remove purchase
+     *
+     * @param \AppBundle\Entity\Purchase $purchase
+     */
+    public function removePurchase(\AppBundle\Entity\Purchase $purchase)
+    {
+        $this->purchases->removeElement($purchase);
+    }
+
+    /**
+     * Get purchases
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPurchases()
+    {
+        return $this->purchases;
     }
 }

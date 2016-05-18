@@ -92,6 +92,7 @@ footer.page-footer {
 .right-buffer4 { padding-right:80px !important; }
 
 .half-top-margin { margin-top:10px !important; }
+.half-bot-margin { margin-bottom:10px !important; }
 .top-margin { margin-top:20px !important; }
 .bot-margin { margin-bottom:20px !important; }
 .top-margin2 { margin-top:40px !important; }
@@ -150,6 +151,15 @@ li.decorated{
   list-style-type: square;
 }
 
+.clickable{
+  cursor: pointer;
+}
+
+tr.clickable:hover{
+  cursor: pointer;
+  background-color: #7e86cd !important;
+}
+
 .whityfy>*{
   font-size: 10pt;
   text-decoration: none;
@@ -161,12 +171,18 @@ li.decorated{
   float: left;
 }
 
+.absolute
+
 .font-m{
   font-size: 13pt !important;
 }
 
-.no_margin_vertical{
+.no-margin-vertical{
   margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+.no-margin-bot{
   margin-bottom:0 !important;
 }
 
@@ -721,11 +737,93 @@ p#alert{
   z-index: 10;
 }
 
+.size100 {
+
+  width: 100px !important;
+  height: 100px !important;
+
+}
+
+.size400 {
+
+  width: 400px !important;
+  height: 300px !important;
+}
+
+.ctitle {
+
+  height: 100px !important;
+
+}
+
+.ccontent {
+  height: 80px !important;
+}
+.meter {
+  height: 15px;  /* Can be anything */
+  position: relative;
+  background: #555;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+  border-radius: 25px;
+  padding: 10px;
+  box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+}
+
+.meter > span {
+  display: block;
+  height: 10px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color: rgb(43,194,83);
+  box-shadow:
+          inset 0 2px 9px  rgba(255,255,255,0.3),
+          inset 0 -2px 6px rgba(0,0,0,0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.meter > p {
+  position: absolute;
+  overflow: visible;
+  height: 10px;
+  width: 100%;
+  bottom: 1%;
+  right: 1%;
+}
+.navy-grey-meter > span {
+  background-color: #394293 !important;
+  background-image: linear-gradient(to bottom, #394293, #2b326e);
+}
+
+.border-red {
+  border: solid 2px darkred !important;
+  border-radius: 5px;
+}
+
+.underline{
+  text-decoration: underline gold !important;
+}
+
+a.logo{
+  font-size: 2.1rem;
+  padding: 0;
+  white-space: nowrap;
+}
 
 
+.hidden{
+  display: none;
+}
 
+img.little{
+  height:30px !important;
+  width:30px !important;
+}
 
-
-
-
-
+img.medium{
+  height:70px !important;
+  width:70px !important;
+}

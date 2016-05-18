@@ -1,0 +1,24 @@
+{%  extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <div class="container">
+
+        {{  render(controller('AppBundle:Product:search')) }}
+
+        <div class="row card padding grey lighten-1">
+            <p class="flow-text center-align">
+                You have succesfully purchased
+                <a class="bold" href="{{ path('product_show', {'category': product.category, 'uuid': product.normalizedName}) }}">
+                    {{ product.name }}
+                </a>
+                for just <span class="bold red-text text-darken-2">{{ product.price }} €</span>.
+            </p>
+        </div>
+
+        {{ include('default/show_purchases.html.twig') }}
+
+    </div>
+
+{%  endblock %}

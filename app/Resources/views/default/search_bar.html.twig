@@ -1,0 +1,11 @@
+{{  form_start(form) }}
+    <div class="search-wrapper card row valign-wrapper">
+        {{ form_widget(form.search, {'attr': {'placeholder': 'Search', 'class': 'col s11 valign no-margin-vertical validate'} })}}
+        <i class="valign material-icons col s1 font-m center-align clickable" onclick="submitSearch()">search</i>
+    </div>
+    {{ form_widget(form.submit, {'attr': {'class': 'hidden'}}) }}
+{{ form_end(form) }}
+
+
+
+

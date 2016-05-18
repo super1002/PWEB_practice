@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme formCreate 'form/FormMaterializeCssTheme.html.twig' %}
+{% form_theme formEdit 'form/FormMaterializeCssTheme.html.twig' %}
+
+
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col s12 card-panel navy-grey darken-5 z-depth-5">
+                <div class="col s12 card-panel grey lighten-4 padding2">
+
+                    <div class="row valign-wrapper center-align">
+                        <h2 class="left-align  col s12 flow-text left-margin"><b>{{ user.username|capitalize }}</b></h2>
+                    </div>
+                    <hr class="row col s12">
+
+                    <div class="row center-align">
+
+                        <div class="col s12 l6">
+                            <img class="col s12 responsive-img" src="{{ asset(user.getProfilePicture) }}" alt="{{ user.username }}">
+                            <hr class="col s12">
+                        </div>
+
+                        <div class="col s12 l6 left-align left-buffer2 padding2">
+                            <div class="row valign-wrapper flow-text font-m">
+                                <p><strong>Score: </strong> {{ user.score }}</p>
+                                {% if user.score < 100 %}
+                                    {% set medal = asset('images/bronze_medal.png') %}
+                                    {% set step = 20 %}
+                                {% elseif user.score < 1000 %}
+                                    {% set medal = asset('images/silver_medal.png') %}
+                                    {% set step = 200 %}
+                                {% elseif user.score < 10000 %}
+                                    {% set medal = asset('images/gold_medal.png') %}
+                                    {% set step = 2000 %}
+                                {% else %}
+                                    {% set medal = asset('images/logo_symfony.png') %}
+                                    {% set step = product.owner.score %}
+                                {% endif %}
+                                {% for i in range(0, user.score, step) %}
+                                    <img src="{{ medal }}" alt="this is a wonderful medal" class="circle valign" style="width: 45px; height: 60px;">
+                                {% endfor %}
+                            </div>
+                            <p class="row flow-text font-m no_margin_vertical"> Products sold: <b>{{ user.purchases.count }}</b></p>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="s12 col">
+                            <ul class="collection">
+                                {% for comment in user.comments %}
+                                    <li class="collection-item avatar">
+                                        <img src="{{ asset(comment.author.profilePicture) }}" alt="this is a handsome dude" class="circle">
+                                        <span class="title"><strong>{{ comment.title|upper }}</strong></span>
+                                        <p>by <a href="{{ path('profile', {'username': comment.author.username}) }}">{{ comment.author.username }}</a> {{ comment.author.username }} on {{ comment.getDateString }}<br>
+                                            <div class="card-panel orange-grey lighten-5 fr-view">
+                                                {{ comment.comment|raw }}
+                                            </div>
+                                        </p>
+                                        {% if is_granted("EDIT", comment) %}
+                                            <a href="{{ '#edit_'~comment.author.username }}" class="modal-trigger"><i class="material-icons right-margin2 secondary-content">mode_edit</i></a>
+                                            <a href="{{ '#del_'~comment.author.username }}" class="modal-trigger"><i class="material-icons red-text secondary-content">delete</i></a>
+                                        {% endif %}
+                                    </li>
+
+                                    <!-- Edit Modal Structure -->
+                                    <div id="{{ 'edit_'~comment.author.username }}" class="modal modal-fixed-footer">
+                                        <div class="modal-content">
+                                            <h4>Edit Comment</h4>
+                                            {{ form_start(formEdit)}}
+                                            <div class="col s6">
+                                                {{ form_row(formEdit.title) }}
+                                            </div>
+                                            <div class="col s12">
+                                                {{ form_row(formEdit.comment,  {'label': ' '}, {'attr': {'length' : '500', 'class' : 'materialize-textarea white-text'}}) }}
+                                            </div>
+                                            <div class="col right top-margin3">
+                                                {{ form_row(formEdit.submit, { 'label': 'Submit' , 'attr': {'class': 'hidden'}}) }}
+                                            </div>
+                                            {{ form_end(formEdit) }}
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="#!" onclick="submitEdit()" class=" modal-action modal-close waves-effect waves-green btn-flat">Send</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Delete Modal Structure -->
+
+                                    <div id="{{ 'del_'~comment.author.username }}" class="modal">
+                                        <div class="modal-content">
+                                            <h4>Delete Comment</h4>
+                                            <p>Are you sure you want to delete this comment?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
+                                            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <p class="center-align orange-grey-text accent-3"> There are no comments for this seller </p>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col s12">
+                            {% if not is_granted('ROLE_USER') %}
+                                <p class="center-align orange-grey-text accent-3"> You need to <strong>login</strong> to leave a comment </p>
+                            {% else %}
+                                {% if not canComment %}
+                                    <p class="center-align orange-grey-text accent-3"> You need to purchase a product from this user to leave a comment. <strong>Remember!</strong> You can only post one comment per user </p>
+                                {% else %}
+                                    {{ form_start(formCreate) }}
+                                    <div class="row">
+                                        <div class="col s6">
+                                            {{ form_row(formCreate.title) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            {{ form_row(formCreate.comment,  {'label': ' '}, {'attr': {'length' : '500', 'class' : 'materialize-textarea white-text'}}) }}
+                                        </div>
+                                    </div>
+                                    <div class="col right top-margin3">
+                                        {{ form_row(formCreate.submit, { 'label': 'Submit' }) }}
+                                    </div>
+                                        {{ form_end(formCreate) }}
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

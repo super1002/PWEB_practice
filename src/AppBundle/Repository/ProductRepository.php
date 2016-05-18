@@ -1,6 +1,11 @@
 <?php
 
 namespace AppBundle\Repository;
+use Doctrine\Common\Cache\RedisCache;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use DateTime;
+use Snc\RedisBundle\Client\Phpredis\Client;
+
 
 /**
  * ProductRepository
@@ -10,4 +15,133 @@ namespace AppBundle\Repository;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    const SEARCH_PAGE_SIZE = 5;
+
+    /**
+     * @return array
+     */
+    public function getNewestProducts()
+    {
+        $date = new DateTime();
+        $products = $this->createQueryBuilder('p')
+            ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->where('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
+            ->orderBy('p.creationDate', 'DESC')
+            ->setMaxResults(7)
+            ->getQuery()
+            ->useQueryCache(true)
+            ->useResultCache(true)
+            ->getResult();
+
+        return $products;
+    }
+
+    public function getMostViewedProducts()
+    {
+        $date = new DateTime();
+
+        $products = $this->createQueryBuilder('p')
+            ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->where('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
+            ->orderBy('p.numVisits', 'DESC')
+            ->setMaxResults(6)
+            ->getQuery()
+            ->useQueryCache(true)
+            ->useResultCache(true)
+            ->getResult();
+
+        return $products;
+    }
+
+    public function getAllProducts(){
+
+        $date = new DateTime();
+        $products = $this->createQueryBuilder('p')
+            ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->where('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
+            ->getQuery()
+            ->setResultCacheLifetime(60)
+            ->getResult();
+
+        return $products;
+    }
+
+    public function getOrderedByPopular($currentPage = 1, $limit = 12)
+    {
+        $date = new DateTime();
+        $products = $this->createQueryBuilder('p')
+            ->setParameter('date', $date, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->where('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
+            ->setFirstResult($limit * ($currentPage - 1))
+            ->setMaxResults($limit)
+            ->orderBy('p.numVisits', 'DESC')
+            ->getQuery()
+            ->setResultCacheLifetime(60)
+            ->getResult();
+
+        return $products;
+    }
+
+
+    public function remove($category, $uuid)
+    {
+
+        $ret = $this->getEntityManager()->createQuery(
+            'DELETE FROM AppBundle:Product p WHERE p.category = :category AND p.normalizedName = :uuid'
+        )->setParameters(array(
+            'category' => $category,
+            'uuid' => $uuid
+        ))
+            ->setResultCacheLifetime(60)
+            ->execute();
+
+        return $ret !== null;
+    }
+
+     public function countTotalVisits()
+    {
+        $total = $this->createQueryBuilder('p')
+            ->select("sum(p.numVisits)")
+            ->getQuery()
+            ->getSingleScalarResult();
+        return $total;
+    }
+
+    public function searchAll($string, $page){
+
+
+        $total = $this->createQueryBuilder('p')
+            ->select('count(p)')
+            ->where('p.name LIKE :string')
+            ->andWhere('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
+            ->setParameter('string', '%' . $string . '%')
+            ->setParameter('date', new DateTime())
+            ->getQuery()
+            ->setResultCacheLifetime(60)
+            ->getSingleScalarResult();
+
+        $pages = ceil($total/self::SEARCH_PAGE_SIZE);
+        if($page > $pages) return array(null, $pages);
+
+        $results = $this->createQueryBuilder('p')
+            ->where('p.name LIKE :string')
+            ->andWhere('p.expiringDate >= :date')
+            ->andWhere('p.stock > 0')
+            ->setMaxResults(self::SEARCH_PAGE_SIZE)
+            ->setFirstResult(($page - 1) * self::SEARCH_PAGE_SIZE)
+            ->setParameter('string', '%' . $string . '%')
+            ->setParameter('date', new DateTime())
+            ->getQuery()
+            ->setResultCacheLifetime(60)
+            ->execute();
+
+        return array($results, $pages);
+    }
+
 }

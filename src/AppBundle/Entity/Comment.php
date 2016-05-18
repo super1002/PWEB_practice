@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -44,24 +45,30 @@ class Comment
     private $score;
 
     /**
+     * @var DateTime $date
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
      * @var ArrayCollection
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="comments_done")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $author;
 
     /**
      * @var ArrayCollection
      * @ORM\ManyToOne(targetEntity="User", inversedBy="comments")
-     * @ORM\JoinColumn(name="target_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="target_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $target;
 
 
     public function __construct()
     {
-        $this->author = new ArrayCollection();
-        $this->target = new ArrayCollection();
+        $this->score = 0;
+        $this->date = new \DateTime();
     }
 
     /**
@@ -192,5 +199,39 @@ class Comment
     public function getTarget()
     {
         return $this->target;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Comment
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDateString()
+    {
+        return $this->date->format("d/m/y");
     }
 }
