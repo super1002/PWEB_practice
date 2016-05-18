@@ -419,15 +419,6 @@ class ProfileController extends Controller
 
         //Mirar si pot fer comentari o no en el propi smarty per fer disable del boto submit
         //Tambe en smarty mirar si estem logged per mostrar el missatge derror enves del WYSIWYG
-        $userComment = new Comment();
-        $comment = new Comment();
-
-        foreach ($user->getComments() as $ele) {
-            if ($ele->getOwner()->getUsername() == $this->getUser()->getUsername()) {
-                $userComment = $ele;
-                break;
-            }
-        }
 
         //Tampoc es pot comentar si sha comentat ja a lusuari, pero aixo ho verificaria al fer submit i
         //mostrem modal si ja nhi havia un mostrant error
@@ -466,6 +457,8 @@ class ProfileController extends Controller
 
         $comment = new Comment();
         $this->getDoctrine()->getManager()->persist($comment);
+        $comment->setAuthor($this->getUser());
+        $comment->setTarget($user);
 
         $formCreate = $this->createFormBuilder($comment)
             ->setAction($this->generateUrl('post_comment', array('username' => $username)))
@@ -490,7 +483,7 @@ class ProfileController extends Controller
         $userComment = null;
 
         foreach ($user->getComments() as $ele) {
-            if ($ele->getOwner()->getUsername() == $this->getUser()->getUsername()) {
+            if ($ele->getAuthor()->getUsername() == $this->getUser()->getUsername()) {
                 $userComment = $ele;
                 break;
             }
@@ -518,7 +511,7 @@ class ProfileController extends Controller
         $userComment = null;
 
         foreach ($user->getComments() as $ele) {
-            if ($ele->getOwner()->getUsername() == $this->getUser()->getUsername()) {
+            if ($ele->getAuthor()->getUsername() == $this->getUser()->getUsername()) {
                 $userComment = $ele;
                 break;
             }

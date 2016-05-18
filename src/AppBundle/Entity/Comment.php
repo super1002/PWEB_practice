@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -44,6 +45,12 @@ class Comment
     private $score;
 
     /**
+     * @var DateTime $creationDate
+     * @ORM\Column(name="creation_date", type="datetime")
+     */
+    private $date;
+
+    /**
      * @var ArrayCollection
      * @ORM\ManyToOne(targetEntity="User", inversedBy="comments_done")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
@@ -60,7 +67,8 @@ class Comment
 
     public function __construct()
     {
-
+        $this->score = 0;
+        $this->date = new \DateTime();
     }
 
     /**
