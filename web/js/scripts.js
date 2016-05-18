@@ -61,6 +61,6 @@ function submitSearch(){
 }
 
 function submitEdit(){
-
+    alert('patata');
     $('button.hidden').click();
 }

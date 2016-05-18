@@ -217,7 +217,6 @@ post_comment:
     _controller: AppBundle:Profile:postComment
     _format: html
   methods:
-    - GET
     - POST
 
 edit_comment:
@@ -226,7 +225,6 @@ edit_comment:
     _controller: AppBundle:Profile:editComment
     _format: html
   methods:
-    - GET
     - POST
 
 delete_comment:
@@ -235,7 +233,6 @@ delete_comment:
     _controller: AppBundle:Profile:deleteComment
     _format: html
   methods:
-    - GET
     - POST
 
 resend_email:

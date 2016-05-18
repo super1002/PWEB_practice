@@ -423,7 +423,7 @@ class ProfileController extends Controller
         }
 
         $newComment = new Comment();
-        $userComment = null;
+        $userComment = new Comment();
 
         foreach ($user->getComments() as $ele) {
             if ($ele->getAuthor()->getUsername() == $this->getUser()->getUsername()) {
@@ -433,6 +433,7 @@ class ProfileController extends Controller
             }
         }
 
+        dump($userComment);
         $canComment2 = false;
         foreach($this->getUser()->getPurchases() as $purchase){
             if($purchase->getProduct()->getOwner() == $user){
@@ -443,19 +444,10 @@ class ProfileController extends Controller
 
         $canComment = $canComment1 && $canComment2;
 
-        //Mirar si pot fer comentari o no en el propi smarty per fer disable del boto submit
-        //Tambe en smarty mirar si estem logged per mostrar el missatge derror enves del WYSIWYG
-
-        //Tampoc es pot comentar si sha comentat ja a lusuari, pero aixo ho verificaria al fer submit i
-        //mostrem modal si ja nhi havia un mostrant error
-
-        //Amb smarty mirar si el comentari es nostre per afegir el edit/delete
-
-        //Afegir una pagina al header que ens porti a aquesta pagina per veure els coments sobre nosaltres
-
         $formCreate = $this->createForm(CommentType::class, $newComment, array('username' => $username));
 
-        $formEdit = $this->createForm(CommentType::class, $userComment, array('username' => $username));
+        $formEdit = $this->createForm(CommentType::class, $userComment, array('username' => $username,
+            'route' => 'edit_comment'));
 
 
         return $this->render('default/view_profile.html.twig',
@@ -481,8 +473,19 @@ class ProfileController extends Controller
         $formCreate->handleRequest($request);
 
         if($formCreate->isSubmitted() && $formCreate->isValid()){
-            $user->addComment($comment);
-            $this->getDoctrine()->getManager()->flush();
+            $canPost = true;
+            foreach ($user->getComments() as $ele) {
+                if ($ele->getAuthor()->getUsername() == $this->getUser()->getUsername()) {
+                    $canPost = false;
+                    break;
+                }
+            }
+            if($canPost){
+                $user->addComment($comment);
+                $this->getDoctrine()->getManager()->flush();
+            }else{
+                $this->addFlash('modal','You can only comment once per user');
+            }
         }
 
         return $this->redirectToRoute('profile', array('username' => $username));
@@ -496,17 +499,16 @@ class ProfileController extends Controller
         $userComment->setAuthor($this->getUser());
         $userComment->setTarget($user);
 
-        $this->getDoctrine()->getManager()->persist($userComment);
-
-
         foreach ($user->getComments() as $ele) {
             if ($ele->getAuthor()->getUsername() == $this->getUser()->getUsername()) {
                 $userComment = $ele;
                 break;
             }
         }
+        $this->getDoctrine()->getManager()->persist($userComment);
 
-        $formEdit = $this->createForm(CommentType::class, $userComment, array('username' => $username));
+        $formEdit = $this->createForm(CommentType::class, $userComment, array('username' => $username,
+            'route' => 'edit_comment'));
         $formEdit->handleRequest($request);
 
         if($formEdit->isSubmitted() && $formEdit->isValid()){

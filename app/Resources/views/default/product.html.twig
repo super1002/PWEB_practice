@@ -109,7 +109,7 @@
                                         <li class="collection-item avatar">
                                             <img src="{{ asset(comment.author.profilePicture) }}" alt="this is a handsome dude" class="circle">
                                             <span class="title"><strong>{{ comment.title|upper }}</strong></span>
-                                            <p>by <a href="{{ path('profile', {'username': comment.author.username}) }}">{{ comment.author.username }}</a><br>
+                                            <p>by <a href="{{ path('profile', {'username': comment.author.username}) }}">{{ comment.author.username }}</a> on {{ comment.getDateString }}<br>
                                             <div class="card-panel orange-grey lighten-5 fr-view">
                                                 {{ comment.comment|raw }}
                                             </div>

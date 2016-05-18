@@ -216,6 +216,7 @@ class User implements UserInterface, AdvancedUserInterface, EquatableInterface, 
         $this->file = null;
         $this->balance = 0;
         $this->recharge = 0;
+        $this->profile_picture = 'uploads/profile-placeholder.png';
         $this->products = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->purchases = new ArrayCollection();

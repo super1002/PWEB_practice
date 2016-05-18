@@ -25,7 +25,8 @@ class CommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->setAction($this->router->generate('post_comment', array('username' => $options['username'])))
+            ->setAction($this->router->generate($options['route'], array('username' => $options['username'])))
+            ->setMethod('POST')
             ->add('title', TextType::class)
             ->add('comment', FroalaEditorType::class)
             ->add('submit', SubmitType::class);
@@ -37,7 +38,8 @@ class CommentType extends AbstractType
         AbstractType::configureOptions($resolver);
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Comment',
-            'username' => ''
+            'username' => '',
+            'route' => 'post_comment'
         ));
     }
 }
