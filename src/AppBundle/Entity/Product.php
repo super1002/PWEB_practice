@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Validator;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Product
@@ -74,10 +75,7 @@ class Product
 
     /**
      * @var DateTime
-     * @Validator\Range(
-     *     min="now",
-     *     minMessage="The expiring date has to be a future date"
-     * )
+     *
      * @ORM\Column(name="expiring_date", type="datetime")
      */
     private $expiringDate;
@@ -85,7 +83,11 @@ class Product
     /**
      * @var string
      *
+     * @Validator\Range(
+     *     min="now"
+     *     )
      * @ORM\Column(name="picture", type="string", length=550)
+     *
      */
     private $picture;
 
@@ -566,5 +568,18 @@ class Product
     public function getPurchases()
     {
         return $this->purchases;
+    }
+
+    /**
+     * @Validator\Callback
+     */
+    public static function validateDate($object, ExecutionContextInterface $context)
+    {
+        $now = new DateTime();
+        if ($object->getExpiringDate() <= $now){
+            $context->buildViolation('You must select a future date')
+                ->atPath('expiringDate')
+                ->addViolation();
+        }
     }
 }
