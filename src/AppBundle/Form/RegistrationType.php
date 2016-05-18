@@ -49,6 +49,7 @@ class RegistrationType extends AbstractType{
             ->add('twitter_user', TextType::class, array(
                 'attr' => array(
                     'data-validation' => 'custom',
+                    'data-validation-optional' => 'true',
                     'data-validation-regexp' => '\@[a-zA-Z0-9_]{1,16}'
                 )
             ))
