@@ -269,12 +269,16 @@ class ProductController extends Controller
         $purchase = new Purchase();
         $purchase->setBuyer($this->getUser());
         $purchase->setProduct($product);
-        $this->getUser()->addPurchase($product);
+        $this->getUser()->addPurchase($purchase);
+        $product->addPurchase($purchase);
         $em = $this->getDoctrine()->getManager();
         $em->persist($purchase);
         $em->flush();
         $mailer = $this->get('app.service.mailer.mailer_repository');
         $mailer->sendNotificationEmail($product->getOwner(), $product);
+        dump($purchase);
+        dump($this->getUser());
+        dump($product);
 
         return $this->render('default/buy_result.html.twig', array(
             'product' => $product,

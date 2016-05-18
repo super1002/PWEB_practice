@@ -65,6 +65,8 @@ services:
 
   app.voter.user_voter:
       class: AppBundle\Voter\UserVoter
+      arguments:
+          doctrine: "@doctrine.orm.entity_manager"
       tags:
           - { name: security.voter }
       # small performance boost
