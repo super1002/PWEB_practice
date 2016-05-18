@@ -56,7 +56,7 @@
                                 {% for comment in user.comments %}
                                     <li class="collection-item avatar">
                                         <img src="{{ asset(comment.author.profilePicture) }}" alt="this is a handsome dude" class="circle">
-                                        <span class="title">{{ comment.title|capitalize }}</span>
+                                        <span class="title"><strong>{{ comment.title|upper }}</strong></span>
                                         <p>by {{ comment.author.username }}<br>
                                             <div class="card-panel orange-grey lighten-5 fr-view">
                                                 {{ comment.comment|raw }}
