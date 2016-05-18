@@ -416,6 +416,14 @@ class ProfileController extends Controller
 
 
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy(array('username' => $username));
+        $userComment = null;
+
+        foreach ($user->getComments() as $ele) {
+            if ($ele->getAuthor()->getUsername() == $this->getUser()->getUsername()) {
+                $userComment = $ele;
+                break;
+            }
+        }
 
         //Mirar si pot fer comentari o no en el propi smarty per fer disable del boto submit
         //Tambe en smarty mirar si estem logged per mostrar el missatge derror enves del WYSIWYG
@@ -434,7 +442,7 @@ class ProfileController extends Controller
             ->add('submit', SubmitType::class)
             ->getForm();
 
-        $formEdit = $this->createFormBuilder()
+        $formEdit = $this->createFormBuilder($userComment)
             ->setAction($this->generateUrl('edit_comment', array('username' => $username)))
             ->add('title', TextType::class)
             ->add('comment', FroalaEditorType::class)

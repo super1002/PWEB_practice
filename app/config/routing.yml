@@ -214,7 +214,7 @@ post_comment:
   path: /profile/{username}
   defaults:
     _controller: AppBundle:Profile:postComment
-    _format:
+    _format: html
   methods:
     - GET
     - POST
@@ -223,7 +223,7 @@ edit_comment:
   path: /profile/{username}/comment-edit
   defaults:
     _controller: AppBundle:Profile:editComment
-    _format:
+    _format: html
   methods:
     - GET
     - POST
@@ -232,10 +232,18 @@ delete_comment:
   path: /profile/{username}/comment-delete
   defaults:
     _controller: AppBundle:Profile:deleteComment
-    _format:
+    _format: html
   methods:
     - GET
     - POST
+
+resend_email:
+  path: /resend
+  defaults:
+    _controller: AppBundle:Register:resendEmail
+    _format: html
+  methods:
+    - GET
 
 welcome:
   path: /welcome
