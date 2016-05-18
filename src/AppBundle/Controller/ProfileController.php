@@ -106,7 +106,6 @@ class ProfileController extends Controller
             $fileSystem->mkdir('uploads/Products/'.$this->getUser()->getUsername());
         }
 
-        $productPicturesTemp = null;
         $tempPictureRoute = 'uploads/Products/product-placeholder.png';
         $product = new Product();
 
@@ -244,7 +243,7 @@ class ProfileController extends Controller
                     return $this->render('default/new_product.html.twig',
                         array(
                             'form' => $form->createView(),
-                            'image' => $productPicturesTemp
+                            'image' => $tempPictureRoute
                         ));
                 }
             }
@@ -271,8 +270,8 @@ class ProfileController extends Controller
 
                 return $this->render('default/new_product.html.twig',
                     array(
-                        'form' => $form->createView(),
-                        'image' => $productPicturesTemp
+                        'form' => $form->createView($product),
+                        'image' => $product->getPicture400()
                     ));
             }
             //HUE
